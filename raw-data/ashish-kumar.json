@@ -1,0 +1,83 @@
+{
+  "Goldman Sachs": {
+    "program": "Summer Analyst",
+    "hire": "Internship (chance of PPO conversion) [1]",
+    "eligibility": "Final year and pre-final year students [1]",
+    "timeline": "July to August [1]",
+    "stpiend/ctc": "1 lakh per month [1]",
+    "Key note/How to prepare": "Great company for industry experience [1]",
+    "preparation strategy": "Watch channel videos detailing the specific hiring process [1]"
+  },
+  "Myntra": {
+    "program": "Myntra Hacker Ramp (Women) & Myntra Ramp Up (All) [2]",
+    "hire": "SD Internship [2]",
+    "eligibility": "3rd/4th year (Hacker Ramp); Final year (Ramp Up) [2]",
+    "timeline": "August to September [2]",
+    "stpiend/ctc": "70k per month [3]",
+    "Key note/How to prepare": "Hacker Ramp is specifically for women candidates [2]",
+    "preparation strategy": "Review previous process videos to understand the timeline [3]"
+  },
+  "GSOC (Google Summer of Code)": {
+    "program": "Open Source Internship",
+    "hire": "Internship [3]",
+    "eligibility": "Open source enthusiasts [3]",
+    "timeline": "January to March [3]",
+    "stpiend/ctc": "~2 lakhs per month [3]",
+    "Key note/How to prepare": "Tag is highly valued by recruiters and interviewers [4]",
+    "preparation strategy": "Watch videos from successful candidates who cracked GSOC [3]"
+  },
+  "Uber": {
+    "program": "Uber HackTag",
+    "hire": "Internship [4]",
+    "eligibility": "Engineering students [4]",
+    "timeline": "January to March [4]",
+    "stpiend/ctc": "Not specified [4]",
+    "Key note/How to prepare": "Requires very strong problem-solving skills [4]",
+    "preparation strategy": "Focus heavily on Data Structures and Algorithms (DSA) [4]"
+  },
+  "Flipkart": {
+    "program": "Flipkart Grid, Runway, and Girls Who Code [4, 5]",
+    "hire": "Internship [4]",
+    "eligibility": "All students (Grid); Women only (Runway & Girls Who Code) [4, 5]",
+    "timeline": "June-August (Grid); March-April (Runway); Year-end (Girls Who Code) [5]",
+    "stpiend/ctc": "1 lakh per month [6]",
+    "Key note/How to prepare": "Grid is a major challenge open to everyone [5]",
+    "preparation strategy": "Utilize resources from previous winners provided in video descriptions [5]"
+  },
+  "EY": {
+    "program": "EY Techathon (6.0)",
+    "hire": "Internship [6]",
+    "eligibility": "All engineering graduates [6]",
+    "timeline": "September to November [6]",
+    "stpiend/ctc": "40k per month [6]",
+    "Key note/How to prepare": "Hiring is often project or case study based [6]",
+    "preparation strategy": "Watch specific guides on the process and how to crack the Techathon [6]"
+  },
+  "Microsoft": {
+    "program": "Microsoft Engage",
+    "hire": "Mentorship with PPI chances [7]",
+    "eligibility": "2nd year and 3rd year students [7]",
+    "timeline": "May to June [7]",
+    "stpiend/ctc": "North of 1 lakh per month [7]",
+    "Key note/How to prepare": "Focuses on mentorship rather than just direct hiring [7]",
+    "preparation strategy": "Keep a close eye on opening windows to secure a spot [7]"
+  },
+  "JP Morgan": {
+    "program": "Code for Good",
+    "hire": "Full-time and Internship [7]",
+    "eligibility": "3rd year and 4th year students [7]",
+    "timeline": "March to April [8]",
+    "stpiend/ctc": "Not specified [8]",
+    "Key note/How to prepare": "Hackathon-style hiring [8]",
+    "preparation strategy": "Watch interviews with winners and employees from previous years [8]"
+  },
+  "Adobe": {
+    "program": "Direct Internship Hiring",
+    "hire": "Internship [8]",
+    "eligibility": "Pre-final and final year students [8]",
+    "timeline": "August to September [8]",
+    "stpiend/ctc": "70k to 1 lakh per month [9]",
+    "Key note/How to prepare": "Standard product-based hiring timeline [8]",
+    "preparation strategy": "Prepare for standard product-based company interview rounds [9]"
+  }
+}

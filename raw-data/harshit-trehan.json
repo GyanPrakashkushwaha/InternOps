@@ -1,0 +1,137 @@
+{
+  "Goldman Sachs": {
+    "program": "Engineering Campus Hiring Program [1]",
+    "hire": "Intern and full-time [2]",
+    "eligibility": "3rd or final year engineering (all branches), MCA, BCA, BSc, MSc [2]",
+    "timeline": "January and August [2]",
+    "stpiend/ctc": "High cut-offs, competition is brutal [1]",
+    "Key note/How to prepare": "Focus on high-speed problem solving [2]",
+    "preparation strategy": "Solve LeetCode contests very fast [2]"
+  },
+  "Microsoft": {
+    "program": "Explore Intern; Research Internship [2, 3]",
+    "hire": "Intern and full-time [3]",
+    "eligibility": "2nd year (Explore); 3rd and final year (Research) [3]",
+    "timeline": "November to January [3]",
+    "stpiend/ctc": "Considered one of the best jobs in the country [3]",
+    "Key note/How to prepare": "Timelines can vary by 1-2 months [3]",
+    "preparation strategy": "Apply directly and keep an eye on reopening via Telegram [2, 3]"
+  },
+  "Uber": {
+    "program": "Uber She++; Uber Star [3, 4]",
+    "hire": "Intern with PPO chance [4]",
+    "eligibility": "She++ (2nd year female); Uber Star (Diversity/everyone) [4]",
+    "timeline": "November and December [3]",
+    "stpiend/ctc": "1.5 lakh stipend and 35 lakh CTC [4]",
+    "Key note/How to prepare": "Package is insanely good [4]",
+    "preparation strategy": "Check specific links shared on Telegram [3, 4]"
+  },
+  "Google": {
+    "program": "Step Intern (Associate SWE Intern); Direct Hiring [4]",
+    "hire": "Intern and full-time [4]",
+    "eligibility": "2nd year (Step); 3rd year (Direct Intern); Final year (Direct Full-time) [4]",
+    "timeline": "Ongoing [4]",
+    "stpiend/ctc": "60 lakh CTC [4]",
+    "Key note/How to prepare": "Direct hiring for application engineering role is open for 2026 batch [4]",
+    "preparation strategy": "Stay updated through Telegram for direct links [4]"
+  },
+  "LinkedIn": {
+    "program": "LinkedIn Coaching; Direct Hiring [5]",
+    "hire": "Intern and potentially PPO [5]",
+    "eligibility": "2nd year female (Coaching); 3rd and final year (Direct) [5]",
+    "timeline": "April to May and September to December [5]",
+    "stpiend/ctc": "Standard LinkedIn packages [5]",
+    "Key note/How to prepare": "Direct hiring often only opens for a few days [5]",
+    "preparation strategy": "Must be active on social media/Telegram to catch short windows [5]"
+  },
+  "Flipkart": {
+    "program": "Flipkart Grid; Runaway; Girls Who Code [6]",
+    "hire": "Intern and full-time [6]",
+    "eligibility": "All engineering students (Grid); Female students (Girls Who Code) [6]",
+    "timeline": "Generally July to August [6]",
+    "stpiend/ctc": "1 lakh stipend and 28 lakh CTC [7]",
+    "Key note/How to prepare": "Grid is a major hackathon open to all years [6]",
+    "preparation strategy": "Review interview experiences available on the YouTube channel [6]"
+  },
+  "EI": {
+    "program": "eTechathon 6.0; Evite Hackathon [7]",
+    "hire": "Intern [7]",
+    "eligibility": "2nd year and 3rd year students [7]",
+    "timeline": "September [7]",
+    "stpiend/ctc": "Good package [7]",
+    "Key note/How to prepare": "Project-based or case study focus [7]",
+    "preparation strategy": "Build projects and practice solving case studies to present [7]"
+  },
+  "D.E. Shaw": {
+    "program": "Ascent Educator Program [7]",
+    "hire": "Internship and mentorship [7, 8]",
+    "eligibility": "2nd year female students [7]",
+    "timeline": "July and August [8]",
+    "stpiend/ctc": "50,000 per month stipend [8]",
+    "Key note/How to prepare": "Includes an offline event to learn about company work [8]",
+    "preparation strategy": "Share progress on social media to gain recruiter attention [8]"
+  },
+  "Walmart": {
+    "program": "CodeHers; Sparkathon; Spark Plug [8, 9]",
+    "hire": "Intern and full-time [9]",
+    "eligibility": "Varies by program; CodeHers is female-specific [8]",
+    "timeline": "March and June/July [10]",
+    "stpiend/ctc": "80,000 stipend and 27 lakh CTC [10]",
+    "Key note/How to prepare": "Hackathons allow you to skip initial DSA/OA rounds [9]",
+    "preparation strategy": "Build MVPs quickly using tools like Replit and prompts [9]"
+  },
+  "Myntra": {
+    "program": "Hacker Ramp; WeForShe [10]",
+    "hire": "Intern and full-time [10]",
+    "eligibility": "3rd and final year (Hacker Ramp); female candidates only (WeForShe) [10]",
+    "timeline": "September end or October [10]",
+    "stpiend/ctc": "60,000 stipend and 30+ lakh CTC [10]",
+    "Key note/How to prepare": "Hacker Ramp is a generic program open to everyone [10]",
+    "preparation strategy": "Participate in hackathons and monitor social media for links [10]"
+  },
+  "Mercari": {
+    "program": "Mercari Build Program [11]",
+    "hire": "Intern [11]",
+    "eligibility": "Any year or freshers (2025 batch) [11]",
+    "timeline": "Starting soon [11]",
+    "stpiend/ctc": "2.5 lakh stipend per month [11]",
+    "Key note/How to prepare": "One of the highest stipends mentioned [11]",
+    "preparation strategy": "Watch specific video tutorials/guides for this program [11]"
+  },
+  "Atlassian": {
+    "program": "Women in Tech [11]",
+    "hire": "Intern [11]",
+    "eligibility": "2nd year students [11]",
+    "timeline": "August and September [11]",
+    "stpiend/ctc": "1 lakh stipend and 70 lakh CTC [11]",
+    "Key note/How to prepare": "Timelines may shift based on company budgets [11]",
+    "preparation strategy": "Monitor for openings 1 month earlier or later than usual [11]"
+  },
+  "Juspay": {
+    "program": "Hiring/Programming Challenges [11, 12]",
+    "hire": "Intern, full-time, and experienced folks [12]",
+    "eligibility": "3rd and final year students [12]",
+    "timeline": "March and September (every 3 months) [12]",
+    "stpiend/ctc": "40,000 stipend; 20-27 lakh full-time CTC [12]",
+    "Key note/How to prepare": "Hosted on Unstop or Hacker platforms [12]",
+    "preparation strategy": "Prepare for high-level programming challenges [12]"
+  },
+  "At Fellowship": {
+    "program": "Engineering Fellowship [12, 13]",
+    "hire": "6-month intern [12]",
+    "eligibility": "3rd and final year students [12]",
+    "timeline": "August and October [13]",
+    "stpiend/ctc": "50,000 stipend [13]",
+    "Key note/How to prepare": "Mostly remote; requires 1-week visit to Delhi office [13]",
+    "preparation strategy": "Apply through links shared in the late summer [12]"
+  },
+  "Summer of Bitcoin": {
+    "program": "Open-source blockchain program [13]",
+    "hire": "Intern (3-month program) [13]",
+    "eligibility": "Students from every year [13]",
+    "timeline": "February or mid-year [13]",
+    "stpiend/ctc": "Stipend in USD/Bitcoin [13]",
+    "Key note/How to prepare": "Focus on blockchain domain projects [13]",
+    "preparation strategy": "Gain experience by working on open-source projects [13]"
+  }
+}

@@ -1,0 +1,344 @@
+{
+  "Goldman Sachs": {
+    "program": "Engineering Campus Hiring Program",
+    "hire": "Intern and Full-time",
+    "eligibility": "3rd or Final year (all engineering branches), MCA, BCA, BSc, MSc",
+    "timeline": "January and August",
+    "stpiend/ctc": "High competitive packages",
+    "Key note/How to prepare": "Competition is brutal with very high cut-offs.",
+    "preparation strategy": "Focus on solving LeetCode contests very fast."
+  },
+  "Goldman Sachs-2": {
+    "program": "Summer Analyst Program",
+    "hire": "Intern with PPO chance",
+    "eligibility": "3rd/Pre-final and final year engineering students",
+    "timeline": "July to August",
+    "stpiend/ctc": "1 lakh per month",
+    "Key note/How to prepare": "Great company for industry experience.",
+    "preparation strategy": "Watch specific hiring process videos to understand the interview structure."
+  },
+  "Google": {
+    "program": "Step Intern (Associate Software Engineering Intern)",
+    "hire": "Intern with PPO/PPI chance",
+    "eligibility": "2nd year students (diversity focused)",
+    "timeline": "December",
+    "stpiend/ctc": "77,000 to 1.25 lakh per month",
+    "Key note/How to prepare": "Shortlisting requires building high-quality projects for your resume.",
+    "preparation strategy": "Focus on high-level Data Structures and Algorithms (DSA)."
+  },
+  "Google-2": {
+    "program": "Direct SDE / Application Engineering Intern",
+    "hire": "Intern and Full-time",
+    "eligibility": "2nd, 3rd, and Final year students",
+    "timeline": "August to September",
+    "stpiend/ctc": "1.25 lakh per month / 60 lakh CTC",
+    "Key note/How to prepare": "Getting a call is highly competitive.",
+    "preparation strategy": "Optimize and refine your profile before applying via the career portal."
+  },
+  "Microsoft": {
+    "program": "Microsoft Engage",
+    "hire": "Mentorship with PPI chances",
+    "eligibility": "2nd and 3rd year students",
+    "timeline": "May to June",
+    "stpiend/ctc": "North of 1 lakh per month",
+    "Key note/How to prepare": "Focuses on providing high-quality mentorship.",
+    "preparation strategy": "Keep a close eye on opening windows in early summer."
+  },
+  "Microsoft-2": {
+    "program": "Explore Intern / Research Internship",
+    "hire": "Intern and Full-time",
+    "eligibility": "2nd year (Explore); 3rd and Final year (Research)",
+    "timeline": "November to January",
+    "stpiend/ctc": "One of the best jobs in the country",
+    "Key note/How to prepare": "Timelines can vary by 1-2 months.",
+    "preparation strategy": "Apply directly through career portal or follow Telegram alerts for re-openings."
+  },
+  "Uber": {
+    "program": "Uber HackTag / Uberct",
+    "hire": "Internship",
+    "eligibility": "3rd year engineering students",
+    "timeline": "January to March",
+    "stpiend/ctc": "1.2 lakh to 1.5 lakh per month",
+    "Key note/How to prepare": "Requires very strong problem-solving skills.",
+    "preparation strategy": "Focus heavily on advanced Data Structures and Algorithms (DSA)."
+  },
+  "Uber-2": {
+    "program": "Uber She++ / Uber Star",
+    "hire": "Internship",
+    "eligibility": "2nd year; She++ is for female candidates only",
+    "timeline": "November and December",
+    "stpiend/ctc": "1.5 lakh per month",
+    "Key note/How to prepare": "Uber Star is a diversity-focused program open to everyone.",
+    "preparation strategy": "Check specific links usually shared on social platforms like Telegram."
+  },
+  "Flipkart": {
+    "program": "Flipkart Grid",
+    "hire": "Intern and Full-time",
+    "eligibility": "Open to all engineering years",
+    "timeline": "June to August",
+    "stpiend/ctc": "1 lakh per month / 28 lakh CTC",
+    "Key note/How to prepare": "A major hackathon for industry problem-solving.",
+    "preparation strategy": "Practice building MVPs and use resources from previous winners."
+  },
+  "Flipkart-2": {
+    "program": "Flipkart Runway / Girls Who Code",
+    "hire": "Internship",
+    "eligibility": "2nd and 3rd year female students",
+    "timeline": "February to March (Runway); Year-end (Girls Who Code)",
+    "stpiend/ctc": "1 lakh per month",
+    "Key note/How to prepare": "Diversity-specific hiring initiatives.",
+    "preparation strategy": "Prepare for rapid-fire technical questions."
+  },
+  "Amazon": {
+    "program": "Amazon WOW (Women of the World)",
+    "hire": "Internship",
+    "eligibility": "1st to 3rd year female students",
+    "timeline": "November to December",
+    "stpiend/ctc": "1 lakh per month",
+    "Key note/How to prepare": "Exclusive program for female tech talent.",
+    "preparation strategy": "Apply via the dedicated Amazon WOW portal."
+  },
+  "Amazon-2": {
+    "program": "Regular SDE Internship",
+    "hire": "Internship",
+    "eligibility": "2nd and 3rd year students",
+    "timeline": "September to December",
+    "stpiend/ctc": "1.25 lakh per month",
+    "Key note/How to prepare": "Standard high-paying product role; applications close fast.",
+    "preparation strategy": "Monitor the Amazon careers portal regularly as links expire."
+  },
+  "JP Morgan": {
+    "program": "Code for Good",
+    "hire": "Internship and Full-time",
+    "eligibility": "2nd, 3rd, and 4th year students",
+    "timeline": "February to April",
+    "stpiend/ctc": "80,000 to 90,000 per month",
+    "Key note/How to prepare": "Opportunities for international roles in London or Glasgow.",
+    "preparation strategy": "Watch interviews with previous winners and employees."
+  },
+  "Walmart": {
+    "program": "CodeHers",
+    "hire": "Intern and Full-time",
+    "eligibility": "3rd year female students",
+    "timeline": "March",
+    "stpiend/ctc": "80,000 to 90,000 stipend / 27 lakh CTC",
+    "Key note/How to prepare": "Selection is purely based on DSA skills.",
+    "preparation strategy": "Build MVPs quickly and prepare specifically for the hackathon format."
+  },
+  "Walmart-2": {
+    "program": "Sparkathon / Spark Plug",
+    "hire": "Intern and Full-time",
+    "eligibility": "Varies by program; typically engineering teams",
+    "timeline": "June to July",
+    "stpiend/ctc": "80,000 stipend / 27 lakh CTC",
+    "Key note/How to prepare": "Hackathons allow you to skip initial DSA rounds.",
+    "preparation strategy": "Focus on rapid project building using tools like Replit."
+  },
+  "Myntra": {
+    "program": "Hacker Ramp (Women)",
+    "hire": "Intern and Full-time",
+    "eligibility": "2nd, 3rd, and 4th year female students",
+    "timeline": "August/September or March/April",
+    "stpiend/ctc": "70,000 to 90,000 per month",
+    "Key note/How to prepare": "Offers extra benefits alongside the stipend.",
+    "preparation strategy": "Review previous hiring timelines and processes."
+  },
+  "Myntra-2": {
+    "program": "Myntra Ramp Up",
+    "hire": "SD Internship",
+    "eligibility": "Open to all students; mostly final year",
+    "timeline": "September",
+    "stpiend/ctc": "70,000 per month / 30+ lakh CTC",
+    "Key note/How to prepare": "Highly competitive open-for-all program.",
+    "preparation strategy": "Focus on industrial problem-solving and development."
+  },
+  "LinkedIn": {
+    "program": "LinkedIn Coaching",
+    "hire": "Internship",
+    "eligibility": "2nd and 3rd year female candidates",
+    "timeline": "April to May",
+    "stpiend/ctc": "1 lakh per month plus benefits like an iPhone",
+    "Key note/How to prepare": "High-value mentorship program often leading to PPOs.",
+    "preparation strategy": "Stay active on social media to catch short application windows."
+  },
+  "LinkedIn-2": {
+    "program": "Direct Hiring",
+    "hire": "Intern and Full-time",
+    "eligibility": "3rd and Final year students",
+    "timeline": "September to December",
+    "stpiend/ctc": "Standard LinkedIn compensation",
+    "Key note/How to prepare": "Direct hiring links often last only a few days.",
+    "preparation strategy": "Ensure your profile and resume are optimized for quick application."
+  },
+  "Juspay": {
+    "program": "Hiring Challenge",
+    "hire": "Intern plus PPO offer",
+    "eligibility": "3rd year and final year students",
+    "timeline": "March and September",
+    "stpiend/ctc": "40,000 to 50,000 stipend / 20-27 lakh CTC",
+    "Key note/How to prepare": "Challenges are typically hosted on Unstop or HackerEarth.",
+    "preparation strategy": "Focus on high-level programming and competitive coding."
+  },
+  "Trilogy (CodeNation)": {
+    "program": "CodeAgon",
+    "hire": "Intern with high PPO chance",
+    "eligibility": "2nd and 3rd year students",
+    "timeline": "January to August",
+    "stpiend/ctc": "1.5 lakh per month (Tax-free)",
+    "Key note/How to prepare": "Training in Dubai; highest paying role mentioned.",
+    "preparation strategy": "Prepare for extremely difficult competitive programming rounds."
+  },
+  "American Express": {
+    "program": "Code Street / Cohort Street",
+    "hire": "Internship",
+    "eligibility": "1st to 4th year students (Technical Degrees)",
+    "timeline": "January to March",
+    "stpiend/ctc": "35,000 to 75,000 per month",
+    "Key note/How to prepare": "Open to all undergraduate years.",
+    "preparation strategy": "Keep an eye on the American Express website."
+  },
+  "American Express-2": {
+    "program": "Geek Goddess",
+    "hire": "Internship",
+    "eligibility": "3rd year female students",
+    "timeline": "November to December",
+    "stpiend/ctc": "1 lakh per month",
+    "Key note/How to prepare": "Diversity focused program for female students.",
+    "preparation strategy": "Search specifically for this program on the Amex portal."
+  },
+  "GSOC": {
+    "program": "Google Summer of Code",
+    "hire": "Open Source Internship",
+    "eligibility": "Open source enthusiasts (All engineering branches)",
+    "timeline": "January to March",
+    "stpiend/ctc": "1.5 lakh to 3 lakh total stipend",
+    "Key note/How to prepare": "The GSOC tag is highly valued by all recruiters.",
+    "preparation strategy": "Practice proposal writing and contribute to open source early."
+  },
+  "D.E. Shaw": {
+    "program": "Ascent / Ascent Educator",
+    "hire": "Internship and Mentorship",
+    "eligibility": "2nd and 3rd year female students",
+    "timeline": "July and August",
+    "stpiend/ctc": "50,000 to 60,000 per month",
+    "Key note/How to prepare": "Short program including an offline learning event.",
+    "preparation strategy": "Build your profile and share progress on social media."
+  },
+  "Atlassian": {
+    "program": "Women in Tech",
+    "hire": "Internship",
+    "eligibility": "2nd year female students",
+    "timeline": "August and September",
+    "stpiend/ctc": "1 lakh per month / 70 lakh CTC",
+    "Key note/How to prepare": "Timelines may shift based on company budgets.",
+    "preparation strategy": "Monitor for openings one month earlier or later than usual."
+  },
+  "ServiceNow": {
+    "program": "Women Code to Win",
+    "hire": "Internship",
+    "eligibility": "Female students from any year",
+    "timeline": "January to March",
+    "stpiend/ctc": "More than 1 lakh per month",
+    "Key note/How to prepare": "Provides equal opportunity regardless of the college year.",
+    "preparation strategy": "Focus on diversity hiring initiatives and coding."
+  },
+  "Cisco": {
+    "program": "IdeaThon",
+    "hire": "Internship",
+    "eligibility": "2nd and 3rd year students",
+    "timeline": "March to June",
+    "stpiend/ctc": "70,000 per month",
+    "Key note/How to prepare": "Known for excellent work-life balance.",
+    "preparation strategy": "Apply during the spring window via the IdeaThon program."
+  },
+  "Adobe": {
+    "program": "Adobe India Internship",
+    "hire": "Internship",
+    "eligibility": "Pre-final and Final year students",
+    "timeline": "August to October",
+    "stpiend/ctc": "60,000 to 1 lakh per month",
+    "Key note/How to prepare": "Powerful brand value to add to your application.",
+    "preparation strategy": "Strong DSA and development skills are expected."
+  },
+  "Summer of Bitcoin": {
+    "program": "Summer of Bitcoin",
+    "hire": "Internship (3-month)",
+    "eligibility": "Students from all college years",
+    "timeline": "February or Mid-year",
+    "stpiend/ctc": "3,000 USD worth of Bitcoins",
+    "Key note/How to prepare": "Unique pay method in cryptocurrency.",
+    "preparation strategy": "Work on open-source blockchain domain projects."
+  },
+  "RBI": {
+    "program": "RBI Research Internship",
+    "hire": "Internship",
+    "eligibility": "3rd and 4th year students (Some sources say any year)",
+    "timeline": "December to January",
+    "stpiend/ctc": "45,000 to 50,000 per month",
+    "Key note/How to prepare": "Opportunity to work for the Indian Government directly.",
+    "preparation strategy": "Monitor for government application windows in winter."
+  },
+  "GitHub": {
+    "program": "GitHub Externship",
+    "hire": "Internship",
+    "eligibility": "3rd and 4th year students",
+    "timeline": "March and November",
+    "stpiend/ctc": "25,000 to 30,000 per month",
+    "Key note/How to prepare": "Gives preference for future Microsoft or LinkedIn roles.",
+    "preparation strategy": "Gain experience working on the GitHub ecosystem."
+  },
+  "Agoda": {
+    "program": "Technology Intern Hiring",
+    "hire": "6-month Intern",
+    "eligibility": "3rd year students",
+    "timeline": "March and April",
+    "stpiend/ctc": "1 lakh per month",
+    "Key note/How to prepare": "Offers a longer duration internship.",
+    "preparation strategy": "Prepare for a March/April application cycle."
+  },
+  "Intuit": {
+    "program": "SDE Internship",
+    "hire": "Internship",
+    "eligibility": "3rd year students",
+    "timeline": "November to December",
+    "stpiend/ctc": "1 lakh to 1.5 lakh per month",
+    "Key note/How to prepare": "Company culture is highly regarded.",
+    "preparation strategy": "Search the company job portal during late autumn."
+  },
+  "Morgan Stanley": {
+    "program": "SDE Internship",
+    "hire": "Internship",
+    "eligibility": "3rd and 4th year students",
+    "timeline": "November to December",
+    "stpiend/ctc": "1 lakh per month",
+    "Key note/How to prepare": "Highly prestigious brand for your resume.",
+    "preparation strategy": "Monitor for openings in the winter window."
+  },
+  "Swiggy": {
+    "program": "Swiggy Launchpad",
+    "hire": "Startup-style internship",
+    "eligibility": "All engineering students (Development skills)",
+    "timeline": "May to July",
+    "stpiend/ctc": "20,000 to 45,000 per month",
+    "Key note/How to prepare": "Focus on practical development skills over pure DSA.",
+    "preparation strategy": "Build a strong development portfolio."
+  },
+  "Meta": {
+    "program": "Hacker Cup / Direct Hiring",
+    "hire": "Internship",
+    "eligibility": "All engineering years",
+    "timeline": "July to September",
+    "stpiend/ctc": "1.5 lakh to 2.5 lakh per month",
+    "Key note/How to prepare": "Competitive coding at an elite level.",
+    "preparation strategy": "Participate in Facebook/Meta Hacker Cup challenges."
+  },
+  "EY": {
+    "program": "EY Techathon",
+    "hire": "Internship",
+    "eligibility": "2nd and 3rd year engineering students",
+    "timeline": "September to November",
+    "stpiend/ctc": "40,000 per month / 1.25 lakh CTC",
+    "Key note/How to prepare": "Hiring is often based on projects or case studies.",
+    "preparation strategy": "Review previous Techathon guides to understand the format."
+  }
+}
