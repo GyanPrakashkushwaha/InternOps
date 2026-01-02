@@ -1,4 +1,3 @@
-```json
 {
   "Goldman Sachs": {
     "program": "Engineering Campus Hiring Program",
@@ -132,4 +131,6 @@
     "eligibility": "Students from every year",
     "timeline": "February or mid-year",
     "stpiend/ctc": "Stipend in US dollars/Bitcoin",
-    "Key note/How to prepare": "Work on open-source projects in the blockchain domain 
+    "Key note/How to prepare": "Work on open-source projects in the blockchain domain"
+  }
+}
