@@ -1,0 +1,16 @@
+{
+  "match_percentage": 85,
+  "missing_skills": [
+    {
+      "skill_name": ["Behavioral Analytics", "computational social science"],
+      "importance": "Bonus",
+      "category": "Domain Knowledge"
+    },
+    {
+      "skill_name": ["Responsible AI", "ethics", "algorithmic fairness"],
+      "importance": "Bonus",
+      "category": "Soft Skill"
+    }
+  ],
+  "brief_summary": "The candidate is a strong match, possessing excellent technical skills in AI/ML, GenAI, and data analytics, though they could articulate their interest in Responsible AI and Behavioral Analytics more explicitly as emphasized in the job description."
+}

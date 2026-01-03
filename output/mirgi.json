@@ -1,0 +1,51 @@
+{
+  "match_percentage": 50,
+  "missing_skills": [
+    {
+      "skill_name": [
+        "Market research and analysis",
+        "Competitor benchmarking",
+        "Go-to-market strategies"
+      ],
+      "importance": "Critical",
+      "category": "Domain Knowledge"
+    },
+    {
+      "skill_name": [
+        "Business model development",
+        "Profitability analysis",
+        "ROI analysis",
+        "Growth potential analysis"
+      ],
+      "importance": "Critical",
+      "category": "Domain Knowledge"
+    },
+    {
+      "skill_name": [
+        "Customer segmentation",
+        "Buyer persona development",
+        "Lead generation strategies",
+        "Customer requirements compilation"
+      ],
+      "importance": "Critical",
+      "category": "Domain Knowledge"
+    },
+    {
+      "skill_name": [
+        "Stakeholder communication (business reports, presentations, dashboards)"
+      ],
+      "importance": "Critical",
+      "category": "Soft Skill"
+    },
+    {
+      "skill_name": [
+        "Understanding complex product domains (from a business strategy perspective)",
+        "Customer-first mindset",
+        "Business-focused mindset"
+      ],
+      "importance": "Bonus",
+      "category": "Soft Skill"
+    }
+  ],
+  "brief_summary": "The candidate has strong AI/ML technical skills and analytical abilities but lacks direct experience in core business strategy, market intelligence, customer strategy, and business-focused communication, which are central to this Business Development & Strategy Apprentice role."
+}
