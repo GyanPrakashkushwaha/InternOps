@@ -30,8 +30,8 @@ print(final_state["ats_result"])
 # print(final_state["recruiter_result"])
 
 output = {
-    "resume": final_state["resume_text"],
-    "jd": final_state["job_description"],
+    # "resume": final_state["resume_text"],
+    # "jd": final_state["job_description"],
     "ats_result": final_state["ats_result"].model_dump(),
     # "recruiter_result": final_state["recruiter_result"].model_dump() if final_state["recruiter_result"] else None ,
     # "hm_result": final_state["hm_result"].model_dump() if final_state["hm_result"] else None,
