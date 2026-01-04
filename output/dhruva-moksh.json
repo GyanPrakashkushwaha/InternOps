@@ -1,0 +1,31 @@
+{
+  "match_percentage": 30,
+  "fit_category": "Hard Reach",
+  "verdict_message": "STOP. Do not apply. You fail the mandatory 'Hard Requirements' for this specific role. You will be auto-rejected.",
+  "missing_skills": [
+    {
+      "skill_name": "Professional Teaching/Mentoring Experience",
+      "priority": "High",
+      "learning_difficulty": "Hard"
+    },
+    {
+      "skill_name": "Excellent Technical Communication Skills (for instruction)",
+      "priority": "High",
+      "learning_difficulty": "Moderate"
+    },
+    {
+      "skill_name": "Proficiency in Fine-tuning/PEFT concepts",
+      "priority": "High",
+      "learning_difficulty": "Moderate"
+    },
+    {
+      "skill_name": "Ability to patiently handle and solve student doubts",
+      "priority": "High",
+      "learning_difficulty": "Moderate"
+    }
+  ],
+  "estimated_preparation_time": "Several months to years",
+  "action_plan": [
+    "Look for roles that match your current Experience Level and tech stack, such as SDE/AI internships."
+  ]
+}

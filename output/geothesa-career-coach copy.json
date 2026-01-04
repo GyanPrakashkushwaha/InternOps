@@ -1,0 +1,23 @@
+{
+  "match_percentage": 88,
+  "fit_category": "Good Match",
+  "verdict_message": "You are an exceptionally strong candidate with impressive technical skills and projects directly relevant to this internship. With minor adjustments to highlight specific areas, you could be a perfect fit.",
+  "missing_skills": [
+    {
+      "skill_name": "Responsible AI principles and ethics",
+      "priority": "Medium",
+      "learning_difficulty": "Easy"
+    },
+    {
+      "skill_name": "Behavioral Analytics / Computational Social Science",
+      "priority": "Medium",
+      "learning_difficulty": "Moderate"
+    }
+  ],
+  "estimated_preparation_time": "1 month",
+  "action_plan": [
+    "Research key concepts and frameworks in Responsible AI, ethics, and algorithmic fairness. Be prepared to discuss your interest in these topics and how they apply to your projects.",
+    "Explore foundational concepts and applications in Behavioral Analytics or computational social science to broaden your exposure.",
+    "Consider how your existing projects, particularly the Customer Churn Predictor, can be framed to highlight aspects related to human behavior analysis or ethical considerations in data modeling."
+  ]
+}

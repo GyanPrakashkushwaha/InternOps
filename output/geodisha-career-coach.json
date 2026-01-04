@@ -1,0 +1,16 @@
+{
+  "match_percentage": 40,
+  "fit_category": "Hard Reach",
+  "verdict_message": "STOP. Do not apply. You fail the mandatory 'Hard Requirements' for this specific role. You will be auto-rejected.",
+  "missing_skills": [
+    {
+      "skill_name": "Onsite availability in Hyderabad (Primary Work Location)",
+      "priority": "High",
+      "learning_difficulty": "Hard"
+    }
+  ],
+  "estimated_preparation_time": "Relocation to Hyderabad for full-time onsite work is a significant life decision, typically requiring months for planning and execution, and does not align with the immediate joining requirement.",
+  "action_plan": [
+    "Look for roles that match your current location and experience level instead."
+  ]
+}
