@@ -1,0 +1,28 @@
+{
+  "todo-tree.general.tags": [
+    "TODO",
+    "FIXME",
+    "BUG",
+    "REVIEW",
+    "COMPLETE",
+    "NOTE"
+  ],
+  "todo-tree.highlights.customHighlight": {
+    "COMPLETE": {
+      "icon": "verified",
+      "iconColour": "green",
+      "gutterIcon": "verified",
+      "type": "line"
+    },
+    "REVIEW": {
+      "icon": "eye",
+      "iconColour": "#3498db",
+      "gutterIcon": "eye"
+    },
+    "NOTE": {
+      "icon": "pencil",
+      "iconColour": "orange",
+      "gutterIcon": "pencil"
+    }
+  }
+}

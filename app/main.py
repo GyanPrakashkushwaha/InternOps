@@ -58,6 +58,7 @@ def ats_condition(state: ResumeScreeningState)-> Literal["PASS", "FAIL"]:
 def recruiter_condition(state: ResumeScreeningState)-> Literal["PASS", "FAIL"]:
     return state["recruiter_result"].decision
 
+# FIXME: add Try-Except block for robustness
 # Graph
 builder = StateGraph(ResumeScreeningState)
 
