@@ -1,7 +1,7 @@
 
-- [ ] Add ATS class for dumb filtering.
 - [x] Create the Prompt Templates not just strings. ✅
-- [ ] Do seperate ATS, Recruiter, and Hiring Manager to get faster results.
 - [ ] API 
 - [ ] Streaming
+- [ ] Add Rule based ATS class for dumb filtering.
+- [ ] Do seperate ATS, Recruiter, and Hiring Manager to get faster results.
 - [ ] Extension

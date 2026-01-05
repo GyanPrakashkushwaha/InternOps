@@ -51,7 +51,6 @@ class Prompt:
             """)
         ]
     )
-
     
     RECRUITER_PROMPT = ChatPromptTemplate([
         ("system", 

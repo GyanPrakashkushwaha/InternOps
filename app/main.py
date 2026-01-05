@@ -6,8 +6,8 @@ from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage, SystemMessage
 
 # Local Module Imports
-from models import ATSAnalysis, RecruiterAnalysis, HiringManagerAnalysis, Prompt
-from services import gemini
+from .models import ATSAnalysis, RecruiterAnalysis, HiringManagerAnalysis, Prompt
+from .services import gemini
 
 # Structured LLM's
 llm = gemini()
