@@ -27,11 +27,17 @@ async def analysis(
 
     for page in pdf_reader.pages:
         text_content += page.extract_text() or ""
-
-
-    return {
+    
+    input_state = {
         "resume_text": text_content,
         "job_description": jobDescription
+    }
+    
+    output_state = workflow.invoke(input_state)
+    
+
+    return {
+        "result": output_state
     }
 
 # final_state = workflow.invoke(initial_state)

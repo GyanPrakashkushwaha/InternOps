@@ -5,3 +5,7 @@
 - [ ] Add Rule based ATS class for dumb filtering.
 - [ ] Do seperate ATS, Recruiter, and Hiring Manager to get faster results.
 - [ ] Extension
+- [ ] Add 3 Modes
+        - Strict Compliance ->	Risk elimination
+        - Real-World ATS ->	Ranking & filtering
+        - Brutal Signal ->	Depth validation

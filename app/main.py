@@ -12,17 +12,25 @@ from .services import gemini
 # Structured LLM's
 llm = gemini()
 
-# State
-class ResumeScreeningState(TypedDict):
+# ***************************** STATES ***********************************
+class InputState(TypedDict):
     resume_text: str
     job_description: str
+    
+class ScreeningState(InputState):
     ats_result: Optional[ATSAnalysis] = None
     recruiter_result: Optional[RecruiterAnalysis] = None
     hm_result: Optional[HiringManagerAnalysis] = None
     final_status: Literal["HIRE", "PENDING", "REJECT"]
+    
+class OutputState(BaseModel):
+    ats_result: Optional[ATSAnalysis] = Field(default=None, description="Result from ATS Agent")
+    recruiter_result: Optional[RecruiterAnalysis] = Field(default=None, description="Result from Recruiter Agent")
+    hm_result: Optional[HiringManagerAnalysis] = Field(default=None, description="Result from HM Agent")
+    final_status: Literal["HIRE", "PENDING", "REJECT"] = "PENDING"
 
 # Node Functions
-def ats_agent(state: ResumeScreeningState):
+def ats_agent(state: InputState):
     ats_llm = llm.with_structured_output(ATSAnalysis)
     agent_prompt = Prompt.ATS_PROMPT.format(
         resume_text = state["resume_text"],
@@ -31,7 +39,7 @@ def ats_agent(state: ResumeScreeningState):
     response = ats_llm.invoke(agent_prompt)
     return {"ats_result": response}
     
-def recruiter_agent(state: ResumeScreeningState):
+def recruiter_agent(state):
     recruiter_llm = llm.with_structured_output(RecruiterAnalysis)
     agent_prompt = Prompt.RECRUITER_PROMPT.format(
         resume_text = state["resume_text"],
@@ -40,7 +48,7 @@ def recruiter_agent(state: ResumeScreeningState):
     response = recruiter_llm.invoke(agent_prompt)
     return {"recruiter_result": response}
 
-def hm_agent(state: ResumeScreeningState):
+def hm_agent(state: InputState):
     hm_llm = llm.with_structured_output(HiringManagerAnalysis)
     agent_prompt = Prompt.HM_PROMPT.format(
         resume_text = state["resume_text"],
@@ -50,17 +58,17 @@ def hm_agent(state: ResumeScreeningState):
     return {"hm_result": response}
     
 # conditional Functions
-def ats_condition(state: ResumeScreeningState)-> Literal["PASS", "FAIL"]:
+def ats_condition(state: ScreeningState)-> Literal["PASS", "FAIL"]:
     if state["ats_result"].decision == "PASS":
         return "PASS"
     return "FAIL"
 
-def recruiter_condition(state: ResumeScreeningState)-> Literal["PASS", "FAIL"]:
+def recruiter_condition(state: ScreeningState)-> Literal["PASS", "FAIL"]:
     return state["recruiter_result"].decision
 
 # FIXME: add Try-Except block for robustness
 # Graph
-builder = StateGraph(ResumeScreeningState)
+builder = StateGraph(ScreeningState, input = InputState, output = OutputState)
 
 # Nodes
 builder.add_node("ats_node", ats_agent)
