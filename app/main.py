@@ -4,20 +4,24 @@ from typing import TypedDict, Literal, Annotated, Optional
 from operator import add
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage, SystemMessage
+import os
 
 # Local Module Imports
-from .models import ATSAnalysis, RecruiterAnalysis, HiringManagerAnalysis, Prompt
+from .models import (ATSAnalysis, RecruiterAnalysis, HiringManagerAnalysis,
+                     StrictCompliancePrompt, RealWorldATSPrompt, BrutalSignalPrompt)
+
 from .services import gemini
 
 # Structured LLM's
 llm = gemini()
 
-os.environ["virtual-recruiter"]
+os.environ["LANGCHAIN_PROJECT"] = "virtual-recruiter"
 
 # ***************************** STATES ***********************************
 class InputState(TypedDict):
     resume_text: str
     job_description: str
+    mode: Literal["strict", "real-world", "brutal"]
     
 class ScreeningState(InputState):
     ats_result: Optional[ATSAnalysis] = None
@@ -31,10 +35,21 @@ class OutputState(BaseModel):
     hm_result: Optional[HiringManagerAnalysis] = Field(default=None, description="Result from HM Agent")
     final_status: Literal["HIRE", "PENDING", "REJECT"] = "PENDING"
 
+
+# Prompt Mapping
+def get_prompt_class(mode: str):
+    PROMPT_MAP = {
+        "strict": StrictCompliancePrompt,
+        "real-world": RealWorldATSPrompt,
+        "brutal": BrutalSignalPrompt
+    }
+    return PROMPT_MAP.get(mode, RealWorldATSPrompt)
+
 # Node Functions
 def ats_agent(state: InputState):
     ats_llm = llm.with_structured_output(ATSAnalysis)
-    agent_prompt = Prompt.ATS_PROMPT.format(
+    PromptClass = get_prompt_class(state["mode"])
+    agent_prompt = PromptClass.ATS_PROMPT.format(
         resume_text = state["resume_text"],
         job_description = state["job_description"]
     )
@@ -43,7 +58,8 @@ def ats_agent(state: InputState):
     
 def recruiter_agent(state):
     recruiter_llm = llm.with_structured_output(RecruiterAnalysis)
-    agent_prompt = Prompt.RECRUITER_PROMPT.format(
+    PromptClass = get_prompt_class(state["mode"])
+    agent_prompt = PromptClass.RECRUITER_PROMPT.format(
         resume_text = state["resume_text"],
         ats_feedback = state["ats_result"].feedback
     )
@@ -52,7 +68,8 @@ def recruiter_agent(state):
 
 def hm_agent(state: InputState):
     hm_llm = llm.with_structured_output(HiringManagerAnalysis)
-    agent_prompt = Prompt.HM_PROMPT.format(
+    PromptClass = get_prompt_class(state["mode"])
+    agent_prompt = PromptClass.HM_PROMPT.format(
         resume_text = state["resume_text"],
         job_description = state["job_description"]
     )

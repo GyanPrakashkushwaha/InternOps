@@ -13,7 +13,7 @@ API_KEYS = [
 ]
 # print(API_KEYS)
 API_KEY_NO = 0
-MODEL_NAME = "gemini-2.5-flash-lite"
+MODEL_NAME = "gemini-2.5-flash"
 def gemini(model = MODEL_NAME, temperature = 0):
     try:
         # os.environ['GEMINI_API_KEY'] = API_KEYS[API_KEY_NO]

@@ -3,6 +3,7 @@ from langchain_community.document_loaders import TextLoader
 from PyPDF2 import PdfReader
 from fastapi import FastAPI, UploadFile, File, Form
 from base64 import b64encode
+from typing import Literal
 import io
 
 # Local Module Import
@@ -14,8 +15,9 @@ app = FastAPI()
 def root():
     return {"message": "background is running!"}
 
-@app.post("/analyze")
+@app.post("/analyze/{mode}")
 async def analysis(
+    mode: Literal["strict", "real-world", "brutal"],
     file: UploadFile = File(...),
     jobDescription: str = Form(...)
 ):
@@ -30,12 +32,12 @@ async def analysis(
     
     input_state = {
         "resume_text": text_content,
-        "job_description": jobDescription
+        "job_description": jobDescription,
+        "mode": mode
     }
     
     output_state = workflow.invoke(input_state)
     
-
     return {
         "result": output_state
     }
