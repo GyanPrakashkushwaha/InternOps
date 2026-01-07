@@ -17,6 +17,8 @@ llm = gemini()
 
 os.environ["LANGCHAIN_PROJECT"] = "virtual-recruiter"
 
+os.environ["LANGCHAIN_TRACING_V2"] = "false"
+
 # ***************************** STATES ***********************************
 class InputState(TypedDict):
     resume_text: str

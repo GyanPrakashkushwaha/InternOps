@@ -1,0 +1,15 @@
+fastapi
+python-multipart
+uvicorn
+PyPDF2
+langchain-community
+langchain-core
+langchain-google-genai
+langgraph
+pydantic
+python-dotenv
+pandas
+openpyxl
+langchain-redis
+redis
+celery
