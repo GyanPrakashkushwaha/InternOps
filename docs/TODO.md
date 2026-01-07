@@ -1,11 +1,11 @@
 
 - [x] Create the Prompt Templates not just strings. ✅
-- [ ] API 
-- [ ] Streaming
+- [ ] API ✅
+- [ ] Streaming 
 - [ ] Add Rule based ATS class for dumb filtering.
 - [ ] Do seperate ATS, Recruiter, and Hiring Manager to get faster results.
-- [ ] Extension
-- [ ] Add 3 Modes
+- [ ] Extension 
+- [ ] Add 3 Modes(The user can toggle modes.)
         - Strict Compliance ->	Risk elimination
         - Real-World ATS ->	Ranking & filtering
         - Brutal Signal ->	Depth validation

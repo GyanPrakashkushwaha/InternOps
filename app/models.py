@@ -100,6 +100,7 @@ class Prompt:
         """)
     ])
 
+
 # REal World senario but I'll use more strict one
 class Prompt2:
     ATS_PROMPT = ChatPromptTemplate(

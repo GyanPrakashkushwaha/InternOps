@@ -12,6 +12,8 @@ from .services import gemini
 # Structured LLM's
 llm = gemini()
 
+os.environ["virtual-recruiter"]
+
 # ***************************** STATES ***********************************
 class InputState(TypedDict):
     resume_text: str
