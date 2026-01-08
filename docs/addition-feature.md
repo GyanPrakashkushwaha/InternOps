@@ -5,4 +5,4 @@
 - Create a LLM wrapper
 - Add a messaging service(SMTP/Whatsapp)
 - Do send reminders for each internships.
-- Resume Creator
+- Resume Builder

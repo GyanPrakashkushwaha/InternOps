@@ -1,9 +1,9 @@
 
 from celery import Celery
-import sqlite3
 import json
 import hashlib
 from .main import workflow
+from .database import init_db, get_db_connection
 
 # Configure Celery to use Redis as the broker
 celery_app = Celery(
@@ -11,28 +11,6 @@ celery_app = Celery(
     broker="redis://localhost:6379/0",
     backend="redis://localhost:6379/0"
 )
-
-DB_FILE = "analysis_cache.db"
-
-def get_db_connection():
-    conn = sqlite3.connect(DB_FILE)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-def init_db():
-    conn = get_db_connection()
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS analysis_results (
-            id TEXT PRIMARY KEY,
-            resume_hash TEXT,
-            jd_hash TEXT,
-            mode TEXT,
-            result JSON,  -- Column name is 'result'
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    conn.commit()
-    conn.close()
 
 # Initialize DB on start
 init_db()
@@ -86,7 +64,7 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str):
     # FIXED: Table name 'analysis_results', Column name 'result'
     conn.execute(
         "INSERT OR REPLACE INTO analysis_results (id, resume_hash, jd_hash, mode, result) VALUES (?, ?, ?, ?, ?)",
-        (cache_key, resume_hash, jd_hash, mode, serialized_output)
+        (cache_key, resume_text, job_description, mode, serialized_output)
     )
     conn.commit()
     conn.close()
