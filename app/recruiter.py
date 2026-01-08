@@ -1,23 +1,19 @@
 
 from langgraph.graph import StateGraph, START, END
 from typing import TypedDict, Literal, Annotated, Optional
-from operator import add
 from pydantic import BaseModel, Field
-from langchain_core.messages import HumanMessage, SystemMessage
 import os
 
 # Local Module Imports
-from .models import (ATSAnalysis, RecruiterAnalysis, HiringManagerAnalysis,
-                     StrictCompliancePrompt, RealWorldATSPrompt, BrutalSignalPrompt)
+from .models import ATSAnalysis, RecruiterAnalysis, HiringManagerAnalysis
+from .prompts import StrictCompliancePrompt, RealWorldATSPrompt, BrutalSignalPrompt
 
 from .services import gemini
 
 # Structured LLM's
 llm = gemini()
-
 os.environ["LANGCHAIN_PROJECT"] = "virtual-recruiter"
-
-os.environ["LANGCHAIN_TRACING_V2"] = "false"
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
 
 # ***************************** STATES ***********************************
 class InputState(TypedDict):
@@ -80,16 +76,14 @@ def hm_agent(state: InputState):
     
 # conditional Functions
 def ats_condition(state: ScreeningState)-> Literal["PASS", "FAIL"]:
-    if state["ats_result"].decision == "PASS":
-        return "PASS"
-    return "FAIL"
+    return state["ats_result"].decision
 
 def recruiter_condition(state: ScreeningState)-> Literal["PASS", "FAIL"]:
     return state["recruiter_result"].decision
 
 # FIXME: add Try-Except block for robustness
 # Graph
-builder = StateGraph(ScreeningState, input = InputState, output = OutputState)
+builder = StateGraph(ScreeningState, input = InputState, output_schema= OutputState)
 
 # Nodes
 builder.add_node("ats_node", ats_agent)
@@ -104,3 +98,5 @@ builder.add_edge("hm_node", END)
 
 # Workflow
 workflow = builder.compile()
+
+

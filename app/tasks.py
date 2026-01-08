@@ -2,7 +2,7 @@
 from celery import Celery
 import json
 import hashlib
-from .main import workflow
+from .recruiter import workflow
 from .database import init_db, get_db_connection
 
 # Configure Celery to use Redis as the broker
