@@ -13,7 +13,6 @@ from .services import gemini
 # Structured LLM's
 llm = gemini()
 os.environ["LANGCHAIN_PROJECT"] = "virtual-recruiter"
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
 
 # ***************************** STATES ***********************************
 class InputState(TypedDict):

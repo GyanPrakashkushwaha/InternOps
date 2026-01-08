@@ -10,6 +10,7 @@ from models import LatexCodeAnalysis
 
 # BUG - Latex code not being as expected.
 # FIXME - Use other gemini model and then try to generate the latex code.
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
 
 # state
 class BuilderStateInput(TypedDict):
