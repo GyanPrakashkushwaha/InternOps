@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-
 # Setup Redis for LLM Caching
 # This saves costs by caching exact API responses
 
@@ -34,7 +33,6 @@ MODEL_NAME = "gemini-2.5-flash-lite"
 def gemini(model = MODEL_NAME, temperature = 0):
     try:
         # os.environ['GEMINI_API_KEY'] = API_KEYS[API_KEY_NO]
-        print("=================================================================== \n REDIS CACHE \n =================================== \n\n ",redis_cache, "\n \n=================================================================== \n REDIS CACHE \n ===================================")
         llm = ChatGoogleGenerativeAI(
             model = model, 
             temperature = temperature, 
@@ -45,10 +43,10 @@ def gemini(model = MODEL_NAME, temperature = 0):
     except Exception as e:
         raise e
 
-if __name__ == "__main__":
-    model = gemini()
-    response1 = model.invoke("What is 2+2?")
-    print("First response:", response1.content)
+# if __name__ == "__main__":
+#     model = gemini()
+#     response1 = model.invoke("What is 2+2?")
+#     print("First response:", response1.content)
     
-    # response2 = model.invoke("What is 2+2?")  # Should hit cache
-    # print("Second response (cached):", response2.content)
+#     # response2 = model.invoke("What is 2+2?")  # Should hit cache
+#     # print("Second response (cached):", response2.content)
