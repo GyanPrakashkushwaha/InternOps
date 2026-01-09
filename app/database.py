@@ -11,22 +11,12 @@ def get_db_connection():
             "user": os.getenv("DB_USER", "postgres"),
             "password": os.getenv("DB_PASSWORD", "password"),
             "host": os.getenv("DB_HOST", "localhost"),
-            "port": os.getenv("DB_PORT", "5432"),
+            "port": os.getenv("DB_PORT", "5430"),
             "database": os.getenv("DB_NAME", "internops")
         }
-        
-        # db_params = {
-        #     "user": "postgres",
-        #     "password": "password",
-        #     "host": "localhost",
-        #     "port": "5432",
-        #     "database": "internops"
-        # }
-        
-        print("DB_HOST =", os.getenv("DB_HOST"))
-        print("DB_PORT =", os.getenv("DB_PORT"))
-
+        print(db_params)
         conn = psycopg2.connect(**db_params)
+        
     except Exception as e:
         raise RuntimeError(f"DB connection failed: {e}")
     return conn
@@ -47,7 +37,7 @@ def init_db():
                 jd_hash TEXT,
                 mode TEXT,
                 result TEXT, 
-                created_at TIMESTAMP DEFAULT NOW()
+                created_at TIMESTAMPZ NOT NULL DEFAULT NOW()
             )
         """)
         conn.commit()

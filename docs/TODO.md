@@ -15,3 +15,6 @@
 - [ ] CI/CD Integration.
 - [ ] AWS deployment
 - [ ] Do seperate ATS, Recruiter, and Hiring Manager to get faster results.
+- [ ] Add a way to generate new response even if the data is present in the database.
+- [ ] (OPTIONAL) Structure the database(for responses).
+- [ ] Add Polling

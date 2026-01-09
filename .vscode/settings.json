@@ -1,12 +1,4 @@
 {
-  "todo-tree.general.tags": [
-    "TODO",
-    "FIXME",
-    "BUG",
-    "REVIEW",
-    "COMPLETE",
-    "NOTE"
-  ],
   "todo-tree.highlights.customHighlight": {
     "COMPLETE": {
       "icon": "verified",

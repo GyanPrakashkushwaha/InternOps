@@ -23,43 +23,33 @@ def generate_hash(text: str) -> str:
 
 @celery_app.task(bind=True)
 def analyze_task(self, resume_text: str, job_description: str, mode: str):
-    # 1. Generate unique hashes for inputs
+    
     resume_hash = generate_hash(resume_text)
     jd_hash = generate_hash(job_description)
     cache_key = f"{resume_hash}_{jd_hash}_{mode}"
 
-    # 2. Check DB cache
     conn = get_db_connection()
-    print(conn.get_dsn_parameters())
-
     cur = conn.cursor(cursor_factory=RealDictCursor)
-
     cur.execute(
         "SELECT result FROM analysis_results WHERE id = %s",
         (cache_key,)
     )
     row = cur.fetchone()
-
     if row:
         cur.close()
         conn.close()
         print("Returning cached result from DB")
         return json.loads(row["result"])
 
-    # 3. Run workflow
     input_state = {
         "resume_text": resume_text,
         "job_description": job_description,
         "mode": mode
     }
-
     output_state = workflow.invoke(input_state)
-
-    # 4. Normalize output
     output_state_dict = {
         "ats_result": output_state["ats_result"].model_dump()
     }
-
     if "recruiter_result" in output_state:
         output_state_dict["recruiter_result"] = output_state["recruiter_result"].model_dump()
 
@@ -68,10 +58,9 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str):
 
     if "final_status" in output_state:
         output_state_dict["final_status"] = output_state["final_status"].model_dump()
-
     serialized_output = json.dumps(output_state_dict, default=str)
 
-    # 5. Insert / update cache
+    # Insert / update cache
     query = """
     INSERT INTO analysis_results (id, resume_hash, jd_hash, mode, result)
     VALUES (%s, %s, %s, %s, %s)
@@ -82,14 +71,14 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str):
         mode = EXCLUDED.mode,
         result = EXCLUDED.result;
     """
-
     cur.execute(
         query,
-        (cache_key, resume_hash, jd_hash, mode, serialized_output)
+        (cache_key, resume_text, job_description, mode, serialized_output)
     )
-
     conn.commit()
     cur.close()
     conn.close()
 
     return output_state_dict
+
+
