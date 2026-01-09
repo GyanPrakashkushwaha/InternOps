@@ -5,12 +5,17 @@ import hashlib
 from .recruiter import workflow
 from .database import init_db, get_db_connection
 from psycopg2.extras import RealDictCursor
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 
 # Configure Celery to use Redis as the broker
 celery_app = Celery(
     "internops_worker",
-    broker="redis://localhost:6379/0",
-    backend="redis://localhost:6379/0"
+    broker=redis_url,
+    backend=redis_url
 )
 
 # Initialize DB on start
@@ -31,15 +36,16 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str):
     # We use RealDictCursor so we can access columns by name like cached_row['result']
     cur = conn.cursor(cursor_factory=RealDictCursor)
     
-    cached_row = conn.execute(
+    cached_row = cur.execute(
         "SELECT result FROM analysis_results WHERE id = %s", (cache_key,)
-    ).fetchone()
+    )
+    
     
     if cached_row:
         cur.close()
         conn.close()
         print("Returning cached result from SQLite")
-        return json.loads(cached_row["result"])
+        return json.loads(cached_row.fetchone()["result"])
 
     cur.close()
     
@@ -80,6 +86,7 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str):
     """
     cur.execute(query, (cache_key, resume_hash, job_description, mode, serialized_output))
     conn.commit()
+    cur.close()
     conn.close()
     
     return output_state_dict

@@ -13,4 +13,4 @@ openpyxl
 langchain-redis
 redis
 celery
-psycopg2
+psycopg2-binary

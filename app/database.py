@@ -4,25 +4,24 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-
 def get_db_connection():
     conn = None
     try:
-        # db_params = {
-        #     "user": os.getenv("DB_USER"),
-        #     "password": os.getenv("DB_PASSWORD"),
-        #     "host": os.getenv("DB_HOST"),
-        #     "port": os.getenv("DB_PORT"),
-        #     "database": os.getenv("DB_NAME")
-        # }
-        
         db_params = {
-            "user": "postgres",
-            "password": "password",
-            "host": "localhost",
-            "port": "5432",
-            "database": "internops"
+            "user": os.getenv("DB_USER", "postgres"),
+            "password": os.getenv("DB_PASSWORD", "password"),
+            "host": os.getenv("DB_HOST", "localhost"),
+            "port": os.getenv("DB_PORT", "5432"),
+            "database": os.getenv("DB_NAME", "internops")
         }
+        
+        # db_params = {
+        #     "user": "postgres",
+        #     "password": "password",
+        #     "host": "localhost",
+        #     "port": "5432",
+        #     "database": "internops"
+        # }
         
         print("DB_HOST =", os.getenv("DB_HOST"))
         print("DB_PORT =", os.getenv("DB_PORT"))
@@ -58,11 +57,11 @@ def init_db():
         if cur: cur.close()
         if conn: conn.close()
 
-if __name__ == "__main__":
-    conn = get_db_connection()
-    cur = conn.cursor()
-    query = "SELECT * FROM me"
-    cur.execute(query)
-    print(cur.fetchall())
-    cur.close()
-    conn.close()
+# if __name__ == "__main__":
+#     conn = get_db_connection()
+#     cur = conn.cursor()
+#     query = "SELECT * FROM me"
+#     cur.execute(query)
+#     print(cur.fetchall())
+#     cur.close()
+#     conn.close()
