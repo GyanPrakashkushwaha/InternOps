@@ -1,25 +1,68 @@
 
-import sqlite3
+import psycopg2
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-
-DB_FILE = "analysis_cache.db"
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_FILE)
-    conn.row_factory = sqlite3.Row
+    conn = None
+    try:
+        # db_params = {
+        #     "user": os.getenv("DB_USER"),
+        #     "password": os.getenv("DB_PASSWORD"),
+        #     "host": os.getenv("DB_HOST"),
+        #     "port": os.getenv("DB_PORT"),
+        #     "database": os.getenv("DB_NAME")
+        # }
+        
+        db_params = {
+            "user": "postgres",
+            "password": "password",
+            "host": "localhost",
+            "port": "5432",
+            "database": "internops"
+        }
+        
+        print("DB_HOST =", os.getenv("DB_HOST"))
+        print("DB_PORT =", os.getenv("DB_PORT"))
+
+        conn = psycopg2.connect(**db_params)
+    except Exception as e:
+        raise RuntimeError(f"DB connection failed: {e}")
     return conn
 
 def init_db():
+    conn = None
+    cur = None
+    try:
+        conn = get_db_connection()
+        if not conn:
+            raise RuntimeError("Database connection is None")
+
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS analysis_results (
+                id TEXT PRIMARY KEY,
+                resume_hash TEXT,
+                jd_hash TEXT,
+                mode TEXT,
+                result TEXT, 
+                created_at TIMESTAMP DEFAULT NOW()
+            )
+        """)
+        conn.commit()
+    except Exception:
+        raise
+    finally:
+        if cur: cur.close()
+        if conn: conn.close()
+
+if __name__ == "__main__":
     conn = get_db_connection()
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS analysis_results (
-            id TEXT PRIMARY KEY,
-            resume_hash TEXT,
-            jd_hash TEXT,
-            mode TEXT,
-            result JSON,  -- Column name is 'result'
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    conn.commit()
+    cur = conn.cursor()
+    query = "SELECT * FROM me"
+    cur.execute(query)
+    print(cur.fetchall())
+    cur.close()
     conn.close()

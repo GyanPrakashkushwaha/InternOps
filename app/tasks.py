@@ -4,6 +4,7 @@ import json
 import hashlib
 from .recruiter import workflow
 from .database import init_db, get_db_connection
+from psycopg2.extras import RealDictCursor
 
 # Configure Celery to use Redis as the broker
 celery_app = Celery(
@@ -27,16 +28,21 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str):
 
     # 2. Check SQLite Cache (Result Caching)
     conn = get_db_connection()
+    # We use RealDictCursor so we can access columns by name like cached_row['result']
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    
     cached_row = conn.execute(
-        "SELECT result FROM analysis_results WHERE id = ?", (cache_key,)
+        "SELECT result FROM analysis_results WHERE id = %s", (cache_key,)
     ).fetchone()
     
     if cached_row:
+        cur.close()
         conn.close()
         print("Returning cached result from SQLite")
-        # Returns a Dictionary
         return json.loads(cached_row["result"])
 
+    cur.close()
+    
     # 3. Run Workflow (If not cached)
     input_state = {
         "resume_text": resume_text,
@@ -60,15 +66,20 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str):
     # We use default=str to handle Pydantic objects or datetime objects
     serialized_output = json.dumps(output_state_dict, default=str)
 
-    # 4. Save to SQLite
-    # FIXED: Table name 'analysis_results', Column name 'result'
-    conn.execute(
-        "INSERT OR REPLACE INTO analysis_results (id, resume_hash, jd_hash, mode, result) VALUES (?, ?, ?, ?, ?)",
-        (cache_key, resume_text, job_description, mode, serialized_output)
-    )
+    cur = conn.cursor()
+    
+    query = """
+    INSERT INTO analysis_results (id, resume_hash, jd_hash, mode, result)
+    VALUES (%s, %s, %s, %s, %s)
+    ON CONFLICT (id)
+    DO UPDATE SET
+            resume_hash = EXCLUDED.resume_hash,
+            jd_hash = EXCLUDED.jd_hash,
+            mode = EXCLUDED.mode,
+            result = EXCLUDED.result;
+    """
+    cur.execute(query, (cache_key, resume_hash, job_description, mode, serialized_output))
     conn.commit()
     conn.close()
     
-    # FIXED: Return the original dictionary (output_state), not the string.
-    # This ensures consistency with the 'cached_row' return above.
     return output_state_dict
