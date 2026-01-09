@@ -11,7 +11,7 @@
 - [ ] Add Rule based ATS class for dumb filtering.
 - [ ] Integrate the Resume builder workflow with the app and create api of it.
 - [ ] Add Chat feature.
-- [ ] Use Docker
+- [x] Use Docker
 - [ ] CI/CD Integration.
 - [ ] AWS deployment
 - [ ] Do seperate ATS, Recruiter, and Hiring Manager to get faster results.

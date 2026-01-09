@@ -1,5 +1,3 @@
-
-
 from langgraph.graph import StateGraph, START, END
 from typing import TypedDict, Dict, Literal, Annotated
 from operator import add
@@ -10,6 +8,7 @@ from models import LatexCodeAnalysis
 
 # BUG - Latex code not being as expected.
 # FIXME - Use other gemini model and then try to generate the latex code.
+# REVIEW
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 
 # state

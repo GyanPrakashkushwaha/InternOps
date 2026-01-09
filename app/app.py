@@ -5,6 +5,7 @@ from fastapi import FastAPI, UploadFile, File, Form
 from base64 import b64encode
 from typing import Literal
 import io
+from .database import init_db
 
 # Celery
 from .tasks import celery_app, analyze_task
@@ -56,3 +57,8 @@ def get_result(task_id: str):
             }
     else:
         return {"status": "processing"}
+    
+@app.on_event("startup")
+def startup():
+    print("======================================================== \n DATABASE CREATED\n ========================================================")
+    init_db()
