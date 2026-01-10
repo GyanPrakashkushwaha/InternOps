@@ -4,7 +4,7 @@
 ### Tables
 
 #### Picture
-![alt text](image.png)
+![alt text](image-1.png)
 1. analysis -> Store(ID, hashKey, JD, Rsume)
 2. ats -> Store(ID, analysisId(FK), match_score, missing_keywords, fortmatting_issues, decision, feedback)
 3. recruiter -> Store(ID, analysisId(FK), career_progresion_socre, red_flags, soft_skills, decision, feedback)

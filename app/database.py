@@ -4,6 +4,24 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+DB_CREATION_QUERY = """
+            ALTER DATABASE internops SET TIMEZONE TO 'Asia/Kolkata';
+            
+            CREATE TABLE IF NOT EXISTS analysis (
+                id INT PRIMARY KEY,
+                hash_key TEXT NOT NULL,
+                job_description TEXT,
+                resume_text TEXT,
+                mode TEXT, 
+                created_at TIMESTAMPZ NOT NULL DEFAULT NOW()
+            );
+            
+            
+            
+            
+            CREATE TABLE 
+        """
+
 def get_db_connection():
     conn = None
     try:
@@ -29,16 +47,7 @@ def init_db():
             raise RuntimeError("Database connection is None")
 
         cur = conn.cursor()
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS analysis (
-                id INT PRIMARY KEY,
-                resume TEXT,
-                jd_hash TEXT,
-                mode TEXT,
-                result TEXT, 
-                created_at TIMESTAMPZ NOT NULL DEFAULT NOW()
-            )
-        """)
+        cur.execute()
         conn.commit()
     except Exception:
         raise
