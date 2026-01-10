@@ -1,7 +1,7 @@
 
 - [x] Create DB(For Extension API calls)
 - [x] Update the existing api call's database uses method.
-- [ ] API's for the frontend
+- [x] API's for the frontend
 - [ ] Memory for Agents(Persistence Checkpointers)
 - [ ] Extension
 - [ ] Add Chat feature.

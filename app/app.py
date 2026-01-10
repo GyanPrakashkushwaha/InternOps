@@ -39,7 +39,6 @@ async def analysis(
     
     if analysis_id:
         final_result = get_final_result(analysis_id)
-        
         return {
             "status": "Completed",
             "final_result": final_result
@@ -76,7 +75,15 @@ async def analysis(
         "task_id": task.id,
         "mode": mode
     }
-    
+
+@app.get("/analysis_result/{analysis_id}")
+def get_analysis_result(analysis_id):
+    final_result = get_final_result(analysis_id)
+    return {
+            "status": "Completed",
+            "final_result": final_result
+        }
+
 @app.get("/result/{task_id}")
 def get_result(task_id: str):
     result = AsyncResult(task_id, app = celery_app)

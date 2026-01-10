@@ -95,19 +95,7 @@ def get_final_result(analysis_id):
         """
         cur.execute(query, (analysis_id[0],))
         ats_result_tuple = cur.fetchone()
-        query = """
-        SELECT * FROM recruiter
-        WHERE analysis_id = %s;
-        """        
-        cur.execute(query, (analysis_id[0],))
-        recruiter_result_tuple = cur.fetchone()
-        query = """
-        SELECT * FROM hiring_manager
-        WHERE analysis_id = %s;
-        """        
-        cur.execute(query, (analysis_id[0],))
-        hm_result_tuple = cur.fetchone()
-        # format result
+        
         ats_result = {
             "match_score": ats_result_tuple[2],
             "missing_keywords": ats_result_tuple[3],
@@ -115,26 +103,52 @@ def get_final_result(analysis_id):
             "decision": ats_result_tuple[5],
             "feedback": ats_result_tuple[6],
         }
+        
+        if ats_result["decision"] == "PASS":
+            query = """
+            SELECT * FROM recruiter
+            WHERE analysis_id = %s;
+            """        
+            cur.execute(query, (analysis_id[0],))
+            recruiter_result_tuple = cur.fetchone()
+            
+            recruiter_result = {
+                "career_progression_score": recruiter_result_tuple[2],
+                "red_flags": recruiter_result_tuple[3],
+                "soft_skills_detected": recruiter_result_tuple[4],
+                "decision": recruiter_result_tuple[5],
+                "feedback": recruiter_result_tuple[6],
+            }
+            
+            if recruiter_result["decision"] == "PASS":
+                query = """
+                SELECT * FROM hiring_manager
+                WHERE analysis_id = %s;
+                """        
+                cur.execute(query, (analysis_id[0],))
+                hm_result_tuple = cur.fetchone()
 
-        recruiter_result = {
-            "career_progression_score": recruiter_result_tuple[2],
-            "red_flags": recruiter_result_tuple[3],
-            "soft_skills_detected": recruiter_result_tuple[4],
-            "decision": recruiter_result_tuple[5],
-            "feedback": recruiter_result_tuple[6],
-        }
-
-        hm_result = {
-            "tech_depth_score": hm_result_tuple[2],
-            "project_impact_score": hm_result_tuple[3],
-            "stack_alignment": hm_result_tuple[4],
-            "decision": hm_result_tuple[5],
-            "feedback": hm_result_tuple[6],
-        }
-        final_result = {
-            "ats_result": ats_result,
-            "recruiter_result": recruiter_result,
-            "hm_result": hm_result
+                hm_result = {
+                    "tech_depth_score": hm_result_tuple[2],
+                    "project_impact_score": hm_result_tuple[3],
+                    "stack_alignment": hm_result_tuple[4],
+                    "decision": hm_result_tuple[5],
+                    "feedback": hm_result_tuple[6],
+                }
+                
+                return {
+                    "ats_result": ats_result,
+                    "recruiter_result": recruiter_result,
+                    "hm_result": hm_result
+                }
+                
+            return {
+                "ats_result": ats_result,
+                "recruiter_result": recruiter_result
+            }
+            
+        return {
+            "ats_result": ats_result
         }
         
     except Exception as e:
