@@ -85,3 +85,61 @@ def init_db():
     finally:
         if cur: cur.close()
         if conn: conn.close()
+
+def get_final_result(analysis_id):
+    try:
+        conn, cur = get_db_connection()
+        query = """
+        SELECT * FROM ats
+        WHERE analysis_id = %s;
+        """
+        cur.execute(query, (analysis_id[0],))
+        ats_result_tuple = cur.fetchone()
+        query = """
+        SELECT * FROM recruiter
+        WHERE analysis_id = %s;
+        """        
+        cur.execute(query, (analysis_id[0],))
+        recruiter_result_tuple = cur.fetchone()
+        query = """
+        SELECT * FROM hiring_manager
+        WHERE analysis_id = %s;
+        """        
+        cur.execute(query, (analysis_id[0],))
+        hm_result_tuple = cur.fetchone()
+        # format result
+        ats_result = {
+            "match_score": ats_result_tuple[2],
+            "missing_keywords": ats_result_tuple[3],
+            "formatting_issues": ats_result_tuple[4],
+            "decision": ats_result_tuple[5],
+            "feedback": ats_result_tuple[6],
+        }
+
+        recruiter_result = {
+            "career_progression_score": recruiter_result_tuple[2],
+            "red_flags": recruiter_result_tuple[3],
+            "soft_skills_detected": recruiter_result_tuple[4],
+            "decision": recruiter_result_tuple[5],
+            "feedback": recruiter_result_tuple[6],
+        }
+
+        hm_result = {
+            "tech_depth_score": hm_result_tuple[2],
+            "project_impact_score": hm_result_tuple[3],
+            "stack_alignment": hm_result_tuple[4],
+            "decision": hm_result_tuple[5],
+            "feedback": hm_result_tuple[6],
+        }
+        final_result = {
+            "ats_result": ats_result,
+            "recruiter_result": recruiter_result,
+            "hm_result": hm_result
+        }
+        
+    except Exception as e:
+        raise e
+    finally:
+        cur.close()
+        conn.close()
+    return final_result
