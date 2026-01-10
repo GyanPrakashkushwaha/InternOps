@@ -1,5 +1,6 @@
 
-- [ ] Create DB(For REST API calls)
+- [x] Create DB(For Extension API calls)
+- [ ] Update the existing api call's database uses method.
 - [ ] API's for the frontend
 - [ ] Memory for Agents(Persistence Checkpointers)
 - [ ] Extension

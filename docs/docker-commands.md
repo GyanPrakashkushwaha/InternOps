@@ -100,7 +100,7 @@ Since you can't access the database file directly on your laptop easily, you use
 
 * **Connect to the Database CLI:**
 ```bash
-docker-compose exec db psql -U postgres -d internops
+docker-compose exec -it db(docker image name) psql -U postgres -d internops
 
 ```
 

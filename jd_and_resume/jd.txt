@@ -1,76 +1,69 @@
 Job Description
-Company: Druva Moksh – AI Consulting Venturing into EdTech 
+Job Title: Data Science & AI Intern  
 
-About Us: 
+Company: GEODISHA 
 
-Druva Moksh is a fast-growing AI consulting firm working with 15+ clients globally,  delivering real-world AI and Generative AI solutions across industries. 
+Location: Hyderabad - Onsite 
 
-Seeing the massive demand for practical, industry-ready AI education, we are now venturing into the EdTech space to build a learning platform that focuses on real skills, real  use-cases, and real impact. 
+Duration: 1- 4 Months 
 
-We’re looking for someone who doesn’t just teach — but builds this journey with us.
+About GEODISHA 
 
-Job Title: AI Instructor / Generative AI Mentor (Remote)
+At GEODISHA, we are at the forefront of Data Analytics and AI, leveraging data to solve  complex problems and drive innovation. Our team is a dedicated group of researchers, engineers,  and strategists who believe in the power of technology. We are passionately committed to  developing cutting-edge AI that is not only powerful but also ethical, transparent, and fair. We're  looking for the next generation of innovators to join us. 
 
-Role Overview:
+The Opportunity: This Isn't Your Typical Internship 
 
-We are hiring a passionate AI Instructor / Mentor who can explain complex AI concepts in  a simple, practical, and engaging way. This role is ideal for someone who enjoys teaching,  mentoring, and helping students truly understand how modern AI works in the real world. 
+We are seeking truly exceptional interns to join our core Data & AI team. This is a unique  opportunity to move beyond theory and apply your skills to high-impact, real-world challenges  across the full data lifecycle. 
 
-This is a remote role and a long-term opportunity as we scale our EdTech platform.
+You won't be on the sidelines. You'll be paired with a senior mentor and embedded directly into  projects at the intersection of data engineering, data analytics, artificial intelligence, and human  behavior. We are looking for a candidate who is not just an outstanding programmer, but a  critical thinker who understands that great AI starts with great data, is passionate about the  "why" behind the data, and sees the critical importance of building Responsible AI. 
 
-Key Responsibilities: 
+What You’ll Do (Key Responsibilities): 
 
-• Teach and mentor students in Generative AI and modern AI systems
+∉ Assist in developing AI-driven recommendation engines and personalization workflows. ∉ Analyze structured and unstructured datasets to derive insights and patterns. ∉ Work with senior team members on customer segmentation, predictive modeling, and LLM integrated analytics tools. 
 
-• Clearly explain concepts related to LLMs, prompt engineering, RAG, fine-tuning,  and AI pipelines 
+∉ Learn and support the development of modular data pipelines and models using industry  tools. 
 
-• Solve student doubts and guide them through real-world problem-solving 
+∉ Use Python, SQL, scikit-learn, and other libraries for experimentation and development. ∉ Present findings through visualization tools such as seaborn, matplotlib, or BI tools like  Power BI. 
 
-• Help design and improve course content as the platform evolves 
+∉ Document code, experiments, and insights for further development. 
 
-• Actively engage with learners and ensure strong learning outcomes 
+Who You Are (Our Ideal Candidate):
 
-• Be a core part of Druva Moksh’s EdTech journey from the ground up
+We are looking for a rising star who is driven, curious, and eager to make a tangible impact. 
 
-Required Skills & Qualifications: 
+Core Requirements: 
 
-• Strong passion for teaching and mentoring 
+∉ Currently pursuing or recently completed a degree in Data Science, Computer Science,  Statistics, Mathematics, or related field. 
 
-• Excellent technical communication skills (ability to explain complex topics clearly) • Hands-on proficiency in Generative AI and latest LLM tech stack 
+∉ Good understanding of Python and SQL (R is a plus). 
 
-LLMs (Open AI, LLaMA, Mistral, etc.) 
-Prompt Engineering 
-RAG systems 
-Fine-tuning / PEFT concepts 
-AI application architecture 
-Ability to patiently handle and solve student doubts 
-Self-driven, consistent, and excited to grow with a startup 
-Compensation: 
+∉ Familiarity with basic ML algorithms: classification, regression, clustering. ∉ Exposure to libraries such as pandas, NumPy, scikit-learn, etc. 
 
-• ₹20,000 per month (Remote) 
+∉ Interest in GenAI/NLP concepts like transformers or LLMs is a bonus. ∉ Strong analytical mindset, curiosity, and willingness to learn. 
 
-• Guaranteed compensation revision after 3 months, based on performance and  involvement.
+Passion & Interest (What Sets You Apart): 
 
-Why Join Druva Moksh? 
+∉ A genuine and demonstrable passion for the entire Data Analytics space, from robust  engineering to insightful analysis. 
 
-• Work directly with a real AI consulting firm, not just an academy • Be part of building an EdTech platform from scratch 
+∉ Academic or project-based exposure to Behavioral Analytics or computational social  science. 
 
-• Learn, teach, and grow alongside industry-level AI projects 
+∉ A strong, well-articulated interest in the field of Responsible AI, ethics, and algorithmic  fairness 
 
-• Long-term growth opportunity as the platform scales globally
+Bonus Points: 
 
-1. Designation: AI Instructor / Generative AI Mentor.
+∉ Exposure to tools like TensorFlow, Hugging Face, or BI dashboards. 
 
-2. Stipend offered: 20k Per Month
+∉ Basic understanding of cloud platforms (AWS/GCP/Azure), Git, or APIs. ∉ Academic projects, personal experiments, or GitHub repositories demonstrating interest in  AI/ML. 
 
-3. Job Location: Remote
+What You’ll Gain: 
 
-4. Mode of Interview: Online interview 
+● Hands-on experience in a startup environment working on cutting-edge AdTech & MarTech  products. 
 
-5. Number of open positions: 2
+● Mentorship from senior Data Science and AI professionals. 
 
-6. Mode of Work: Work from Home
+● A chance to convert the internship into a full-time position based on performance.
 
-Please Note :
+Type of Opportunity: Internship 
 
-The last date to apply for this opportunity is December 20, 2025 by 11 AM IST.
-Not adhering to placement and internship policy rules will lead to necessary disciplinary actions by the committee.
+Job Title: Data Science & AI Intern
+

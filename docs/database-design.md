@@ -1,11 +1,8 @@
-
-
-
 ### Tables
 
 #### Picture
-![alt text](image-1.png)
-1. analysis -> Store(ID, hashKey, JD, Rsume)
+![database design](image-2.png)
+1. analysis -> Store(ID, hashKey, JD, mode, Rsume)
 2. ats -> Store(ID, analysisId(FK), match_score, missing_keywords, fortmatting_issues, decision, feedback)
 3. recruiter -> Store(ID, analysisId(FK), career_progresion_socre, red_flags, soft_skills, decision, feedback)
 4. hiringmanager -> Store(ID, analysisId(FK), tech_depth_score, project_impact_score, stack_alignemt, decision, feedback)

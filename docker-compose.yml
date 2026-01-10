@@ -3,7 +3,6 @@ services:
   # Service 1: The Database
   db:
     image: postgres:15-alpine
-    container_name: internopsdb
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
