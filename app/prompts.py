@@ -135,7 +135,6 @@ class BrutalSignalPrompt:
             2. **The 'Why' Test:** Did they explain the tradeoff of their technical choices? 
             3. **Low-Level Knowledge:** Look for evidence of understanding memory, concurrency, or networking.
             
-            Generate 3 'Stress-Test' technical questions designed to expose if they actually built what they claimed.
         """),
         ("human", "RESUME: {resume_text} \n JD: {job_description}")
     ])

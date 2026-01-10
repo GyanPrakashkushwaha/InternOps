@@ -46,6 +46,7 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str):
         "job_description": job_description,
         "mode": mode
     }
+    
     output_state = workflow.invoke(input_state)
     output_state_dict = {
         "ats_result": output_state["ats_result"].model_dump()

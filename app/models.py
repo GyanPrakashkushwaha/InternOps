@@ -21,7 +21,6 @@ class HiringManagerAnalysis(BaseModel):
     project_impact_score: int = Field(..., description="0-100. Are there metrics ($, %, users, latency)?")
     stack_alignment: str = Field(..., description="How well their specific tech experience maps to the JD's stack.")
     decision: Literal["HIRE", "NO_HIRE", "MAYBE"]
-    interview_questions: List[str] = Field(..., description="3-5 hard technical questions to verify their claims.")
     feedback: str = Field(..., description="Deep technical advice on improving bullet points.")
     
 class LatexCodeAnalysis(BaseModel):

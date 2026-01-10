@@ -16,7 +16,6 @@ def get_db_connection():
         }
         print(db_params)
         conn = psycopg2.connect(**db_params)
-        
     except Exception as e:
         raise RuntimeError(f"DB connection failed: {e}")
     return conn
@@ -31,9 +30,9 @@ def init_db():
 
         cur = conn.cursor()
         cur.execute("""
-            CREATE TABLE IF NOT EXISTS analysis_results (
-                id TEXT PRIMARY KEY,
-                resume_hash TEXT,
+            CREATE TABLE IF NOT EXISTS analysis (
+                id INT PRIMARY KEY,
+                resume TEXT,
                 jd_hash TEXT,
                 mode TEXT,
                 result TEXT, 
