@@ -27,7 +27,7 @@ except Exception as e:
     
 # TODO Add re-try logic for different api keys if one not working.
 
-API_KEY_NO = 1
+API_KEY_NO = 0
 MODEL_NAME = "gemini-2.5-flash"
 def gemini(model = MODEL_NAME, temperature = 0):
     try:

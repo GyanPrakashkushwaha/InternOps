@@ -93,9 +93,11 @@ def get_final_result(analysis_id):
         SELECT * FROM ats
         WHERE analysis_id = %s;
         """
-        cur.execute(query, (analysis_id[0],))
+        cur.execute(query, (analysis_id,))
         ats_result_tuple = cur.fetchone()
-        
+        # print(f"======================================= ATS RESULT {analysis_id}=================================================")
+        # print(ats_result_tuple)
+        # print("======================================= ATS RESULT =================================================")
         ats_result = {
             "match_score": ats_result_tuple[2],
             "missing_keywords": ats_result_tuple[3],
@@ -104,14 +106,18 @@ def get_final_result(analysis_id):
             "feedback": ats_result_tuple[6],
         }
         
+        # data base can also be used to check if the entry exists or not.
         if ats_result["decision"] == "PASS":
             query = """
             SELECT * FROM recruiter
             WHERE analysis_id = %s;
             """        
-            cur.execute(query, (analysis_id[0],))
+            cur.execute(query, (analysis_id,))
             recruiter_result_tuple = cur.fetchone()
-            
+            # print("======================================= RECRUITER RESULT =================================================")
+            # print(recruiter_result_tuple)
+            # print("======================================= RECRUITER RESULT =================================================")
+
             recruiter_result = {
                 "career_progression_score": recruiter_result_tuple[2],
                 "red_flags": recruiter_result_tuple[3],
@@ -125,7 +131,7 @@ def get_final_result(analysis_id):
                 SELECT * FROM hiring_manager
                 WHERE analysis_id = %s;
                 """        
-                cur.execute(query, (analysis_id[0],))
+                cur.execute(query, (analysis_id,))
                 hm_result_tuple = cur.fetchone()
 
                 hm_result = {

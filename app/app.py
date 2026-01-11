@@ -1,6 +1,7 @@
 
 from langchain_community.document_loaders import TextLoader
 from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.middleware.cors import CORSMiddleware
 from base64 import b64encode
 from typing import Literal
 from .utils import read_pdf, generate_hash
@@ -12,6 +13,13 @@ from celery.result import AsyncResult
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 @app.get("/")
 def root():
@@ -39,6 +47,10 @@ async def analysis(
     
     if analysis_id:
         final_result = get_final_result(analysis_id)
+        print("============================================ API CALL =============================================== \n")
+        print(final_result)
+        print("\n ============================================ API CALL ===============================================")
+
         return {
             "status": "Completed",
             "final_result": final_result
@@ -69,9 +81,12 @@ async def analysis(
         hash_key = hash_key,
         analysis_id = analysis_id
         )
+    print("============================================ API CALL =============================================== \n")
+    print(task.id)
+    print("\n ============================================ API CALL ===============================================")
     
     return {
-        "message": "Analysis Started",
+        "status": "Analysis Started",
         "task_id": task.id,
         "mode": mode
     }
@@ -79,6 +94,7 @@ async def analysis(
 @app.get("/analysis_result/{analysis_id}")
 def get_analysis_result(analysis_id):
     final_result = get_final_result(analysis_id)
+    # print(final_result)
     return {
             "status": "Completed",
             "final_result": final_result
@@ -91,16 +107,16 @@ def get_result(task_id: str):
     if result.ready():
         if result.successful():
             return {
-                "status": "completed",
-                "data": result.get()
+                "status": "Completed",
+                "final_result": result.get()
             }
         else:
             return {
-                "status": "failed",
+                "status": "Failed",
                 "error": str(result.result)
             }
     else:
-        return {"status": "processing"}
+        return {"status": "Processing"}
     
 @app.on_event("startup")
 def startup():
