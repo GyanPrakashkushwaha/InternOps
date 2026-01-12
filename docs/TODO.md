@@ -1,8 +1,7 @@
 
-- [ ] Extension
 - [ ] Memory for Agents(Persistence Checkpointers)
-- [ ] Add Chat feature
 - [ ] Streaming
+- [ ] Add Chat feature
 - [ ] Add Chat feature for the resume. (There add checkpointers and persistent memory for the recruiter.)
 - [ ] Integrate the Resume builder workflow with the app and create api of it.
 - [ ] Add Rule based ATS class for dumb filtering.
@@ -15,6 +14,7 @@
 - [ ] Role based Access
 
 ### DONE
+- [x] Extension
 - [x] Structure the database(for responses).
 - [x] Persitence and caching.(For Chat History not for recruiter agent(LangGraph).)  ✅
 - [x] Create the Prompt Templates not just strings. ✅

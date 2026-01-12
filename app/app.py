@@ -117,7 +117,39 @@ def get_result(task_id: str):
             }
     else:
         return {"status": "Processing"}
-    
+
+
+@app.get("/analysis_id_list")
+def analysis_history():
+    try:
+        conn, cur = get_db_connection()
+        query = """
+        SELECT id FROM analysis
+        """
+        cur.execute(query)
+        analysis_id = cur.fetchall()
+        print(analysis_id)
+        return {
+            "status": "done",
+            "id_list": analysis_id
+        }
+    except Exception as e:
+        raise e
+    finally:
+        cur.close()
+        conn.close()
+
+@app.get("/get_chat_history/{thread_id}")
+def get_chat_history(thread_id):
+    pass
+
+@app.post("/chat/")
+def get_chat_history(
+    thread_id: str,
+    # ...
+):
+    pass
+
 @app.on_event("startup")
 def startup():
     init_db()

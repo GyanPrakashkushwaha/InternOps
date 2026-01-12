@@ -65,7 +65,7 @@ def get_db_connection():
             "port": os.getenv("DB_PORT", "5430"),
             "database": os.getenv("DB_NAME", "internops")
         }
-        print(db_params)
+        # print(db_params)
         conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
     except Exception as e:
