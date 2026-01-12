@@ -204,6 +204,4 @@ Contributions are what make the open-source community such an amazing place to l
 
 ## 📞 Contact
 
-**Gyan Prakash Kushwaha** - [GitHub Profile](https://github.com/gyanprakashkushwaha)
-
-Project Link: [https://github.com/gyanprakashkushwaha/internops](https://www.google.com/search?q=https://github.com/gyanprakashkushwaha/internops)
+**Gyan Prakash Kushwaha** - [Linkedin Profile](https://www.linkedin.com/in/gyanprakashkushwaha/)
