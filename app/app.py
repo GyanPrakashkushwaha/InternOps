@@ -1,18 +1,52 @@
 
-from langchain_community.document_loaders import TextLoader
-from fastapi import FastAPI, UploadFile, File, Form
+import json
+import asyncio
+from contextlib import asynccontextmanager
+from typing import Literal, AsyncGenerator
+
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from base64 import b64encode
-from typing import Literal
-from .utils import read_pdf, generate_hash
-from .database import init_db, get_db_connection, get_final_result
-
-# Celery
-from .tasks import celery_app, analyze_task
+from langchain_core.messages import HumanMessage
 from celery.result import AsyncResult
+from psycopg_pool import AsyncConnectionPool
 
-app = FastAPI()
+# LangGraph Persistence
+from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
+from langgraph.store.postgres.aio import AsyncPostgresStore
 
+# Internal Modules
+from .utils import read_pdf, generate_hash
+from .database import init_db, get_db_connection, get_final_result, get_db_uri
+from .tasks import celery_app, analyze_task
+from .models import ChatRequest
+from .chat import build_chat_graph
+
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # 1. Sync DB Init (Legacy tables)
+    print("--- 🟢 Startup: Initializing Legacy Tables ---")
+    try:
+        init_db() 
+    except Exception as e:
+        print(f"Warning: Sync DB Init failed: {e}")
+    
+    DB_URI = get_db_uri()
+    async with AsyncConnectionPool(conninfo=DB_URI, max_size=20) as pool:
+        checkpointer = AsyncPostgresSaver(pool)
+        store = AsyncPostgresStore(pool)
+        
+        # await checkpointer.setup()
+        # await store.setup()
+        
+        app.state.graph = build_chat_graph(checkpointer, store)
+        yield
+    print("--- Closing DB Connection Pool ---")
+    
+app = FastAPI(lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -20,10 +54,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-
 @app.get("/")
 def root():
-    return {"message": "background is running!"}
+    return {"message": "Backend is running!"}
+
 
 @app.post("/analyze/{mode}")
 async def analysis(
@@ -33,30 +67,21 @@ async def analysis(
 ):
     resume_content = await read_pdf(file)
     conn, cur = get_db_connection()
-    resume_hash = generate_hash(resume_content)
-    jd_hash = generate_hash(job_description)
-    hash_key = f"{resume_hash}_{jd_hash}_{mode}"
-    
-    # check if the hash key matches.
-    query = """
-    SELECT id FROM analysis
-    WHERE hash_key = %s
-    """
-    cur.execute(query, (hash_key, ))
-    analysis_id = cur.fetchone()
-    
-    if analysis_id:
-        final_result = get_final_result(analysis_id)
-        print("============================================ API CALL =============================================== \n")
-        print(final_result)
-        print("\n ============================================ API CALL ===============================================")
-
-        return {
-            "status": "Completed",
-            "final_result": final_result
-        }
     
     try:
+        resume_hash = generate_hash(resume_content)
+        jd_hash = generate_hash(job_description)
+        hash_key = f"{resume_hash}_{jd_hash}_{mode}"
+        
+        # Check cache
+        cur.execute("SELECT id FROM analysis WHERE hash_key = %s", (hash_key, ))
+        existing_id = cur.fetchone()
+        
+        if existing_id:
+            final_result = get_final_result(existing_id[0])
+            return {"status": "Completed", "final_result": final_result}
+        
+        # Create new entry
         query = """
         INSERT INTO analysis (hash_key, job_description, resume_text, mode)
         VALUES (%s, %s, %s, %s)
@@ -64,9 +89,24 @@ async def analysis(
         """
         cur.execute(query, (hash_key, job_description, resume_content, mode))
         analysis_id = cur.fetchone()[0]
-        # print(analysis_id)
         conn.commit()
-        # 10/0
+        
+        # Dispatch Celery Task
+        task = analyze_task.delay(
+            resume_text=resume_content, 
+            job_description=job_description, 
+            mode=mode, 
+            hash_key=hash_key,
+            analysis_id=analysis_id
+        )
+        
+        return {
+            "status": "Analysis Started",
+            "task_id": task.id,
+            "mode": mode,
+            "analysis_id": analysis_id 
+        }
+        
     except Exception as e:
         conn.rollback()
         raise e
@@ -74,23 +114,7 @@ async def analysis(
         cur.close()
         conn.close()
         
-    task = analyze_task.delay(
-        resume_text = resume_content, 
-        job_description = job_description, 
-        mode = mode, 
-        hash_key = hash_key,
-        analysis_id = analysis_id
-        )
-    print("============================================ API CALL =============================================== \n")
-    print(task.id)
-    print("\n ============================================ API CALL ===============================================")
-    
-    return {
-        "status": "Analysis Started",
-        "task_id": task.id,
-        "mode": mode
-    }
-
+        
 @app.get("/analysis_result/{analysis_id}")
 def get_analysis_result(analysis_id):
     final_result = get_final_result(analysis_id)
@@ -102,22 +126,15 @@ def get_analysis_result(analysis_id):
 
 @app.get("/result/{task_id}")
 def get_result(task_id: str):
-    result = AsyncResult(task_id, app = celery_app)
-    
+    result = AsyncResult(task_id, app=celery_app)
     if result.ready():
         if result.successful():
-            return {
-                "status": "Completed",
-                "final_result": result.get()
-            }
+            return {"status": "Completed", "final_result": result.get()}
         else:
-            return {
-                "status": "Failed",
-                "error": str(result.result)
-            }
+            return {"status": "Failed", "error": str(result.result)}
     else:
         return {"status": "Processing"}
-
+    
 
 @app.get("/analysis_id_list")
 def analysis_history():
@@ -143,12 +160,39 @@ def analysis_history():
 def get_chat_history(thread_id):
     pass
 
-@app.post("/chat/")
-def get_chat_history(
-    thread_id: str,
-    # ...
-):
-    pass
+@app.post("/chat/stream")
+async def stream_chat(request: ChatRequest):
+    async def event_generator() -> AsyncGenerator[str, None]:
+        config = {
+            "configurable": {
+                "thread_id": request.analysis_id,
+                "user_id": request.user_id,
+            }
+        }
+        try:
+            async for event in app.state.graph.astream_events(
+                {"messages": [HumanMessage(content=request.question)]},
+                config=config,
+                version="v2"
+            ):
+                kind = event["event"]
+                
+                # Capture generated tokens
+                if kind == "on_chain_stream":
+                    chunk = event["data"].get("chunk")
+                    if chunk and "messages" in chunk:
+                        payload = json.dumps({"token": chunk["messages"].content})
+                        yield f"data: {payload}\n\n"
+                
+                # print(event)
+            yield "data: [DONE]\n\n"
+            
+        except Exception as e:
+            print(f"Error streaming chat: {e}")
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
+
 
 @app.on_event("startup")
 def startup():

@@ -4,6 +4,14 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+def get_db_uri():
+    user = os.getenv("DB_USER", "postgres")
+    password = os.getenv("DB_PASSWORD", "password")
+    host = os.getenv("DB_HOST", "localhost")
+    port = os.getenv("DB_PORT", "5430")
+    dbname = os.getenv("DB_NAME", "internops")
+    return f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
+
 DB_CREATION_QUERY = """
             ALTER DATABASE internops SET TIMEZONE TO 'Asia/Kolkata';
             CREATE TABLE IF NOT EXISTS analysis (
@@ -57,16 +65,10 @@ DB_CREATION_QUERY = """
 
 def get_db_connection():
     conn = None
+    cur = None
     try:
-        db_params = {
-            "user": os.getenv("DB_USER", "postgres"),
-            "password": os.getenv("DB_PASSWORD", "password"),
-            "host": os.getenv("DB_HOST", "localhost"),
-            "port": os.getenv("DB_PORT", "5430"),
-            "database": os.getenv("DB_NAME", "internops")
-        }
-        # print(db_params)
-        conn = psycopg2.connect(**db_params)
+        DB_URI = get_db_uri()
+        conn = psycopg2.connect(DB_URI)
         cur = conn.cursor()
     except Exception as e:
         raise RuntimeError(f"DB connection failed: {e}")

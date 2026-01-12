@@ -26,3 +26,8 @@ class HiringManagerAnalysis(BaseModel):
 class LatexCodeAnalysis(BaseModel):
     decision: Literal["CORRECT", "NEEDS_IMPROVEMENT"] = Field(..., description="...")
     feedback: str = Field(..., description= "...")
+    
+class ChatRequest(BaseModel):
+    analysis_id: str 
+    user_id: str 
+    question: str 
