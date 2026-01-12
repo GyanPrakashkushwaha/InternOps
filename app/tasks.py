@@ -1,6 +1,6 @@
 from celery import Celery
 import json
-from .recruiter import workflow
+from .analyze import workflow
 from .utils import hashlib
 from .database import get_db_connection
 from .models import ATSAnalysis, RecruiterAnalysis, HiringManagerAnalysis
