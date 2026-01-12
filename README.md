@@ -7,7 +7,6 @@ The project ecosystem consists of three core components:
 1. **FastAPI Backend:** The brain handling AI processing, resume analysis, and orchestration.
 2. **Chrome Extension:** A browser-based tool for instant resume scoring and optimization while browsing job boards.
 3. **Web Dashboard:** A modern Vue 3 application for managing user profiles, application history, and deep-dive analytics.
-
 ---
 
 ## 🚀 About The Project
@@ -24,12 +23,23 @@ The Chrome Extension evaluates resumes using three distinct simulation modes:
 
 ---
 
+## ✨ Key Features
+
+* **Smart Resume Builder:** Analyzes your resume against a specific JD, provides a "Selection Percentage," and modifies the content to improve interview chances.
+* **Multi-Perspective Analysis:** View results through three distinct lenses (ATS, Recruiter, Engineering Manager).
+* **Agentic AI Chat:** A GPT-style chat interface allowing users to interact with the system for career advice.
+* **Full Observability:** Integrated with **LangSmith** to trace agent workflows, debug complex LLM chains, and evaluate the quality of AI outputs in real-time.
+* **Automated Application:** An agentic workflow that handles the submission of applications on the user's behalf.
+
+---
+
 ## 🛠 Tech Stack
 
 ### 🧠 Backend (AI & Logic)
 
 * **Framework:** FastAPI (with Uvicorn)
 * **AI & Orchestration:** LangChain (Core, Community, Google GenAI), LangGraph
+* **Observability & Eval:** **LangSmith**
 * **Database & Caching:** PostgreSQL, Redis, LangChain-Redis
 * **Asynchronous Tasks:** Celery
 * **Data Processing:** Pandas, PyPDF2, OpenPyXL
@@ -45,7 +55,6 @@ The Chrome Extension evaluates resumes using three distinct simulation modes:
 * **Framework:** Vue.js 3 (Script Setup)
 * **Build Tool:** Vite
 * **Styling:** Tailwind CSS
-* **Package Manager:** NPM
 
 ---
 
@@ -72,14 +81,33 @@ pip install -r requirements.txt
 ```
 
 
-3. **Start Services (Docker)**
+3. **Environment Configuration**
+Create a `.env` file in the root directory. **Note the addition of LangSmith credentials for observability.**
+```env
+# AI Providers
+GOOGLE_API_KEY=your_google_api_key
+
+# Database & Cache
+POSTGRES_URI=postgresql://postgres:password@localhost:5432/internops
+REDIS_URL=redis://localhost:6379/0
+
+# LangSmith Observability
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
+LANGCHAIN_API_KEY=your_langsmith_api_key
+LANGCHAIN_PROJECT="internops-dev"
+
+```
+
+
+4. **Start Services (Docker)**
 ```bash
 docker-compose up -d  # Starts Postgres & Redis
 
 ```
 
 
-4. **Run the Server**
+5. **Run the Server**
 ```bash
 # Start Celery Worker
 celery -A app.celery_worker worker --loglevel=info
@@ -122,7 +150,6 @@ npm run dev
 ```
 
 
-4. Open the link provided (usually `http://localhost:5173`) to view the dashboard.
 
 ---
 
@@ -134,12 +161,11 @@ npm run dev
 2. **Upload Resume:** Select your PDF resume file.
 3. **Select Strategy:** Choose between *Strict Mode*, *Real World*, or *Brutal Mode*.
 4. **Analyze:** Click "Analyze Resume." The extension communicates with the FastAPI backend to generate a scored report.
-5. **View Results:** See your "Match Score," missing keywords, and specific feedback for formatting and content.
 
-### Using the Web Dashboard
+### Monitoring with LangSmith
 
-* *Current State:* The dashboard is initialized with Vue 3 and Tailwind CSS. It is designed to serve as the central hub for tracking past analyses and managing user settings.
-* Access it via your browser at the local Vite address.
+* Once the backend is running with `LANGCHAIN_TRACING_V2=true`, all agent steps, LLM calls, and tool usages will be logged to your LangSmith project.
+* Use the LangSmith dashboard to debug failed chains, view token usage, and evaluate the "reasoning" quality of the agents.
 
 ---
 
@@ -158,7 +184,7 @@ docker exec -it internopsdb psql -U postgres -d internops
 
 * [x] **Core AI Analysis:** Resume parsing and multi-mode evaluation logic.
 * [x] **Chrome Extension:** Functional popup with file upload and result visualization.
-* [x] **Web Infrastructure:** Vue 3 + Vite + Tailwind project structure initialized.
+* [x] **Observability:** Full integration with LangSmith for traces and evals.
 * [ ] **Dashboard Features:** Build out the Vue components for "Application History" and "Detailed Analytics."
 * [ ] **Auth Integration:** Unified login between Extension and Web Dashboard.
 
