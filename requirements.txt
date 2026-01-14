@@ -14,3 +14,6 @@ langchain-redis
 redis
 celery
 psycopg2-binary
+langchain
+psycopg[binary,pool]
+langgraph-checkpoint-postgres
