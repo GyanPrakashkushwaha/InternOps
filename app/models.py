@@ -28,6 +28,4 @@ class LatexCodeAnalysis(BaseModel):
     feedback: str = Field(..., description= "...")
     
 class ChatRequest(BaseModel):
-    analysis_id: str 
-    user_id: str 
     question: str 

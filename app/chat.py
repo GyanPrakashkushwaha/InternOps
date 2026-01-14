@@ -13,12 +13,7 @@ from .services import gemini
 model = gemini()
 
 async def call_model(state: MessagesState, config: RunnableConfig, *, store: BaseStore):
-    """
-    Core Logic Node:
-    1. Fetches User Memory
-    2. Decides if new memory should be saved
-    3. Calls Gemini
-    """
+    
     user_id = config["configurable"]["user_id"]
     namespace = ("memories", user_id)
     

@@ -24,7 +24,6 @@ from .models import ChatRequest
 from .chat import build_chat_graph
 
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # 1. Sync DB Init (Legacy tables)
@@ -54,6 +53,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
+
 @app.get("/")
 def root():
     return {"message": "Backend is running!"}
@@ -79,7 +79,7 @@ async def analysis(
         
         if existing_id:
             final_result = get_final_result(existing_id[0])
-            return {"status": "Completed", "final_result": final_result}
+            return {"status": "Completed", "final_result": final_result, "analysis_id" : existing_id[0]}
         
         # Create new entry
         query = """
@@ -97,14 +97,14 @@ async def analysis(
             job_description=job_description, 
             mode=mode, 
             hash_key=hash_key,
-            analysis_id=analysis_id
+            analysis_id = analysis_id
         )
         
         return {
             "status": "Analysis Started",
             "task_id": task.id,
             "mode": mode,
-            "analysis_id": analysis_id 
+            "analysis_id": analysis_id
         }
         
     except Exception as e:
@@ -160,13 +160,13 @@ def analysis_history():
 def get_chat_history(thread_id):
     pass
 
-@app.post("/chat/stream")
-async def stream_chat(request: ChatRequest):
+@app.post("/chat/stream/{user_id}/{analysis_id}")
+async def stream_chat(request: ChatRequest, user_id, analysis_id):
     async def event_generator() -> AsyncGenerator[str, None]:
         config = {
             "configurable": {
-                "thread_id": request.analysis_id,
-                "user_id": request.user_id,
+                "thread_id": analysis_id,
+                "user_id": user_id,
             }
         }
         try:
