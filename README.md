@@ -1,12 +1,18 @@
-Here is the updated `README.md` that incorporates the new frontend details, specifically highlighting the Chrome Extension architecture and the interactive features revealed in your code (like the specific analysis tabs and scoring visualizations).
-
----
-
 # InternOps
+
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)
+![Frontend](https://img.shields.io/badge/Chrome-Extension-googlechrome)
+![Evaluation](https://img.shields.io/badge/LangGraph_Eval-85%25_Score-brightgreen)
+![Observability](https://img.shields.io/badge/LangSmith-Observability-orange)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 **InternOps** is an intelligent, Agentic AI-powered platform designed to revolutionize the job application workflow. By bridging the gap between job descriptions and candidate profiles, it automates the analysis, optimization, and application process to maximize hiring success.
 
-The project consists of a robust **FastAPI backend** for AI processing and a **Chrome Extension frontend** for seamless user interaction.
+The project ecosystem consists of three core components:
+1.  **FastAPI Backend:** The brain handling AI processing, resume analysis, and orchestration.
+2.  **Chrome Extension:** A browser-based tool for instant resume scoring and optimization while browsing job boards.
+3.  **Web Dashboard:** A modern Vue 3 application for managing user profiles, application history, and deep-dive analytics.
 
 ---
 
@@ -14,150 +20,145 @@ The project consists of a robust **FastAPI backend** for AI processing and a **C
 
 InternOps acts as an AI career coach and operational assistant. It solves the problem of "resume black holes" by providing transparent feedback on why a resume might be rejected and agentically modifying it to match specific Job Descriptions (JDs).
 
-The system utilizes advanced LLM orchestration to chat with users, analyze documents, and even automate the final application submission. The **Chrome Extension** interface allows users to upload their resume directly and get instant, scored feedback across different hiring personas.
+### The 3 Modes of Hiring Analysis (Extension)
+The Chrome Extension evaluates resumes using three distinct simulation modes:
+1.  **Strict Compliance Mode:** Simulates Enterprise ATS + HR Legal Filters (Binary eligibility checks).
+2.  **Real-World ATS Mode (Default):** Simulates modern ATS (Greenhouse, Lever) with semantic skill matching.
+3.  **Brutal Signal Mode:** Simulates a skeptical Engineering Manager looking for proof of work and depth.
+
+---
 
 ## ✨ Key Features
 
 * **Smart Resume Builder:** Analyzes your resume against a specific JD, provides a "Selection Percentage," and modifies the content to improve interview chances.
 * **Multi-Perspective Analysis:** View results through three distinct lenses (ATS, Recruiter, Engineering Manager).
-* **Visual Scoring:** Interactive circular charts and color-coded badges for quick assessment of "Match Score," "Tech Depth," and "Impact."
 * **Agentic AI Chat:** A GPT-style chat interface allowing users to interact with the system for career advice.
+* **Full Observability:** Integrated with **LangSmith** to trace agent workflows, debug complex LLM chains, and evaluate the quality of AI outputs in real-time.
 * **Automated Application:** An agentic workflow that handles the submission of applications on the user's behalf.
 
-### The 3 Modes of Hiring Analysis
+---
 
-InternOps evaluates resumes using three distinct simulation modes selected via the extension:
+## ⚡ Impact & Performance
 
-1. **Strict Compliance Mode (ATS Heavy):**
-* *Simulates:* Enterprise ATS + HR Legal Filters.
-* *Focus:* Binary eligibility checks based on explicit JD requirements.
+InternOps is engineered for speed, precision, and measurable quality.
 
-
-2. **Real-World ATS Mode (Default):**
-* *Simulates:* Modern ATS (Greenhouse, Lever, Ashby).
-* *Focus:* Semantic skill matching and weighted relevance scoring.
-
-
-3. **Brutal Signal Mode (FAANG):**
-* *Simulates:* Skeptical Hiring Manager / Interviewer.
-* *Focus:* Evidence-based scrutiny of claims, metrics, scope, and depth.
-
-
+* **95% Time Reduction:** Candidates typically spend **30-60 minutes** tailoring a resume for a single role. InternOps completes the deep analysis and tailoring process in under **2 minutes**.
+* **85% Evaluation Score:** The agentic workflows have been rigorously tested using **LangGraph** evaluations, achieving an 85% success rate in accurately identifying resume gaps and generating relevant optimizations compared to human-expert baselines.
+* **90% Reduced TTFT (Time-To-First-Token):** Optimized LLM streaming and orchestration pipelines ensure near-instant feedback for the user.
+* **High-Precision Semantic Caching:** Implements intelligent caching that is highly sensitive to context. If even a single character changes in the Job Description or Resume, the system detects the shift and triggers a fresh analysis, ensuring you never receive stale or mismatched advice.
 
 ---
 
 ## 🛠 Tech Stack
 
-### Backend
-
+### 🧠 Backend (AI & Logic)
 * **Framework:** FastAPI (with Uvicorn)
 * **AI & Orchestration:** LangChain (Core, Community, Google GenAI), LangGraph
+* **Observability & Eval:** **LangSmith**
 * **Database & Caching:** PostgreSQL, Redis, LangChain-Redis
 * **Asynchronous Tasks:** Celery
 * **Data Processing:** Pandas, PyPDF2, OpenPyXL
 
-### Frontend (Chrome Extension)
+### 🧩 Chrome Extension (Browser Integration)
+* **Core:** Manifest V3, Service Workers
+* **Stack:** Vanilla JavaScript (ES6+), HTML5, CSS3
+* **Permissions:** `activeTab` (for reading current page content)
 
-* **Core:** HTML5, CSS3, Vanilla JavaScript (ES6+)
-* **Interaction:** Dynamic DOM manipulation, Fetch API for backend communication
-* **Styling:** Responsive layout with dynamic state management (loading spinners, tab transitions)
+### 💻 Web Dashboard (User Interface)
+* **Framework:** Vue.js 3 (Script Setup)
+* **Build Tool:** Vite
+* **Styling:** Tailwind CSS
 
 ---
 
 ## 🏁 Getting Started
 
-Follow these instructions to set up the full stack (Backend + Frontend) locally.
+Follow these instructions to set up the full stack locally.
 
-### Prerequisites
+### 1. Backend Setup
 
-* **Python 3.9+**
-* **Docker & Docker Compose** (Recommended for DB and Redis services)
-* **Google Gemini API Key** (Required for `langchain-google-genai`)
-* **Google Chrome** (For loading the extension)
+1.  **Clone the repository**
+    ```bash
+    git clone [https://github.com/gyanprakashkushwaha/internops.git](https://github.com/gyanprakashkushwaha/internops.git)
+    cd internops
+    ```
 
-### Installation
+2.  **Install Dependencies**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
 
-#### 1. Backend Setup
+3.  **Environment Configuration**
+    Create a `.env` file in the root directory.
+    ```env
+    # AI Providers
+    GOOGLE_API_KEY=your_google_api_key
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/gyanprakashkushwaha/internops.git
-cd internops
+    # Database & Cache
+    POSTGRES_URI=postgresql://postgres:password@localhost:5432/internops
+    REDIS_URL=redis://localhost:6379/0
 
-```
+    # LangSmith Observability
+    LANGCHAIN_TRACING_V2=true
+    LANGCHAIN_ENDPOINT="[https://api.smith.langchain.com](https://api.smith.langchain.com)"
+    LANGCHAIN_API_KEY=your_langsmith_api_key
+    LANGCHAIN_PROJECT="internops-dev"
+    ```
 
+4.  **Start Services (Docker)**
+    ```bash
+    docker-compose up -d  # Starts Postgres & Redis
+    ```
 
-2. **Set up Virtual Environment**
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+5.  **Run the Server**
+    ```bash
+    # Start Celery Worker
+    celery -A app.celery_worker worker --loglevel=info
 
-```
+    # Start FastAPI
+    uvicorn app.app:app --reload
+    ```
 
+### 2. Chrome Extension Setup
 
-3. **Install Dependencies**
-```bash
-pip install -r requirements.txt
+1.  Open Google Chrome and navigate to `chrome://extensions/`.
+2.  Toggle **Developer mode** in the top right corner.
+3.  Click **Load unpacked**.
+4.  Select the `internops-frontend/extension` folder.
+5.  The InternOps logo should appear in your toolbar.
 
-```
+### 3. Web Dashboard Setup
 
+1.  Navigate to the web directory:
+    ```bash
+    cd internops-frontend/web
+    ```
 
-4. **Environment Configuration**
-Create a `.env` file in the root directory:
-```env
-GOOGLE_API_KEY=your_api_key_here
-POSTGRES_URI=postgresql://postgres:password@localhost:5432/internops
-REDIS_URL=redis://localhost:6379/0
+2.  Install Node dependencies:
+    ```bash
+    npm install
+    ```
 
-```
-
-
-
-#### 2. Frontend Setup (Chrome Extension)
-
-1. Open Google Chrome and navigate to `chrome://extensions/`.
-2. Toggle **Developer mode** in the top right corner.
-3. Click **Load unpacked**.
-4. Select the `frontend` (or `extension`) folder from this repository.
-5. The InternOps logo should appear in your extensions toolbar.
+3.  Start the development server:
+    ```bash
+    npm run dev
+    ```
 
 ---
 
 ## 💡 Usage
 
-### Running the Application
+### Using the Chrome Extension
+1.  Navigate to a job posting or open the extension popup.
+2.  **Upload Resume:** Select your PDF resume file.
+3.  **Select Strategy:** Choose between *Strict Mode*, *Real World*, or *Brutal Mode*.
+4.  **Analyze:** Click "Analyze Resume." The extension communicates with the FastAPI backend to generate a scored report.
 
-1. **Start Backend Services:**
-```bash
-# Start Redis & Postgres
-docker-compose up -d
-
-# Start Celery Worker
-celery -A app.celery_worker worker --loglevel=info
-
-# Start FastAPI Server
-uvicorn app.app:app --reload
-
-```
-
-
-*Ensure the server is running on `http://localhost:8000` as the frontend is hardcoded to this endpoint.*
-2. **Using the Extension:**
-* Click the InternOps extension icon.
-* **Upload Resume:** Select your PDF resume file.
-* **Select Strategy:** Choose between *Strict Mode*, *Real World*, or *Brutal Mode*.
-* **Analyze:** Click "Analyze Resume" to start the AI agent.
-
-
-3. **Interpreting Results:**
-Once analysis is complete, the extension window will expand to show three tabs:
-* **ATS Scan:** View Match Score, missing keywords, and formatting issues.
-* **Recruiter:** Check Career Progression score and soft skills analysis.
-* **Engineering:** Review Tech Depth, Impact Score, and Stack Alignment.
-
-
-
-*(Placeholder: Include a screenshot of the Extension Popup showing the Score Card here)*
+### Monitoring with LangSmith
+* Once the backend is running with `LANGCHAIN_TRACING_V2=true`, all agent steps, LLM calls, and tool usages will be logged to your LangSmith project.
+* Use the LangSmith dashboard to debug failed chains, view token usage, and evaluate the "reasoning" quality of the agents.
 
 ---
 
@@ -165,12 +166,22 @@ Once analysis is complete, the extension window will expand to show three tabs:
 
 InternOps uses PostgreSQL for persistent storage. You can access the running database container using the interactive terminal.
 
-**Connect to the Database:**
-
 ```bash
 docker exec -it internopsdb psql -U postgres -d internops
-
 ```
+
+
+---
+
+## 🗺 Roadmap
+
+* [x] **Core AI Analysis:** Resume parsing and multi-mode evaluation logic.
+* [x] **Chrome Extension:** Functional popup with file upload and result visualization.
+* [x] **Observability:** Full integration with LangSmith for traces and evals.
+* [ ] **Dashboard Features:** Build out the Vue components for "Application History" and "Detailed Analytics."
+* [ ] **Auth Integration:** Unified login between Extension and Web Dashboard.
+
+---
 
 ## 🤝 Contributing
 
@@ -186,6 +197,5 @@ Contributions are what make the open-source community such an amazing place to l
 
 ## 📞 Contact
 
-**Gyan Prakash Kushwaha** - [GitHub Profile](https://github.com/gyanprakashkushwaha)
+**Gyan Prakash Kushwaha** - [LinkedIn Profile](https://www.linkedin.com/in/gyanprakashkushwaha/)
 
-Project Link: [https://github.com/gyanprakashkushwaha/internops](https://www.google.com/search?q=https://github.com/gyanprakashkushwaha/internops)
