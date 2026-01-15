@@ -79,6 +79,8 @@ async def analysis(
         
         if existing_id:
             final_result = get_final_result(existing_id[0])
+            print(final_result)
+            print({"status": "Completed", "final_result": final_result, "analysis_id" : existing_id[0]})
             return {"status": "Completed", "final_result": final_result, "analysis_id" : existing_id[0]}
         
         # Create new entry
