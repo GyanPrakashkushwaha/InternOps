@@ -5,47 +5,17 @@ from contextlib import asynccontextmanager
 from typing import Literal, AsyncGenerator
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from base64 import b64encode
-from langchain_core.messages import HumanMessage
 from celery.result import AsyncResult
-from psycopg_pool import AsyncConnectionPool
-
-# LangGraph Persistence
-from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
-from langgraph.store.postgres.aio import AsyncPostgresStore
 
 # Internal Modules
-from .utils import read_pdf, generate_hash
+from .utils import read_pdf, generate_hash, save_pdf
 from .database import init_db, get_db_connection, get_final_result, get_db_uri
 from .tasks import celery_app, analyze_task
-from .models import ChatRequest
-from .chat import build_chat_graph
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # 1. Sync DB Init (Legacy tables)
-    print("--- 🟢 Startup: Initializing Legacy Tables ---")
-    try:
-        init_db() 
-    except Exception as e:
-        print(f"Warning: Sync DB Init failed: {e}")
-    
-    DB_URI = get_db_uri()
-    async with AsyncConnectionPool(conninfo=DB_URI, max_size=20) as pool:
-        checkpointer = AsyncPostgresSaver(pool)
-        store = AsyncPostgresStore(pool)
-        
-        # await checkpointer.setup()
-        # await store.setup()
-        
-        app.state.graph = build_chat_graph(checkpointer, store)
-        yield
-    print("--- Closing DB Connection Pool ---")
-    
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -65,6 +35,7 @@ async def analysis(
     file: UploadFile = File(...),
     job_description: str = Form(...)
 ):
+    save_pdf(file)
     resume_content = await read_pdf(file)
     conn, cur = get_db_connection()
     
@@ -157,43 +128,6 @@ def analysis_history():
     finally:
         cur.close()
         conn.close()
-
-@app.get("/get_chat_history/{thread_id}")
-def get_chat_history(thread_id):
-    pass
-
-@app.post("/chat/stream/{user_id}/{analysis_id}")
-async def stream_chat(request: ChatRequest, user_id, analysis_id):
-    async def event_generator() -> AsyncGenerator[str, None]:
-        config = {
-            "configurable": {
-                "thread_id": analysis_id,
-                "user_id": user_id,
-            }
-        }
-        try:
-            async for event in app.state.graph.astream_events(
-                {"messages": [HumanMessage(content=request.question)]},
-                config=config,
-                version="v2"
-            ):
-                kind = event["event"]
-                
-                # Capture generated tokens
-                if kind == "on_chain_stream":
-                    chunk = event["data"].get("chunk")
-                    if chunk and "messages" in chunk:
-                        payload = json.dumps({"token": chunk["messages"].content})
-                        yield f"data: {payload}\n\n"
-                
-                # print(event)
-            yield "data: [DONE]\n\n"
-            
-        except Exception as e:
-            print(f"Error streaming chat: {e}")
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
-
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
 @app.on_event("startup")

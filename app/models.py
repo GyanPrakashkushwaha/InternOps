@@ -23,9 +23,3 @@ class HiringManagerAnalysis(BaseModel):
     decision: Literal["HIRE", "NO_HIRE", "MAYBE"]
     feedback: str = Field(..., description="Deep technical advice on improving bullet points.")
     
-class LatexCodeAnalysis(BaseModel):
-    decision: Literal["CORRECT", "NEEDS_IMPROVEMENT"] = Field(..., description="...")
-    feedback: str = Field(..., description= "...")
-    
-class ChatRequest(BaseModel):
-    question: str 

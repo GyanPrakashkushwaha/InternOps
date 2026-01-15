@@ -88,6 +88,7 @@ def init_db():
         if cur: cur.close()
         if conn: conn.close()
 
+
 def get_final_result(analysis_id):
     try:
         conn, cur = get_db_connection()
