@@ -13,7 +13,7 @@ def get_db_uri():
     return f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 
 DB_CREATION_QUERY = """
-            ALTER DATABASE internops SET TIMEZONE TO 'Asia/Kolkata';
+            -- ALTER DATABASE internops_db SET TIMEZONE TO 'Asia/Kolkata';
             CREATE TABLE IF NOT EXISTS analysis (
                 id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                 hash_key TEXT NOT NULL,
@@ -68,7 +68,7 @@ def get_db_connection():
     cur = None
     try:
         DB_URI = get_db_uri()
-        conn = psycopg2.connect("postgresql://internops_db_user:PwfFbYWFVlmqIPjl3BFWsCgWFFHzHXdC@dpg-d5kss95actks73e8f21g-a/internops_db")
+        conn = psycopg2.connect(DB_URI)
         cur = conn.cursor()
     except Exception as e:
         raise RuntimeError(f"DB connection failed: {e}")
