@@ -35,7 +35,6 @@ async def analysis(
     file: UploadFile = File(...),
     job_description: str = Form(...)
 ):
-    save_pdf(file)
     resume_content = await read_pdf(file)
     conn, cur = get_db_connection()
     
