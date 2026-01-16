@@ -68,7 +68,7 @@ def get_db_connection():
     cur = None
     try:
         DB_URI = get_db_uri()
-        conn = psycopg2.connect(DB_URI)
+        conn = psycopg2.connect("postgresql://internops_db_user:PwfFbYWFVlmqIPjl3BFWsCgWFFHzHXdC@dpg-d5kss95actks73e8f21g-a/internops_db")
         cur = conn.cursor()
     except Exception as e:
         raise RuntimeError(f"DB connection failed: {e}")
