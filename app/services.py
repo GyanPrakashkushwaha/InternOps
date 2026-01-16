@@ -17,7 +17,7 @@ API_KEYS = [
 redis_client = None
 redis_cache = None
 try:
-    redis_url = os.getenv("REDIS_URL", "rediss://default:ARPJAAImcDJlOTlmYzlhNDBkNDI0Mjg1ODdlOWIwYmE3NjcyMjMwZnAyNTA2NQ@driving-moth-5065.upstash.io:6379")
+    redis_url = os.getenv("REDIS_URL", "rediss://default:ARPJAAImcDJlOTlmYzlhNDBkNDI0Mjg1ODdlOWIwYmE3NjcyMjMwZnAyNTA2NQ@driving-moth-5065.upstash.io:6379?ssl_cert_reqs=CERT_NONE")
     redis_client = Redis.from_url(redis_url)
     redis_cache = RedisCache(redis_ = redis_client)
     print("Redis cache connected successfully")
