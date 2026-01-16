@@ -5,11 +5,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_db_uri():
-    user = os.getenv("DB_USER", "postgres")
-    password = os.getenv("DB_PASSWORD", "password")
-    host = os.getenv("DB_HOST", "localhost")
+    user = os.getenv("DB_USER", "internops_db_user")
+    password = os.getenv("DB_PASSWORD", "PwfFbYWFVlmqIPjl3BFWsCgWFFHzHXdC")
+    host = os.getenv("DB_HOST", "dpg-d5kss95actks73e8f21g-a")
     port = os.getenv("DB_PORT", "5430")
-    dbname = os.getenv("DB_NAME", "internops")
+    dbname = os.getenv("DB_NAME", "internops_db")
     return f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 
 DB_CREATION_QUERY = """
