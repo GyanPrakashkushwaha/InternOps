@@ -29,8 +29,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # This copies everything from the current folder to /app inside the container
 COPY . .
 
-# 7. Default Command
-# This command runs the FastAPI server by default. 
-# We can override this later to run the Celery worker instead.
-CMD [ "uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8000"]
+# 7. Make the start script executable
+RUN chmod +x start.sh
 
+# 8. Run the combined script
+CMD ["./start.sh"]
