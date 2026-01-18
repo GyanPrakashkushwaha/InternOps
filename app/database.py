@@ -24,6 +24,45 @@ DB_CREATION_QUERY = """
                 mode VARCHAR,
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
+            
+            CREATE TABLE IF NOT EXISTS job_metadata (
+                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                analysis_id INT UNIQUE,
+                
+                -- Core Identity
+                job_title VARCHAR NOT NULL,
+                company_name VARCHAR NOT NULL,
+                location VARCHAR,
+                employment_type VARCHAR,
+                salary_range VARCHAR,
+                
+                -- Hierarchy & Context
+                department VARCHAR,
+                reporting_to VARCHAR,
+                job_summary TEXT,
+                company_overview TEXT,
+                
+                -- Filters (The "Structured Requirements")
+                experience_level VARCHAR,
+                min_education VARCHAR,
+                work_mode VARCHAR,
+                
+                -- Arrays for Rich Data
+                required_skills TEXT[],        -- Searchable!
+                preferred_skills TEXT[],
+                duties_responsibilities TEXT[],
+                benefits TEXT[],
+                
+                -- System Fields
+                posted_date DATE DEFAULT CURRENT_DATE,
+                is_active BOOLEAN DEFAULT TRUE,
+
+                CONSTRAINT FK_jobMeta_analysisId 
+                    FOREIGN KEY (analysis_id) 
+                    REFERENCES analysis(id)
+                    ON DELETE CASCADE
+            );
+            
             CREATE TABLE IF NOT EXISTS ats (
                 id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                 analysis_id INT,

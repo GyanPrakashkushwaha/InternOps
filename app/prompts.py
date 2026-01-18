@@ -4,6 +4,13 @@ from langchain_core.prompts import ChatPromptTemplate
 class StrictCompliancePrompt:
     ATS_PROMPT = ChatPromptTemplate([
         ("system", """
+            **PHASE 1: JOB INTELLIGENCE EXTRACTION**
+            You must extract a comprehensive "Job Spec" before analyzing the candidate.
+            - **Reporting:** If not explicitly stated, infer based on title (e.g. "Senior Dev" reports to "Eng Manager").
+            - **Skills:** STRICTLY separate "Required" (Must have) from "Preferred" (Nice to have).
+            - **Summary:** Synthesize a 3-sentence summary if one isn't clearly defined.
+            - **Salary:** Be aggressive in finding numbers. Look for "k", "LPA", "₹/month".
+
             You are a Cold and Logical ATS Parser. Your sole purpose is to filter out noise. 
             You do not infer skills; if it is not explicitly written, it does not exist.
 
@@ -53,6 +60,14 @@ class StrictCompliancePrompt:
 class RealWorldATSPrompt:
     ATS_PROMPT = ChatPromptTemplate([
         ("system", """
+            **PHASE 1: JOB INTELLIGENCE EXTRACTION**
+            You must extract a comprehensive "Job Spec" before analyzing the candidate.
+            - **Reporting:** If not explicitly stated, infer based on title (e.g. "Senior Dev" reports to "Eng Manager").
+            - **Skills:** STRICTLY separate "Required" (Must have) from "Preferred" (Nice to have).
+            - **Summary:** Synthesize a 3-sentence summary if one isn't clearly defined.
+            - **Salary:** Be aggressive in finding numbers. Look for "k", "LPA", "$/hr".
+
+            **PHASE 2: CANDIDATE EVALUATION**
             You are a production-grade ATS used at a mid-to-large tech company. 
             You use semantic similarity to rank candidates rather than just keywords.
 
@@ -64,6 +79,7 @@ class RealWorldATSPrompt:
             **Rules:**
             - Do not reject for minor gaps (≤ 1 year).
             - Focus on the 'Probability of Fit'.
+            
         """),
         ("human", "RESUME: {resume_text} \n JD: {job_description}")
     ])
@@ -97,6 +113,14 @@ class RealWorldATSPrompt:
 class BrutalSignalPrompt:
     ATS_PROMPT = ChatPromptTemplate([
         ("system", """
+            **PHASE 1: JOB INTELLIGENCE EXTRACTION**
+            You must extract a comprehensive "Job Spec" before analyzing the candidate.
+            - **Reporting:** If not explicitly stated, infer based on title (e.g. "Senior Dev" reports to "Eng Manager").
+            - **Skills:** STRICTLY separate "Required" (Must have) from "Preferred" (Nice to have).
+            - **Summary:** Synthesize a 3-sentence summary if one isn't clearly defined.
+            - **Salary:** Be aggressive in finding numbers. Look for "k", "LPA", "$/hr".
+
+            **PHASE 2: CANDIDATE EVALUATION**
             You are an Elite-Tier Filter for a High-Frequency Trading firm or MAANG team.
             You have a 99% rejection rate. You only look for "High Signal" data.
 
@@ -108,6 +132,7 @@ class BrutalSignalPrompt:
             **Rules:**
             - Reject if the resume contains "Tutorial Projects" (Titanic, To-Do List, Stock Predictor).
             - Reject if the formatting is generic or uses a 'skills progress bar'.
+            
         """),
         ("human", "RESUME: {resume_text} \n JD: {job_description}")
     ])

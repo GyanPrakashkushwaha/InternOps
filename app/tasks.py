@@ -24,6 +24,43 @@ celery_app = Celery(
 def db_write_task(self, analysis_id: int, results: dict):
     conn, cur = get_db_connection()
     try:
+        meta = results["ats_result"]["job_metadata"]
+        
+        meta_query = """
+        INSERT INTO job_metadata (
+            analysis_id, 
+            job_title, company_name, location, employment_type, salary_range,
+            department, reporting_to, job_summary, company_overview,
+            experience_level, min_education, work_mode,
+            required_skills, preferred_skills, duties_responsibilities, benefits
+        )
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        
+        cur.execute(meta_query, (
+            analysis_id,
+            meta["job_title"],
+            meta["company_name"],
+            meta["location"],
+            meta["employment_type"],
+            meta["salary_range"],
+            
+            meta["department"],
+            meta["reporting_to"],
+            meta["job_summary"],
+            meta["company_overview"],
+            
+            meta["experience_level"],
+            meta["min_education"],
+            meta["work_mode"],
+            
+            meta["required_skills"],       
+            meta["preferred_skills"],      
+            meta["duties_responsibilities"], 
+            meta["benefits"]               
+        ))
+        
+        
         ats_result = results["ats_result"]
         ats_query = """
         INSERT INTO ats (analysis_id, match_score, missing_keywords, formatting_issues, decision, feedback)
@@ -36,6 +73,7 @@ def db_write_task(self, analysis_id: int, results: dict):
                     ats_result["formatting_issues"], 
                     ats_result["decision"], 
                     ats_result["feedback"]))
+     
         
         if "recruiter_result" in results:
             recruiter_result = results["recruiter_result"]
