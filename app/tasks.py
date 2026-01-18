@@ -100,7 +100,7 @@ def db_write_task(self, analysis_id: int, results: dict):
             json.dumps(res_meta["certifications"]),
             json.dumps(res_meta["awards"]),
             json.dumps(res_meta["volunteer_experience"]),
-            json.dumps(res_meta["interests"])
+            res_meta["interests"]
         ))
         
         ats_result = results["ats_result"]
