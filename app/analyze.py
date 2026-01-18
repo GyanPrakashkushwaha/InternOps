@@ -73,11 +73,11 @@ def extractor_agent_node(state: InputState):
     # otherwise use a simple template here.
     agent_prompt = ExtractionPrompt.EXTRACTION_PROMPT.format(
         job_description = state["job_description"],
-        resume = state["resume_text"]
+        resume_text = state["resume_text"]
     )
     
     response = extractor_agent.invoke(agent_prompt)
-    return {"job_metadata": response["job_description"], "resume_metadata": response["resume"]}
+    return {"job_metadata": response.job_description, "resume_metadata": response.resume}
 
 def ats_agent(state: ScreeningState):
     """

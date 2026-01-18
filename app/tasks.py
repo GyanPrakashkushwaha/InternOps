@@ -62,7 +62,7 @@ def db_write_task(self, analysis_id: int, results: dict):
         
         res_meta = results["resume_metadata"]
         resume_query = """
-        INSERT INTO resume_metadata (
+        INSERT INTO resume_parsed_data (
             analysis_id,
             full_name, email, phone, location, 
             linkedin_url, github_url, summary, total_years_experience,

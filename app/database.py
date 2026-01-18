@@ -183,19 +183,21 @@ def get_final_result(analysis_id):
         """
         cur.execute(query, (analysis_id,))
         ats_result_tuple = cur.fetchone()
-        print(f"======================================= ATS RESULT {analysis_id}=================================================")
-        print(ats_result_tuple)
-        print("======================================= ATS RESULT =================================================")
-        ats_result = {
-            "match_score": ats_result_tuple["match_score"],
-            "missing_keywords": ats_result_tuple["missing_keywords"],
-            "formatting_issues": ats_result_tuple["formatting_issues"],
-            "decision": ats_result_tuple["decision"],
-            "feedback": ats_result_tuple["feedback"],
-        }
+        ats_result = {}
+        if ats_result_tuple:
+            print(f"======================================= ATS RESULT {analysis_id}=================================================")
+            print(ats_result_tuple)
+            print("======================================= ATS RESULT =================================================")
+            ats_result = {
+                "match_score": ats_result_tuple["match_score"],
+                "missing_keywords": ats_result_tuple["missing_keywords"],
+                "formatting_issues": ats_result_tuple["formatting_issues"],
+                "decision": ats_result_tuple["decision"],
+                "feedback": ats_result_tuple["feedback"],
+            }
         
         # data base can also be used to check if the entry exists or not.
-        if ats_result["decision"] == "PASS":
+        if ats_result and ats_result["decision"] == "PASS":
             query = """
             SELECT * FROM recruiter
             WHERE analysis_id = %s;
