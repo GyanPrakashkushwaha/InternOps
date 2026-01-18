@@ -10,7 +10,7 @@ from base64 import b64encode
 from celery.result import AsyncResult
 
 # Internal Modules
-from .utils import read_pdf, generate_hash, save_pdf
+from .utils import read_pdf, generate_hash
 from .database import init_db, get_db_connection, get_final_result, get_db_uri
 from .tasks import celery_app, analyze_task
 
@@ -48,10 +48,13 @@ async def analysis(
         existing_id = cur.fetchone()
         
         if existing_id:
-            final_result = get_final_result(existing_id[0])
+            # print("=========================================================================================")
+            # print(existing_id)
+            # print("=========================================================================================")
+            final_result = get_final_result(existing_id["id"])
             print(final_result)
-            print({"status": "Completed", "final_result": final_result, "analysis_id" : existing_id[0]})
-            return {"status": "Completed", "final_result": final_result, "analysis_id" : existing_id[0]}
+            print({"status": "Completed", "final_result": final_result, "analysis_id" : existing_id["id"]})
+            return {"status": "Completed", "final_result": final_result, "analysis_id" : existing_id["id"]}
         
         # Create new entry
         query = """
@@ -60,7 +63,10 @@ async def analysis(
         RETURNING id
         """
         cur.execute(query, (hash_key, job_description, resume_content, mode))
-        analysis_id = cur.fetchone()[0]
+        print("======================================== ANALYSIS ID =======================================")
+        analysis_id = cur.fetchone()["id"]
+        print(analysis_id)
+        print("======================================== ANALYSIS ID =======================================")
         conn.commit()
         
         # Dispatch Celery Task
@@ -117,7 +123,7 @@ def analysis_history():
         """
         cur.execute(query)
         analysis_id = cur.fetchall()
-        print(analysis_id)
+        # print(analysis_id)
         return {
             "status": "done",
             "id_list": analysis_id
@@ -128,6 +134,50 @@ def analysis_history():
         cur.close()
         conn.close()
 
+@app.get("/web/dashboard/history")
+def fetch_dashboard_history():
+    try:
+        conn, cur = get_db_connection()
+
+        query = """
+            SELECT 
+                a.id as id,
+                a.created_at as date,
+                SUBSTRING(a.job_description, 10, 35) as jdSnippet,
+                a.mode as strategy, 
+                ats.match_score as atsScore, 
+                r.career_progression_score as recruiterScore, 
+                hm.tech_depth_score as careerProgressionScore, 
+                hm.project_impact_score as techDepthScore,
+                hm.decision as status
+                
+            FROM analysis a
+            JOIN ats
+            ON ats.analysis_id = a.id
+            JOIN recruiter r
+            ON r.analysis_id = a.id
+            JOIN hiring_manager hm
+            ON hm.analysis_id = a.id
+            
+            ORDER BY date DESC
+        """
+        print("hi mdaljlsasdksd")
+        cur.execute(query)
+        rows = cur.fetchall()
+        # print(rows)
+        return {
+            "status": "success",
+            "data": {
+                "history": rows
+            }
+        }
+
+    except Exception as error:
+        raise error
+
+    finally:
+        cur.close()
+        conn.close()
 
 @app.on_event("startup")
 def startup():

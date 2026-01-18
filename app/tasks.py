@@ -94,8 +94,10 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str, hash_k
 
         if "hm_result" in output_state:
             output_state_dict["hm_result"] = output_state["hm_result"].model_dump()
-            
+        
+        print("================================ SAVING OUTPUT========================================")
         db_write_task.delay(analysis_id, output_state_dict)
+        print("================================ SAVING OUTPUT========================================")
     except Exception as e:
         raise e
         

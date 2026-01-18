@@ -2,14 +2,16 @@
 import psycopg2
 import os
 from dotenv import load_dotenv
+from psycopg2.extras import RealDictCursor
+
 load_dotenv()
 
 def get_db_uri():
-    user = os.getenv("DB_USER", "internops_db_user")
-    password = os.getenv("DB_PASSWORD", "PwfFbYWFVlmqIPjl3BFWsCgWFFHzHXdC")
-    host = os.getenv("DB_HOST", "dpg-d5kss95actks73e8f21g-a")
-    port = os.getenv("DB_PORT", "5430")
-    dbname = os.getenv("DB_NAME", "internops_db")
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASSWORD")
+    host = os.getenv("DB_HOST")
+    port = os.getenv("DB_PORT")
+    dbname = os.getenv("DB_NAME")
     return f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 
 DB_CREATION_QUERY = """
@@ -19,7 +21,7 @@ DB_CREATION_QUERY = """
                 hash_key TEXT NOT NULL,
                 job_description TEXT,
                 resume_text TEXT,
-                mode VARCHAR, 
+                mode VARCHAR,
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
             CREATE TABLE IF NOT EXISTS ats (
@@ -69,7 +71,7 @@ def get_db_connection():
     try:
         DB_URI = get_db_uri()
         conn = psycopg2.connect(DB_URI)
-        cur = conn.cursor()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
     except Exception as e:
         raise RuntimeError(f"DB connection failed: {e}")
     return conn, cur
@@ -98,15 +100,15 @@ def get_final_result(analysis_id):
         """
         cur.execute(query, (analysis_id,))
         ats_result_tuple = cur.fetchone()
-        # print(f"======================================= ATS RESULT {analysis_id}=================================================")
-        # print(ats_result_tuple)
-        # print("======================================= ATS RESULT =================================================")
+        print(f"======================================= ATS RESULT {analysis_id}=================================================")
+        print(ats_result_tuple)
+        print("======================================= ATS RESULT =================================================")
         ats_result = {
-            "match_score": ats_result_tuple[2],
-            "missing_keywords": ats_result_tuple[3],
-            "formatting_issues": ats_result_tuple[4],
-            "decision": ats_result_tuple[5],
-            "feedback": ats_result_tuple[6],
+            "match_score": ats_result_tuple["match_score"],
+            "missing_keywords": ats_result_tuple["missing_keywords"],
+            "formatting_issues": ats_result_tuple["formatting_issues"],
+            "decision": ats_result_tuple["decision"],
+            "feedback": ats_result_tuple["feedback"],
         }
         
         # data base can also be used to check if the entry exists or not.
@@ -122,11 +124,11 @@ def get_final_result(analysis_id):
             # print("======================================= RECRUITER RESULT =================================================")
 
             recruiter_result = {
-                "career_progression_score": recruiter_result_tuple[2],
-                "red_flags": recruiter_result_tuple[3],
-                "soft_skills_detected": recruiter_result_tuple[4],
-                "decision": recruiter_result_tuple[5],
-                "feedback": recruiter_result_tuple[6],
+                "career_progression_score": recruiter_result_tuple["career_progression_score"],
+                "red_flags": recruiter_result_tuple["red_flags"],
+                "soft_skills_detected": recruiter_result_tuple["soft_skills"],
+                "decision": recruiter_result_tuple["decision"],
+                "feedback": recruiter_result_tuple["feedback"],
             }
             
             if recruiter_result["decision"] == "PASS":
@@ -138,11 +140,11 @@ def get_final_result(analysis_id):
                 hm_result_tuple = cur.fetchone()
 
                 hm_result = {
-                    "tech_depth_score": hm_result_tuple[2],
-                    "project_impact_score": hm_result_tuple[3],
-                    "stack_alignment": hm_result_tuple[4],
-                    "decision": hm_result_tuple[5],
-                    "feedback": hm_result_tuple[6],
+                    "tech_depth_score": hm_result_tuple["tech_depth_score"],
+                    "project_impact_score": hm_result_tuple["project_impact_score"],
+                    "stack_alignment": hm_result_tuple["stack_alignment"],
+                    "decision": hm_result_tuple["decision"],
+                    "feedback": hm_result_tuple["feedback"],
                 }
                 
                 return {
