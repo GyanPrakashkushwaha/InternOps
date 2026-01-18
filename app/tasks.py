@@ -60,6 +60,48 @@ def db_write_task(self, analysis_id: int, results: dict):
             meta["benefits"]               
         ))
         
+        res_meta = results["resume_metadata"]
+        resume_query = """
+        INSERT INTO resume_metadata (
+            analysis_id,
+            full_name, email, phone, location, 
+            linkedin_url, github_url, summary, total_years_experience,
+            education, work_experience, skills, projects,
+            certifications, awards, volunteer_experience, interests
+        )
+        VALUES (
+            %s, 
+            %s, %s, %s, %s, 
+            %s, %s, %s, %s,
+            %s, %s, %s, %s, 
+            %s, %s, %s, %s
+        )
+        """
+
+        # 3. Execute with JSON serialization for nested lists/dicts
+        cur.execute(resume_query, (
+            analysis_id,
+            res_meta["full_name"],
+            res_meta["email"],
+            res_meta["phone"],
+            res_meta["location"],
+            
+            res_meta["linkedin_url"],
+            res_meta["github_url"],
+            res_meta["summary"],
+            res_meta["total_years_experience"],
+
+            # Complex nested fields must be dumped to JSON strings
+            json.dumps(res_meta["education"]),
+            json.dumps(res_meta["work_experience"]),
+            json.dumps(res_meta["skills"]),
+            json.dumps(res_meta["projects"]),
+            
+            json.dumps(res_meta["certifications"]),
+            json.dumps(res_meta["awards"]),
+            json.dumps(res_meta["volunteer_experience"]),
+            json.dumps(res_meta["interests"])
+        ))
         
         ats_result = results["ats_result"]
         ats_query = """
@@ -126,6 +168,7 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str, hash_k
         
         output_state_dict = {
             "job_metadata": output_state["job_metadata"].model_dump(),
+            "resume_metadata": output_state["resume_metadata"].model_dump(),
             "ats_result": output_state["ats_result"].model_dump()
         }
         if "recruiter_result" in output_state:

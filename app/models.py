@@ -1,6 +1,94 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional, Literal
-from langchain_core.prompts import ChatPromptTemplate
+from typing import List, Optional, Literal,Dict
+
+# --- Section Models ---
+
+class EducationItem(BaseModel):
+    institution: str = Field(..., description="Name of the university or school.")
+    degree: str = Field(..., description="Degree obtained (e.g., 'B.Tech', 'Master of Science').")
+    field_of_study: str = Field(default="", description="Major or specialization.")
+    location: str = Field(default="", description="City, Country.")
+    start_date: str = Field(..., description="Start date (e.g., '2019').")
+    end_date: str = Field(..., description="End date or 'Present'.")
+    grade: Optional[str] = Field(None, description="GPA, CGPA, or Percentage if listed.")
+
+class WorkExperienceItem(BaseModel):
+    role: str = Field(..., description="Job title.")
+    company: str = Field(..., description="Name of the company.")
+    location: str = Field(default="Remote", description="City, Country or 'Remote'.")
+    start_date: str = Field(..., description="Start date.")
+    end_date: str = Field(..., description="End date or 'Present'.")
+    description_bullets: List[str] = Field(..., description="Achievements and responsibilities.")
+    tech_stack: List[str] = Field(default=[], description="Tools/Languages used in this specific role.")
+
+class ProjectItem(BaseModel):
+    name: str = Field(..., description="Project name.")
+    description: str = Field(..., description="Brief summary.")
+    tech_stack: List[str] = Field(..., description="Technologies used.")
+    url: Optional[str] = Field(None, description="Link to code or demo.")
+    bullets: List[str] = Field(default=[], description="Key outcomes or features.")
+
+class CertificationItem(BaseModel):
+    name: str = Field(..., description="Name of the certification (e.g., 'AWS Certified Solutions Architect').")
+    issuer: str = Field(default="", description="Organization (e.g., 'Amazon', 'Google').")
+    date: Optional[str] = Field(None, description="Date obtained or expiry.")
+
+class VolunteerItem(BaseModel):
+    role: str = Field(..., description="Role title (e.g., 'Mentor', 'Volunteer').")
+    organization: str = Field(..., description="Organization name.")
+    description: Optional[str] = Field(None, description="Brief description of impact.")
+
+class AwardItem(BaseModel):
+    title: str = Field(..., description="Name of the award or honor.")
+    issuer: str = Field(default="", description="Who gave the award.")
+    date: Optional[str] = Field(None, description="Date received.")
+
+# --- Main Resume Extraction Model ---
+
+class ResumeMetaData(BaseModel):
+    # 1. Contact Information
+    full_name: str = Field(..., description="Candidate's full name.")
+    email: str = Field(..., description="Email address.")
+    phone: str = Field(default="", description="Phone number.")
+    location: str = Field(default="", description="City, State/Country.")
+    linkedin_url: Optional[str] = Field(None, description="LinkedIn profile URL.")
+    github_url: Optional[str] = Field(None, description="GitHub or Portfolio URL.")
+
+    # 2. Summary/Objective
+    summary: str = Field(default="", description="Professional summary or objective statement.")
+
+    # 3. Work Experience
+    work_experience: List[WorkExperienceItem] = Field(default=[], description="Professional history.")
+
+    # 4. Technical Skills
+    skills: Dict[str, List[str]] = Field(
+        ..., 
+        description="Skills categorized by type (e.g., {'Languages': ['Python'], 'Cloud': ['AWS']} )."
+    )
+
+    # 5. Education
+    education: List[EducationItem] = Field(..., description="Educational background.")
+
+    # --- Optional/Enhancing Sections ---
+    
+    # 6. Projects
+    projects: List[ProjectItem] = Field(default=[], description="Personal or academic projects.")
+
+    # 7. Certifications
+    certifications: List[CertificationItem] = Field(default=[], description="Professional certifications.")
+
+    # 8. Awards & Honors
+    awards: List[AwardItem] = Field(default=[], description="Awards, hackathon wins, or honors.")
+
+    # 9. Volunteer Experience
+    volunteer_experience: List[VolunteerItem] = Field(default=[], description="Volunteering and community service.")
+
+    # 10. Interests/Hobbies
+    interests: List[str] = Field(default=[], description="List of personal interests or hobbies.")
+
+    # --- Meta-Analysis (Computed Fields for Agents) ---
+    total_years_experience: float = Field(..., description="Total years of professional experience.")
+
 
 class JobMetadata(BaseModel):
     # --- Core Job Data ---
@@ -26,6 +114,10 @@ class JobMetadata(BaseModel):
     duties_responsibilities: List[str] = Field(..., description="List of essential functions or tasks.")
     work_mode: Literal["Remote", "On-Site", "Hybrid"] = Field(..., description="Working environment.")
     benefits: List[str] = Field(default=[], description="Perks like 'Health Insurance', 'Stock Options', 'Free Food'.")
+
+class MetaDataExtraction(BaseModel):
+    job_description: Optional[JobMetadata] = Field(description="Extract Job Metadata")
+    resume: Optional[ResumeMetaData] = Field(description="Extract Resume Metadata")
 
 class ATSAnalysis(BaseModel):
     match_score: int = Field(..., description="0-100 score based on keyword overlapping and hard constraints.")

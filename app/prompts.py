@@ -1,9 +1,10 @@
 # FIXME: As in real world senarios ATS does dumb filtering. Add rule-based dumb filtering(using codes and functions)
 from langchain_core.prompts import ChatPromptTemplate
 
-class JobMetaDataExtractionPrompt:
+class ExtractionPrompt:
     EXTRACTION_PROMPT = ChatPromptTemplate([
         ("system","""
+        ** Task-1 **
          You are an expert recruitment data analyst. Extract job details from the provided text into the structured schema.
 
         Follow these extraction rules:
@@ -11,9 +12,26 @@ class JobMetaDataExtractionPrompt:
         2. **Missing Data:** If a mandatory field is strictly missing and cannot be inferred, use "Unknown" or "Not Disclosed" as applicable.
         3. **Skills:** Extract 'required_skills' as distinct, atomic strings (e.g., split "Python/Django" into "Python", "Django").
         4. **Summary:** For 'job_summary', synthesize a concise 3-4 sentence overview from the description; do not just copy the first paragraph.
+        
+        ** task-2 **
+        You are an expert Resume Parser. Your job is to extract candidate details into a precise, structured JSON format.
+
+            **EXTRACTION RULES:**
+            1. **Contact Info:** Extract Name, Email, Phone, and Links (GitHub/LinkedIn/Portfolio).
+            2. **Summary:** Capture the professional summary.
+            3. **Work Experience:** For every role, capture:
+               - Company, Role, Start/End Dates.
+               - **Tech Stack:** Specific tools mentioned in *this* role.
+               - **Description:** Split responsibilities into a list of strings (bullets).
+            4. **Skills:** Categorize into a dictionary (e.g., {{"Languages": ["Python"], "Cloud": ["AWS"]}}).
+            5. **Education:** Extract Degree, Institution, and Dates.
+            6. **Meta-Data:**
+               - **Total Experience:** Calculate the sum of years of experience (excluding overlapping dates).
          """
         ),
-        ("human", "Job Description: {job_description}")
+        ("human", """
+         Job Description: {job_description} \n
+         Resume: {resume_text}""")
     ])
 
 class StrictCompliancePrompt:

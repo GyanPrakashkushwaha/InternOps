@@ -25,6 +25,50 @@ DB_CREATION_QUERY = """
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
             
+            CREATE TABLE IF NOT EXISTS resume_parsed_data (
+                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                analysis_id INT UNIQUE,
+
+                -- 1. Contact Information
+                full_name VARCHAR NOT NULL,
+                email VARCHAR NOT NULL,
+                phone VARCHAR,
+                location VARCHAR,
+                linkedin_url VARCHAR,
+                github_url VARCHAR,
+                portfolio_url VARCHAR,
+
+                -- 2. Professional Summary
+                summary TEXT,
+
+                -- 3. Technical Skills
+                -- Stored as JSONB to handle dynamic categories (e.g., {"Languages": ["Python"], "Cloud": ["AWS"]})
+                skills JSONB DEFAULT '{}'::jsonb, 
+
+                -- 4. Meta-Analysis
+                total_years_experience NUMERIC(4,1), -- Allows values like 2.5, 10.0
+
+                -- 5. Complex Nested Structures (JSONB Arrays of Objects)
+                -- We use JSONB here because these are lists of rich objects (Start Date, End Date, Description), not just simple strings.
+                education JSONB DEFAULT '[]'::jsonb,            -- Schema: List[EducationItem]
+                work_experience JSONB DEFAULT '[]'::jsonb,      -- Schema: List[WorkExperienceItem]
+                projects JSONB DEFAULT '[]'::jsonb,             -- Schema: List[ProjectItem]
+                certifications JSONB DEFAULT '[]'::jsonb,       -- Schema: List[CertificationItem]
+                awards JSONB DEFAULT '[]'::jsonb,               -- Schema: List[AwardItem]
+                volunteer_experience JSONB DEFAULT '[]'::jsonb, -- Schema: List[VolunteerItem]
+
+                -- 6. Simple Arrays
+                interests TEXT[],
+
+                -- System Fields
+                parsed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+                CONSTRAINT FK_resume_analysisId 
+                    FOREIGN KEY (analysis_id) 
+                    REFERENCES analysis(id)
+                    ON DELETE CASCADE
+            );
+            
             CREATE TABLE IF NOT EXISTS job_metadata (
                 id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                 analysis_id INT UNIQUE,

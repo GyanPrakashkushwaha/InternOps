@@ -4,8 +4,20 @@ from pydantic import BaseModel, Field
 import os
 
 # Local Module Imports
-from .models import ATSAnalysis, RecruiterAnalysis, HiringManagerAnalysis, JobMetadata
-from .prompts import StrictCompliancePrompt, RealWorldATSPrompt, BrutalSignalPrompt, JobMetaDataExtractionPrompt
+from .models import (
+    ATSAnalysis, 
+    RecruiterAnalysis, 
+    HiringManagerAnalysis, 
+    JobMetadata, 
+    ResumeMetaData, 
+    MetaDataExtraction
+)
+from .prompts import (
+    StrictCompliancePrompt, 
+    RealWorldATSPrompt, 
+    BrutalSignalPrompt, 
+    ExtractionPrompt
+)
 
 from .services import gemini
 
@@ -21,6 +33,7 @@ class InputState(TypedDict):
     
 class ScreeningState(InputState):
     job_metadata: Optional[JobMetadata] = None
+    resume_metadata: Optional[ResumeMetaData] = None
     ats_result: Optional[ATSAnalysis] = None
     recruiter_result: Optional[RecruiterAnalysis] = None
     hm_result: Optional[HiringManagerAnalysis] = None
@@ -28,6 +41,7 @@ class ScreeningState(InputState):
     
 class OutputState(BaseModel):
     job_metadata: Optional[JobMetadata] = None
+    resume_metadata: Optional[ResumeMetaData] = None
     ats_result: Optional[ATSAnalysis] = Field(default=None, description="Result from ATS Agent")
     recruiter_result: Optional[RecruiterAnalysis] = Field(default=None, description="Result from Recruiter Agent")
     hm_result: Optional[HiringManagerAnalysis] = Field(default=None, description="Result from HM Agent")
@@ -49,20 +63,21 @@ def fmt_list(items: List[str]) -> str:
 
 # ***************************** NODE FUNCTIONS ***********************************
 
-def jd_extractor_agent(state: InputState):
+def extractor_agent_node(state: InputState):
     """
     Phase 1: Extracts structured JobMetadata from the raw Job Description text.
     """
-    extractor_agent = llm.with_structured_output(JobMetadata)
+    extractor_agent = llm.with_structured_output(MetaDataExtraction)
     
     # Ensure JobMetaDataExtractionPrompt is defined in your prompts.py, 
     # otherwise use a simple template here.
-    agent_prompt = JobMetaDataExtractionPrompt.EXTRACTION_PROMPT.format(
-        job_description = state["job_description"]
+    agent_prompt = ExtractionPrompt.EXTRACTION_PROMPT.format(
+        job_description = state["job_description"],
+        resume = state["resume_text"]
     )
     
     response = extractor_agent.invoke(agent_prompt)
-    return {"job_metadata": response}
+    return {"job_metadata": response["job_description"], "resume_metadata": response["resume"]}
 
 def ats_agent(state: ScreeningState):
     """
@@ -155,7 +170,7 @@ def recruiter_condition(state: ScreeningState) -> Literal["PASS", "FAIL"]:
 builder = StateGraph(ScreeningState, input=InputState, output_schema=OutputState)
 
 # 1. Add Nodes
-builder.add_node("jd_extractor_node", jd_extractor_agent)
+builder.add_node("jd_extractor_node", extractor_agent_node)
 builder.add_node("ats_node", ats_agent)
 builder.add_node("recruiter_node", recruiter_agent)
 builder.add_node("hm_node", hm_agent)
