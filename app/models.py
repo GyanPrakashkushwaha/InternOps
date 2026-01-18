@@ -28,7 +28,6 @@ class JobMetadata(BaseModel):
     benefits: List[str] = Field(default=[], description="Perks like 'Health Insurance', 'Stock Options', 'Free Food'.")
 
 class ATSAnalysis(BaseModel):
-    job_metadata: JobMetadata = Field(..., description="Deep extraction of job details.")
     match_score: int = Field(..., description="0-100 score based on keyword overlapping and hard constraints.")
     missing_keywords: List[str] = Field(..., description="Critical keywords from JD missing in Resume.")
     formatting_issues: List[str] = Field(..., description="Issues like complex tables, missing headers, or unparseable sections.")

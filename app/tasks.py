@@ -24,7 +24,7 @@ celery_app = Celery(
 def db_write_task(self, analysis_id: int, results: dict):
     conn, cur = get_db_connection()
     try:
-        meta = results["ats_result"]["job_metadata"]
+        meta = results["job_metadata"]
         
         meta_query = """
         INSERT INTO job_metadata (
@@ -125,6 +125,7 @@ def analyze_task(self, resume_text: str, job_description: str, mode: str, hash_k
         output_state = workflow.invoke(input_state)
         
         output_state_dict = {
+            "job_metadata": output_state["job_metadata"].model_dump(),
             "ats_result": output_state["ats_result"].model_dump()
         }
         if "recruiter_result" in output_state:
