@@ -15,35 +15,49 @@ SELECT
 FROM analysis a
 JOIN job_metadata jam
 ON jam.analysis_id = a.id
-JOIN hiring_manager ham
+LEFT JOIN recruiter r
+ON r.analysis_id = r.id
+LEFT JOIN hiring_manager ham
 ON ham.analysis_id = a.id
 ORDER BY a.created_at DESC
 """
 
+
+# Fetch all the candiates details who did analysis and does not matter whether passed or failed ATS and went ahead.
 DASHBOARD_HISTORY_QUERY = """
-            SELECT 
-                a.id as id,
-                a.created_at as date,
-                SUBSTRING(a.job_description, 10, 35) as jdSnippet,
-                a.mode as strategy, 
-                ats.match_score as atsScore, 
-                r.career_progression_score as recruiterScore, 
-                hm.tech_depth_score as careerProgressionScore, 
-                hm.project_impact_score as techDepthScore,
-                hm.decision as status
-                
-            FROM analysis a
-            JOIN ats
-            ON ats.analysis_id = a.id
-            JOIN recruiter r
-            ON r.analysis_id = a.id
-            JOIN hiring_manager hm
-            ON hm.analysis_id = a.id
-            JOIN job_metadata jam
-            ON jam.analysis_id = a.id
+        SELECT 
+            a.id as id,
+            a.created_at as date,
+            a.mode as mode, 
+            ats.match_score as match_score, 
+            ats.missing_keywords as missing_keywords,
+            hm.decision as status,
             
-            ORDER BY date DESC
-        """
+            jam.job_title as job_title,
+            jam.company_name as company_name,
+            jam.location as location,
+            jam.salary_range as salary_range,
+            jam.work_mode as work_mode,
+            jam.required_skills as required_skills,
+            
+            hm.tech_depth_score as tech_depth_score, 
+            r.career_progression_score as career_progression_score, 
+            SUBSTRING(hm.stack_alignment, 1, 7) as stack_alignment,
+            r.soft_skills as soft_skills
+            
+        FROM analysis a
+        JOIN ats
+        ON ats.analysis_id = a.id
+        JOIN job_metadata jam
+        ON jam.analysis_id = a.id
+        LEFT JOIN recruiter r
+        ON r.analysis_id = a.id
+        LEFT JOIN hiring_manager hm
+        ON hm.analysis_id = a.id
+
+        ORDER BY date DESC
+
+"""
         
 ANALYSIS_TABLE_INSERTION_QUERY = """
         INSERT INTO analysis (hash_key, job_description, resume_text, mode)
