@@ -3,6 +3,7 @@ import psycopg2
 import os
 from dotenv import load_dotenv
 from psycopg2.extras import RealDictCursor
+from .database_queries import DB_CREATION_QUERY
 
 load_dotenv()
 
@@ -14,139 +15,6 @@ def get_db_uri():
     dbname = os.getenv("DB_NAME")
     return f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 
-DB_CREATION_QUERY = """
-            -- ALTER DATABASE internops_db SET TIMEZONE TO 'Asia/Kolkata';
-            CREATE TABLE IF NOT EXISTS analysis (
-                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                hash_key TEXT NOT NULL,
-                job_description TEXT,
-                resume_text TEXT,
-                mode VARCHAR,
-                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-            );
-            
-            CREATE TABLE IF NOT EXISTS resume_parsed_data (
-                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                analysis_id INT UNIQUE,
-
-                -- 1. Contact Information
-                full_name VARCHAR NOT NULL,
-                email VARCHAR NOT NULL,
-                phone VARCHAR,
-                location VARCHAR,
-                linkedin_url VARCHAR,
-                github_url VARCHAR,
-                portfolio_url VARCHAR,
-
-                -- 2. Professional Summary
-                summary TEXT,
-
-                -- 3. Technical Skills
-                -- Stored as JSONB to handle dynamic categories (e.g., {"Languages": ["Python"], "Cloud": ["AWS"]})
-                skills JSONB DEFAULT '{}'::jsonb, 
-
-                -- 4. Meta-Analysis
-                total_years_experience NUMERIC(4,1), -- Allows values like 2.5, 10.0
-
-                -- 5. Complex Nested Structures (JSONB Arrays of Objects)
-                -- We use JSONB here because these are lists of rich objects (Start Date, End Date, Description), not just simple strings.
-                education JSONB DEFAULT '[]'::jsonb,            -- Schema: List[EducationItem]
-                work_experience JSONB DEFAULT '[]'::jsonb,      -- Schema: List[WorkExperienceItem]
-                projects JSONB DEFAULT '[]'::jsonb,             -- Schema: List[ProjectItem]
-                certifications JSONB DEFAULT '[]'::jsonb,       -- Schema: List[CertificationItem]
-                awards JSONB DEFAULT '[]'::jsonb,               -- Schema: List[AwardItem]
-                volunteer_experience JSONB DEFAULT '[]'::jsonb, -- Schema: List[VolunteerItem]
-
-                -- 6. Simple Arrays
-                interests TEXT[],
-
-                -- System Fields
-                parsed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-                CONSTRAINT FK_resume_analysisId 
-                    FOREIGN KEY (analysis_id) 
-                    REFERENCES analysis(id)
-                    ON DELETE CASCADE
-            );
-            
-            CREATE TABLE IF NOT EXISTS job_metadata (
-                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                analysis_id INT UNIQUE,
-                
-                -- Core Identity
-                job_title VARCHAR NOT NULL,
-                company_name VARCHAR NOT NULL,
-                location VARCHAR,
-                employment_type VARCHAR,
-                salary_range VARCHAR,
-                
-                -- Hierarchy & Context
-                department VARCHAR,
-                reporting_to VARCHAR,
-                job_summary TEXT,
-                company_overview TEXT,
-                
-                -- Filters (The "Structured Requirements")
-                experience_level VARCHAR,
-                min_education VARCHAR,
-                work_mode VARCHAR,
-                
-                -- Arrays for Rich Data
-                required_skills TEXT[],        -- Searchable!
-                preferred_skills TEXT[],
-                duties_responsibilities TEXT[],
-                benefits TEXT[],
-                
-                -- System Fields
-                posted_date DATE DEFAULT CURRENT_DATE,
-                is_active BOOLEAN DEFAULT TRUE,
-
-                CONSTRAINT FK_jobMeta_analysisId 
-                    FOREIGN KEY (analysis_id) 
-                    REFERENCES analysis(id)
-                    ON DELETE CASCADE
-            );
-            
-            CREATE TABLE IF NOT EXISTS ats (
-                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                analysis_id INT,
-                match_score INT,
-                missing_keywords TEXT[],
-                formatting_issues TEXT[],
-                decision VARCHAR NOT NULL,
-                feedback TEXT NOT NULL,
-                CONSTRAINT FK_atsTable_analysisId 
-                FOREIGN KEY (analysis_id) 
-                REFERENCES analysis(id)
-                ON DELETE CASCADE
-            );
-            CREATE TABLE IF NOT EXISTS recruiter (
-                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                analysis_id INT,
-                career_progression_score INT,
-                red_flags TEXT[],
-                soft_skills TEXT[],
-                decision VARCHAR NOT NULL,
-                feedback TEXT NOT NULL,
-                CONSTRAINT FK_recruiterTable_analysisId                 
-                FOREIGN KEY (analysis_id) 
-                REFERENCES analysis(id)
-                ON DELETE CASCADE
-            );
-            CREATE TABLE IF NOT EXISTS hiring_manager (
-                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                analysis_id INT ,
-                tech_depth_score INT,
-                project_impact_score INT,
-                stack_alignment TEXT,
-                decision VARCHAR NOT NULL,
-                feedback TEXT NOT NULL,
-                CONSTRAINT FK_hmTable_analysisId 
-                FOREIGN KEY (analysis_id) 
-                REFERENCES analysis(id)
-                ON DELETE CASCADE
-            );
-        """
 
 def get_db_connection():
     conn = None

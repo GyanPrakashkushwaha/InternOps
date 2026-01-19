@@ -13,7 +13,11 @@ from celery.result import AsyncResult
 from .utils import read_pdf, generate_hash
 from .database import init_db, get_db_connection, get_final_result, get_db_uri
 from .tasks import celery_app, analyze_task
-
+from .database_queries import (
+    DASHBOARD_HISTORY_QUERY,
+    ANALYSIS_TABLE_INSERTION_QUERY,
+    ANALYSIS_HISTORY_QUERY
+)
 
 app = FastAPI()
 app.add_middleware(
@@ -57,12 +61,7 @@ async def analysis(
             return {"status": "Completed", "final_result": final_result, "analysis_id" : existing_id["id"]}
         
         # Create new entry
-        query = """
-        INSERT INTO analysis (hash_key, job_description, resume_text, mode)
-        VALUES (%s, %s, %s, %s)
-        RETURNING id
-        """
-        cur.execute(query, (hash_key, job_description, resume_content, mode))
+        cur.execute(ANALYSIS_TABLE_INSERTION_QUERY, (hash_key, job_description, resume_content, mode))
         print("======================================== ANALYSIS ID =======================================")
         analysis_id = cur.fetchone()["id"]
         print(analysis_id)
@@ -138,31 +137,8 @@ def analysis_history():
 def fetch_dashboard_history():
     try:
         conn, cur = get_db_connection()
-
-        query = """
-            SELECT 
-                a.id as id,
-                a.created_at as date,
-                SUBSTRING(a.job_description, 10, 35) as jdSnippet,
-                a.mode as strategy, 
-                ats.match_score as atsScore, 
-                r.career_progression_score as recruiterScore, 
-                hm.tech_depth_score as careerProgressionScore, 
-                hm.project_impact_score as techDepthScore,
-                hm.decision as status
-                
-            FROM analysis a
-            JOIN ats
-            ON ats.analysis_id = a.id
-            JOIN recruiter r
-            ON r.analysis_id = a.id
-            JOIN hiring_manager hm
-            ON hm.analysis_id = a.id
-            
-            ORDER BY date DESC
-        """
-        print("hi mdaljlsasdksd")
-        cur.execute(query)
+        # print("hi mdaljlsasdksd")
+        cur.execute(DASHBOARD_HISTORY_QUERY)
         rows = cur.fetchall()
         # print(rows)
         return {
@@ -179,6 +155,70 @@ def fetch_dashboard_history():
         cur.close()
         conn.close()
 
+
+@app.get("/web/analysis/history")
+def fetch_analysis_history():
+    try:
+        conn, cur = get_db_connection()
+        cur.execute(ANALYSIS_HISTORY_QUERY)
+        rows = cur.fetchall()
+        return {
+            "status": "success",
+            "data": {
+                "history": rows
+            }
+        }
+
+    except Exception as error:
+        raise error
+
+    finally:
+        cur.close()
+        conn.close()
+        
+@app.get("/web/analysis/report/{id}")
+def fetch_analysis_report(id):
+    try:
+        conn, cur = get_db_connection()
+        
+        cur.execute("SELECT employment_type FROM job_metadata WHERE analysis_id = %s", (id,))
+        role = cur.fetchone()
+        
+        cur.execute("SELECT mode FROM analysis WHERE id = %s", (id,))
+        mode = cur.fetchone()
+        
+        cur.execute("SELECT * FROM ats WHERE analysis_id = %s", (id,))
+        ats_result = cur.fetchone()
+        
+        cur.execute("SELECT * FROM recruiter WHERE analysis_id = %s", (id,))
+        recruiter_result = cur.fetchone()
+        
+        cur.execute("SELECT * FROM hiring_manager WHERE analysis_id = %s", (id,))
+        hm_result = cur.fetchone()
+        
+        report = {
+            "id": id,
+            "role": role, 
+            "mode": mode,
+            "final_result": {
+                "ats_result": ats_result,
+                "recruiter_result": recruiter_result,
+                "hm_result": hm_result      
+            }
+        }
+        
+        return {
+            "status": "success",
+            "report": report
+        }
+
+    except Exception as error:
+        raise error
+
+    finally:
+        cur.close()
+        conn.close()
+        
 @app.on_event("startup")
 def startup():
     init_db()

@@ -7,6 +7,13 @@ from .models import ATSAnalysis, RecruiterAnalysis, HiringManagerAnalysis
 from psycopg2.extras import RealDictCursor
 import os
 from dotenv import load_dotenv
+from .database_queries import (
+    JOB_METADATA_INSERTION_QUERY,
+    RESUME_METADATA_INSERTION_QUERY,
+    ATS_RESULT_INSERTION_QUERY,
+    RECRUITER_RESULT_INSERTION_QUERY,
+    HM_RESULT_INSERTION_QUERY
+)
 
 load_dotenv()
 
@@ -26,18 +33,7 @@ def db_write_task(self, analysis_id: int, results: dict):
     try:
         meta = results["job_metadata"]
         
-        meta_query = """
-        INSERT INTO job_metadata (
-            analysis_id, 
-            job_title, company_name, location, employment_type, salary_range,
-            department, reporting_to, job_summary, company_overview,
-            experience_level, min_education, work_mode,
-            required_skills, preferred_skills, duties_responsibilities, benefits
-        )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """
-        
-        cur.execute(meta_query, (
+        cur.execute(JOB_METADATA_INSERTION_QUERY, (
             analysis_id,
             meta["job_title"],
             meta["company_name"],
@@ -61,25 +57,8 @@ def db_write_task(self, analysis_id: int, results: dict):
         ))
         
         res_meta = results["resume_metadata"]
-        resume_query = """
-        INSERT INTO resume_parsed_data (
-            analysis_id,
-            full_name, email, phone, location, 
-            linkedin_url, github_url, summary, total_years_experience,
-            education, work_experience, skills, projects,
-            certifications, awards, volunteer_experience, interests
-        )
-        VALUES (
-            %s, 
-            %s, %s, %s, %s, 
-            %s, %s, %s, %s,
-            %s, %s, %s, %s, 
-            %s, %s, %s, %s
-        )
-        """
-
         # 3. Execute with JSON serialization for nested lists/dicts
-        cur.execute(resume_query, (
+        cur.execute(RESUME_METADATA_INSERTION_QUERY, (
             analysis_id,
             res_meta["full_name"],
             res_meta["email"],
@@ -104,11 +83,7 @@ def db_write_task(self, analysis_id: int, results: dict):
         ))
         
         ats_result = results["ats_result"]
-        ats_query = """
-        INSERT INTO ats (analysis_id, match_score, missing_keywords, formatting_issues, decision, feedback)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        """
-        cur.execute(ats_query, 
+        cur.execute(ATS_RESULT_INSERTION_QUERY, 
                     (analysis_id, 
                     ats_result["match_score"], 
                     ats_result["missing_keywords"], 
@@ -119,11 +94,7 @@ def db_write_task(self, analysis_id: int, results: dict):
         
         if "recruiter_result" in results:
             recruiter_result = results["recruiter_result"]
-            recruiter_query = """
-            INSERT INTO recruiter (analysis_id, career_progression_score, red_flags, soft_skills, decision, feedback)
-            VALUES (%s, %s, %s, %s, %s, %s)
-            """
-            cur.execute(recruiter_query, 
+            cur.execute(RECRUITER_RESULT_INSERTION_QUERY, 
                         (analysis_id, 
                         recruiter_result["career_progression_score"], 
                         recruiter_result["red_flags"], 
@@ -133,11 +104,7 @@ def db_write_task(self, analysis_id: int, results: dict):
             
         if "hm_result" in results:
             hm_result = results["hm_result"]
-            hm_query = """
-            INSERT INTO hiring_manager (analysis_id, tech_depth_score, project_impact_score, stack_alignment, decision, feedback)
-            VALUES (%s, %s, %s, %s, %s, %s)
-            """
-            cur.execute(hm_query, 
+            cur.execute(HM_RESULT_INSERTION_QUERY, 
                         (analysis_id, 
                         hm_result["tech_depth_score"], 
                         hm_result["project_impact_score"], 

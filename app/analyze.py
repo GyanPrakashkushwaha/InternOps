@@ -12,6 +12,7 @@ from .models import (
     ResumeMetaData, 
     MetaDataExtraction
 )
+
 from .prompts import (
     StrictCompliancePrompt, 
     RealWorldATSPrompt, 
