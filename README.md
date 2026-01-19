@@ -173,12 +173,12 @@ docker exec -it internopsdb psql -U postgres -d internops
 
 ---
 
-## 🗺 Roadmap
+## 🗺 Progress 
 
 * [x] **Core AI Analysis:** Resume parsing and multi-mode evaluation logic.
 * [x] **Chrome Extension:** Functional popup with file upload and result visualization.
 * [x] **Observability:** Full integration with LangSmith for traces and evals.
-* [ ] **Dashboard Features:** Build out the Vue components for "Application History" and "Detailed Analytics."
+* [x] **Dashboard Features:** Build out the Vue components for "Application History" and "Detailed Analytics."
 * [ ] **Auth Integration:** Unified login between Extension and Web Dashboard.
 
 ---
