@@ -181,7 +181,7 @@ def fetch_analysis_report(id):
     try:
         conn, cur = get_db_connection()
         
-        cur.execute("SELECT employment_type FROM job_metadata WHERE analysis_id = %s", (id,))
+        cur.execute("SELECT company_name, employment_type FROM job_metadata WHERE analysis_id = %s", (id,))
         role = cur.fetchone()
         
         cur.execute("SELECT mode FROM analysis WHERE id = %s", (id,))
@@ -198,7 +198,8 @@ def fetch_analysis_report(id):
         
         report = {
             "id": id,
-            "role": role, 
+            "role": role["employment_type"], 
+            "company": role["company_name"], 
             "mode": mode,
             "final_result": {
                 "ats_result": ats_result,
