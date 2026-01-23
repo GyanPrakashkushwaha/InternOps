@@ -13,7 +13,8 @@ def get_db_uri():
     host = os.getenv("DB_HOST")
     port = os.getenv("DB_PORT")
     dbname = os.getenv("DB_NAME")
-    return f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
+    # return f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
+    return "postgresql://postgres:password@localhost:5432/internops?sslmode=disable"
 
 
 def get_db_connection():
@@ -121,3 +122,96 @@ def get_final_result(analysis_id):
         cur.close()
         conn.close()
     return final_result
+
+
+def db_write_task(analysis_id: int, results: dict):
+    conn, cur = get_db_connection()
+    try:
+        meta = results["job_metadata"]
+        
+        cur.execute(JOB_METADATA_INSERTION_QUERY, (
+            analysis_id,
+            meta["job_title"],
+            meta["company_name"],
+            meta["location"],
+            meta["employment_type"],
+            meta["salary_range"],
+            
+            meta["department"],
+            meta["reporting_to"],
+            meta["job_summary"],
+            meta["company_overview"],
+            
+            meta["experience_level"],
+            meta["min_education"],
+            meta["work_mode"],
+            
+            meta["required_skills"],       
+            meta["preferred_skills"],      
+            meta["duties_responsibilities"], 
+            meta["benefits"]               
+        ))
+        
+        res_meta = results["resume_metadata"]
+        # 3. Execute with JSON serialization for nested lists/dicts
+        cur.execute(RESUME_METADATA_INSERTION_QUERY, (
+            analysis_id,
+            res_meta["full_name"],
+            res_meta["email"],
+            res_meta["phone"],
+            res_meta["location"],
+            
+            res_meta["linkedin_url"],
+            res_meta["github_url"],
+            res_meta["summary"],
+            res_meta["total_years_experience"],
+
+            # Complex nested fields must be dumped to JSON strings
+            json.dumps(res_meta["education"]),
+            json.dumps(res_meta["work_experience"]),
+            json.dumps(res_meta["skills"]),
+            json.dumps(res_meta["projects"]),
+            
+            json.dumps(res_meta["certifications"]),
+            json.dumps(res_meta["awards"]),
+            json.dumps(res_meta["volunteer_experience"]),
+            res_meta["interests"]
+        ))
+        
+        ats_result = results["ats_result"]
+        cur.execute(ATS_RESULT_INSERTION_QUERY, 
+                    (analysis_id, 
+                    ats_result["match_score"], 
+                    ats_result["missing_keywords"], 
+                    ats_result["formatting_issues"], 
+                    ats_result["decision"], 
+                    ats_result["feedback"]))
+     
+        
+        if "recruiter_result" in results:
+            recruiter_result = results["recruiter_result"]
+            cur.execute(RECRUITER_RESULT_INSERTION_QUERY, 
+                        (analysis_id, 
+                        recruiter_result["career_progression_score"], 
+                        recruiter_result["red_flags"], 
+                        recruiter_result["soft_skills_detected"], 
+                        recruiter_result["decision"], 
+                        recruiter_result["feedback"]))
+            
+        if "hm_result" in results:
+            hm_result = results["hm_result"]
+            cur.execute(HM_RESULT_INSERTION_QUERY, 
+                        (analysis_id, 
+                        hm_result["tech_depth_score"], 
+                        hm_result["project_impact_score"], 
+                        hm_result["stack_alignment"], 
+                        hm_result["decision"], 
+                        hm_result["feedback"]))
+        
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise
+    finally:
+        cur.close()
+        conn.close()

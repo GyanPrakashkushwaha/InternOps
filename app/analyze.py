@@ -2,6 +2,7 @@ from langgraph.graph import StateGraph, START, END
 from typing import TypedDict, Literal, Annotated, Optional, List
 from pydantic import BaseModel, Field
 import os
+from .database import db_write_task
 
 # Local Module Imports
 from .models import (
@@ -189,3 +190,34 @@ builder.add_edge("hm_node", END)
 
 # Compile Workflow
 workflow = builder.compile()
+
+
+def analyze_task(resume_text: str, job_description: str, mode: str, hash_key, analysis_id):
+    
+    try:
+        input_state = {
+            "resume_text": resume_text,
+            "job_description": job_description,
+            "mode": mode
+        }
+        
+        output_state = workflow.invoke(input_state)
+        
+        output_state_dict = {
+            "job_metadata": output_state["job_metadata"].model_dump(),
+            "resume_metadata": output_state["resume_metadata"].model_dump(),
+            "ats_result": output_state["ats_result"].model_dump()
+        }
+        if "recruiter_result" in output_state:
+            output_state_dict["recruiter_result"] = output_state["recruiter_result"].model_dump()
+
+        if "hm_result" in output_state:
+            output_state_dict["hm_result"] = output_state["hm_result"].model_dump()
+        
+        print("================================ SAVING OUTPUT========================================")
+        db_write_task(analysis_id, output_state_dict)
+        print("================================ SAVING OUTPUT========================================")
+    except Exception as e:
+        raise e
+        
+    return output_state_dict

@@ -10,9 +10,6 @@ pydantic
 python-dotenv
 pandas
 openpyxl
-langchain-redis
-redis
-celery
 psycopg2-binary
 langchain
 psycopg[binary,pool]

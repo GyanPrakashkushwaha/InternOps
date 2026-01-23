@@ -7,12 +7,11 @@ from typing import Literal, AsyncGenerator
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from base64 import b64encode
-from celery.result import AsyncResult
 
 # Internal Modules
 from .utils import read_pdf, generate_hash
 from .database import init_db, get_db_connection, get_final_result, get_db_uri
-from .tasks import celery_app, analyze_task
+from .analyze import analyze_task
 from .database_queries import (
     DASHBOARD_HISTORY_QUERY,
     ANALYSIS_TABLE_INSERTION_QUERY,
@@ -69,7 +68,7 @@ async def analysis(
         conn.commit()
         
         # Dispatch Celery Task
-        task = analyze_task.delay(
+        task = analyze_task(
             resume_text=resume_content, 
             job_description=job_description, 
             mode=mode, 
@@ -223,3 +222,5 @@ def fetch_analysis_report(id):
 @app.on_event("startup")
 def startup():
     init_db()
+    
+    
