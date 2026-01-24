@@ -1,4 +1,5 @@
 
+## - [ ] Notification Feature
 - [ ] Add Chat feature for the resume. (There add checkpointers and persistent memory for the recruiter.)
 - [ ] Integrate the Resume builder workflow with the app and create api of it.
 - [ ] Add Rule based ATS class for dumb filtering.
