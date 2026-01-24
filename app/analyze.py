@@ -59,38 +59,28 @@ def get_prompt_class(mode: str):
     }
     return PROMPT_MAP.get(mode, RealWorldATSPrompt)
 
-# Helper to format lists (e.g., skills) into strings for Prompts
+# Helper to format lists
 def fmt_list(items: List[str]) -> str:
     return ", ".join(items) if items else "None"
 
 # ***************************** NODE FUNCTIONS ***********************************
 
 def extractor_agent_node(state: InputState):
-    """
-    Phase 1: Extracts structured JobMetadata from the raw Job Description text.
-    """
+    """Phase 1: Extracts structured JobMetadata"""
     extractor_agent = llm.with_structured_output(MetaDataExtraction)
-    
-    # Ensure JobMetaDataExtractionPrompt is defined in your prompts.py, 
-    # otherwise use a simple template here.
     agent_prompt = ExtractionPrompt.EXTRACTION_PROMPT.format(
         job_description = state["job_description"],
         resume_text = state["resume_text"]
     )
-    
     response = extractor_agent.invoke(agent_prompt)
     return {"job_metadata": response.job_description, "resume_metadata": response.resume}
 
 def ats_agent(state: ScreeningState):
-    """
-    Phase 2: ATS Agent. Uses structured metadata to enforce hard constraints.
-    """
+    """Phase 2: ATS Agent"""
     ats_llm = llm.with_structured_output(ATSAnalysis)
     PromptClass = get_prompt_class(state["mode"])
-    
     jd = state["job_metadata"]
     
-    # We unpack the metadata and explicitly format lists to strings
     agent_prompt = PromptClass.ATS_PROMPT.format(
         resume_text=state["resume_text"],
         job_title=jd.job_title,
@@ -104,24 +94,18 @@ def ats_agent(state: ScreeningState):
         preferred_skills=fmt_list(jd.preferred_skills),
         job_summary=jd.job_summary
     )
-    
     response = ats_llm.invoke(agent_prompt)
     return {"ats_result": response}
     
 def recruiter_agent(state: ScreeningState):
-    """
-    Phase 3: Recruiter Agent. Checks culture fit, salary, and red flags.
-    """
+    """Phase 3: Recruiter Agent"""
     recruiter_llm = llm.with_structured_output(RecruiterAnalysis)
     PromptClass = get_prompt_class(state["mode"])
-    
     jd = state["job_metadata"]
     
     agent_prompt = PromptClass.RECRUITER_PROMPT.format(
         resume_text=state["resume_text"],
         ats_feedback=state["ats_result"].feedback,
-        
-        # Inject Recruiter specific context
         company_name=jd.company_name,
         department=jd.department,
         salary_range=jd.salary_range,
@@ -131,69 +115,58 @@ def recruiter_agent(state: ScreeningState):
         job_title=jd.job_title,
         experience_level=jd.experience_level
     )
-    
     response = recruiter_llm.invoke(agent_prompt)
     return {"recruiter_result": response}
 
 def hm_agent(state: ScreeningState):
-    """
-    Phase 4: Hiring Manager. Checks deep technical depth and specific duties.
-    """
+    """Phase 4: Hiring Manager"""
     hm_llm = llm.with_structured_output(HiringManagerAnalysis)
     PromptClass = get_prompt_class(state["mode"])
-    
     jd = state["job_metadata"]
     
     agent_prompt = PromptClass.HM_PROMPT.format(
         resume_text=state["resume_text"],
-        
-        # Inject HM specific context
         reporting_to=jd.reporting_to,
         duties_responsibilities=fmt_list(jd.duties_responsibilities),
         required_skills=fmt_list(jd.required_skills),
         experience_level=jd.experience_level,
         department=jd.department
     )
-    
     response = hm_llm.invoke(agent_prompt)
     return {"hm_result": response}
     
 # ***************************** CONDITIONS & GRAPH ***********************************
 
 def ats_condition(state: ScreeningState) -> Literal["PASS", "FAIL"]:
-    # Fail fast if ATS rejects
     return state["ats_result"].decision
 
 def recruiter_condition(state: ScreeningState) -> Literal["PASS", "FAIL"]:
-    # Fail fast if Recruiter rejects
     return state["recruiter_result"].decision
 
 # Graph Construction
 builder = StateGraph(ScreeningState, input=InputState, output_schema=OutputState)
 
-# 1. Add Nodes
 builder.add_node("jd_extractor_node", extractor_agent_node)
 builder.add_node("ats_node", ats_agent)
 builder.add_node("recruiter_node", recruiter_agent)
 builder.add_node("hm_node", hm_agent)
 
-# 2. Add Edges
-# Start -> Extract Metadata -> ATS
 builder.add_edge(START, "jd_extractor_node")
 builder.add_edge("jd_extractor_node", "ats_node")
 
-# ATS -> (Pass) -> Recruiter -> (Pass) -> HM -> End
-# ATS -> (Fail) -> End
 builder.add_conditional_edges("ats_node", ats_condition, {"PASS": "recruiter_node", "FAIL": END})
 builder.add_conditional_edges("recruiter_node", recruiter_condition, {"PASS": "hm_node", "FAIL": END})
 builder.add_edge("hm_node", END)
 
-# Compile Workflow
 workflow = builder.compile()
 
+# ***************************** ENTRY POINT ***********************************
 
-def analyze_task(resume_text: str, job_description: str, mode: str, hash_key, analysis_id):
-    
+async def analyze_task(resume_text: str, job_description: str, mode: str, hash_key, analysis_id):
+    """
+    Executes the LangGraph workflow asynchronously.
+    Writes results to DB synchronously at the end.
+    """
     try:
         input_state = {
             "resume_text": resume_text,
@@ -201,7 +174,8 @@ def analyze_task(resume_text: str, job_description: str, mode: str, hash_key, an
             "mode": mode
         }
         
-        output_state = workflow.invoke(input_state)
+        # Use ainvoke for async execution where supported
+        output_state = await workflow.ainvoke(input_state)
         
         output_state_dict = {
             "job_metadata": output_state["job_metadata"].model_dump(),
@@ -214,10 +188,13 @@ def analyze_task(resume_text: str, job_description: str, mode: str, hash_key, an
         if "hm_result" in output_state:
             output_state_dict["hm_result"] = output_state["hm_result"].model_dump()
         
-        print("================================ SAVING OUTPUT========================================")
+        print(f"================ SAVING OUTPUT for Analysis {analysis_id} ================")
+        # DB Write is sync, but that's acceptable for this simplified architecture
         db_write_task(analysis_id, output_state_dict)
-        print("================================ SAVING OUTPUT========================================")
-    except Exception as e:
-        raise e
+        print("================ OUTPUT SAVED ================")
         
-    return output_state_dict
+        return output_state_dict
+
+    except Exception as e:
+        print(f"Error in analyze_task: {e}")
+        raise e

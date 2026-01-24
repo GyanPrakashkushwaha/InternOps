@@ -1,16 +1,13 @@
-
 import json
 import asyncio
-from contextlib import asynccontextmanager
-from typing import Literal, AsyncGenerator
+from typing import Literal
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from base64 import b64encode
 
 # Internal Modules
 from .utils import read_pdf, generate_hash
-from .database import init_db, get_db_connection, get_final_result, get_db_uri
+from .database import init_db, get_db_connection, get_final_result
 from .analyze import analyze_task
 from .database_queries import (
     DASHBOARD_HISTORY_QUERY,
@@ -19,6 +16,7 @@ from .database_queries import (
 )
 
 app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -29,8 +27,11 @@ app.add_middleware(
 
 @app.get("/")
 def root():
-    return {"message": "Backend is running!"}
+    return {"message": "InternOps Backend is running!"}
 
+@app.on_event("startup")
+def startup():
+    init_db()
 
 @app.post("/analyze/{mode}")
 async def analysis(
@@ -46,82 +47,68 @@ async def analysis(
         jd_hash = generate_hash(job_description)
         hash_key = f"{resume_hash}_{jd_hash}_{mode}"
         
-        # Check cache
+        # Check cache / existing analysis
         cur.execute("SELECT id FROM analysis WHERE hash_key = %s", (hash_key, ))
         existing_id = cur.fetchone()
         
         if existing_id:
-            # print("=========================================================================================")
-            # print(existing_id)
-            # print("=========================================================================================")
             final_result = get_final_result(existing_id["id"])
-            print(final_result)
-            print({"status": "Completed", "final_result": final_result, "analysis_id" : existing_id["id"]})
-            return {"status": "Completed", "final_result": final_result, "analysis_id" : existing_id["id"]}
+            return {
+                "status": "Completed", 
+                "final_result": final_result, 
+                "analysis_id": existing_id["id"],
+                "cached": True
+            }
         
-        # Create new entry
+        # Create new entry in DB (Status Pending)
         cur.execute(ANALYSIS_TABLE_INSERTION_QUERY, (hash_key, job_description, resume_content, mode))
-        print("======================================== ANALYSIS ID =======================================")
         analysis_id = cur.fetchone()["id"]
-        print(analysis_id)
-        print("======================================== ANALYSIS ID =======================================")
         conn.commit()
         
-        # Dispatch Celery Task
-        task = analyze_task(
+        # EXECUTE ANALYSIS DIRECTLY (Blocking/Sync-in-Async)
+        # This replaces the Celery task.
+        # Note: If this takes >60s (Vercel Pro) or >10s (Hobby), it may timeout.
+        result_data = await analyze_task(
             resume_text=resume_content, 
             job_description=job_description, 
             mode=mode, 
             hash_key=hash_key,
-            analysis_id = analysis_id
+            analysis_id=analysis_id
         )
         
+        # Re-fetch formatted result to match the structure expected by frontend
+        final_result = get_final_result(analysis_id)
+        
         return {
-            "status": "Analysis Started",
-            "task_id": task.id,
-            "mode": mode,
+            "status": "Completed",
+            "final_result": final_result,
             "analysis_id": analysis_id
         }
         
     except Exception as e:
-        conn.rollback()
+        if conn:
+            conn.rollback()
         raise e
     finally:
-        cur.close()
-        conn.close()
+        if cur: cur.close()
+        if conn: conn.close()
         
         
 @app.get("/analysis_result/{analysis_id}")
 def get_analysis_result(analysis_id):
     final_result = get_final_result(analysis_id)
-    # print(final_result)
     return {
             "status": "Completed",
             "final_result": final_result
         }
 
-@app.get("/result/{task_id}")
-def get_result(task_id: str):
-    result = AsyncResult(task_id, app=celery_app)
-    if result.ready():
-        if result.successful():
-            return {"status": "Completed", "final_result": result.get()}
-        else:
-            return {"status": "Failed", "error": str(result.result)}
-    else:
-        return {"status": "Processing"}
-    
-
 @app.get("/analysis_id_list")
 def analysis_history():
     try:
         conn, cur = get_db_connection()
-        query = """
-        SELECT id FROM analysis
-        """
+        query = "SELECT id FROM analysis"
         cur.execute(query)
         analysis_id = cur.fetchall()
-        # print(analysis_id)
         return {
             "status": "done",
             "id_list": analysis_id
@@ -136,20 +123,16 @@ def analysis_history():
 def fetch_dashboard_history():
     try:
         conn, cur = get_db_connection()
-        # print("hi mdaljlsasdksd")
         cur.execute(DASHBOARD_HISTORY_QUERY)
         rows = cur.fetchall()
-        # print(rows)
         return {
             "status": "success",
             "data": {
                 "history": rows
             }
         }
-
     except Exception as error:
         raise error
-
     finally:
         cur.close()
         conn.close()
@@ -167,10 +150,8 @@ def fetch_analysis_history():
                 "history": rows
             }
         }
-
     except Exception as error:
         raise error
-
     finally:
         cur.close()
         conn.close()
@@ -197,9 +178,9 @@ def fetch_analysis_report(id):
         
         report = {
             "id": id,
-            "role": role["employment_type"], 
-            "company": role["company_name"], 
-            "mode": mode,
+            "role": role["employment_type"] if role else "Unknown", 
+            "company": role["company_name"] if role else "Unknown", 
+            "mode": mode["mode"] if mode else "Unknown",
             "final_result": {
                 "ats_result": ats_result,
                 "recruiter_result": recruiter_result,
@@ -218,9 +199,3 @@ def fetch_analysis_report(id):
     finally:
         cur.close()
         conn.close()
-        
-@app.on_event("startup")
-def startup():
-    init_db()
-    
-    

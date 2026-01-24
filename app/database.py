@@ -1,28 +1,33 @@
-
 import psycopg2
 import os
 from dotenv import load_dotenv
 from psycopg2.extras import RealDictCursor
-from .database_queries import DB_CREATION_QUERY
+from .database_queries import (
+    DB_CREATION_QUERY, 
+    JOB_METADATA_INSERTION_QUERY,
+    RESUME_METADATA_INSERTION_QUERY,
+    ATS_RESULT_INSERTION_QUERY,
+    RECRUITER_RESULT_INSERTION_QUERY,
+    HM_RESULT_INSERTION_QUERY
+)
+import json
 
 load_dotenv()
 
 def get_db_uri():
-    user = os.getenv("DB_USER")
-    password = os.getenv("DB_PASSWORD")
-    host = os.getenv("DB_HOST")
-    port = os.getenv("DB_PORT")
-    dbname = os.getenv("DB_NAME")
-    # return f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
-    return "postgresql://postgres:password@localhost:5432/internops?sslmode=disable"
-
+    # Vercel / Neon / Railway standard environment variables
+    # Priority: POSTGRES_URL -> DATABASE_URL -> Local Fallback
+    return os.getenv("POSTGRES_URL") or os.getenv("DATABASE_URL") or "postgresql://postgres:password@localhost:5432/internops"
 
 def get_db_connection():
     conn = None
     cur = None
     try:
         DB_URI = get_db_uri()
-        conn = psycopg2.connect(DB_URI)
+        # Vercel Postgres requires SSL mode
+        ssl_mode = "require" if "localhost" not in DB_URI else "disable"
+        
+        conn = psycopg2.connect(DB_URI, sslmode=ssl_mode)
         cur = conn.cursor(cursor_factory=RealDictCursor)
     except Exception as e:
         raise RuntimeError(f"DB connection failed: {e}")
@@ -42,21 +47,15 @@ def init_db():
         if cur: cur.close()
         if conn: conn.close()
 
-
 def get_final_result(analysis_id):
     try:
         conn, cur = get_db_connection()
-        query = """
-        SELECT * FROM ats
-        WHERE analysis_id = %s;
-        """
+        query = "SELECT * FROM ats WHERE analysis_id = %s;"
         cur.execute(query, (analysis_id,))
         ats_result_tuple = cur.fetchone()
+        
         ats_result = {}
         if ats_result_tuple:
-            print(f"======================================= ATS RESULT {analysis_id}=================================================")
-            print(ats_result_tuple)
-            print("======================================= ATS RESULT =================================================")
             ats_result = {
                 "match_score": ats_result_tuple["match_score"],
                 "missing_keywords": ats_result_tuple["missing_keywords"],
@@ -65,17 +64,10 @@ def get_final_result(analysis_id):
                 "feedback": ats_result_tuple["feedback"],
             }
         
-        # data base can also be used to check if the entry exists or not.
-        if ats_result and ats_result["decision"] == "PASS":
-            query = """
-            SELECT * FROM recruiter
-            WHERE analysis_id = %s;
-            """        
+        if ats_result and ats_result.get("decision") == "PASS":
+            query = "SELECT * FROM recruiter WHERE analysis_id = %s;"
             cur.execute(query, (analysis_id,))
             recruiter_result_tuple = cur.fetchone()
-            # print("======================================= RECRUITER RESULT =================================================")
-            # print(recruiter_result_tuple)
-            # print("======================================= RECRUITER RESULT =================================================")
 
             recruiter_result = {
                 "career_progression_score": recruiter_result_tuple["career_progression_score"],
@@ -85,11 +77,8 @@ def get_final_result(analysis_id):
                 "feedback": recruiter_result_tuple["feedback"],
             }
             
-            if recruiter_result["decision"] == "PASS":
-                query = """
-                SELECT * FROM hiring_manager
-                WHERE analysis_id = %s;
-                """        
+            if recruiter_result.get("decision") == "PASS":
+                query = "SELECT * FROM hiring_manager WHERE analysis_id = %s;"
                 cur.execute(query, (analysis_id,))
                 hm_result_tuple = cur.fetchone()
 
@@ -119,12 +108,14 @@ def get_final_result(analysis_id):
     except Exception as e:
         raise e
     finally:
-        cur.close()
-        conn.close()
-    return final_result
-
+        if cur: cur.close()
+        if conn: conn.close()
 
 def db_write_task(analysis_id: int, results: dict):
+    """
+    Synchronous DB write function.
+    Previously executed by Celery, now called directly after analysis.
+    """
     conn, cur = get_db_connection()
     try:
         meta = results["job_metadata"]
@@ -153,7 +144,6 @@ def db_write_task(analysis_id: int, results: dict):
         ))
         
         res_meta = results["resume_metadata"]
-        # 3. Execute with JSON serialization for nested lists/dicts
         cur.execute(RESUME_METADATA_INSERTION_QUERY, (
             analysis_id,
             res_meta["full_name"],
@@ -166,7 +156,6 @@ def db_write_task(analysis_id: int, results: dict):
             res_meta["summary"],
             res_meta["total_years_experience"],
 
-            # Complex nested fields must be dumped to JSON strings
             json.dumps(res_meta["education"]),
             json.dumps(res_meta["work_experience"]),
             json.dumps(res_meta["skills"]),
@@ -187,7 +176,6 @@ def db_write_task(analysis_id: int, results: dict):
                     ats_result["decision"], 
                     ats_result["feedback"]))
      
-        
         if "recruiter_result" in results:
             recruiter_result = results["recruiter_result"]
             cur.execute(RECRUITER_RESULT_INSERTION_QUERY, 
@@ -211,7 +199,7 @@ def db_write_task(analysis_id: int, results: dict):
         conn.commit()
     except Exception as e:
         conn.rollback()
-        raise
+        raise e
     finally:
-        cur.close()
-        conn.close()
+        if cur: cur.close()
+        if conn: conn.close()
