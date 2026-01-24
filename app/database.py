@@ -14,20 +14,16 @@ import json
 
 load_dotenv()
 
-def get_db_uri():
-    # Vercel / Neon / Railway standard environment variables
-    # Priority: POSTGRES_URL -> DATABASE_URL -> Local Fallback
-    return os.getenv("POSTGRES_URL") or os.getenv("DATABASE_URL") or "postgresql://postgres:password@localhost:5432/internops"
 
 def get_db_connection():
     conn = None
     cur = None
     try:
-        DB_URI = get_db_uri()
+        DB_URI = os.getenv("AIVEN_DB_URI")
         # Vercel Postgres requires SSL mode
-        ssl_mode = "require" if "localhost" not in DB_URI else "disable"
+        # ssl_mode = "require" if "localhost" not in DB_URI else "disable"
         
-        conn = psycopg2.connect(DB_URI, sslmode=ssl_mode)
+        conn = psycopg2.connect(DB_URI, sslmode="require")
         cur = conn.cursor(cursor_factory=RealDictCursor)
     except Exception as e:
         raise RuntimeError(f"DB connection failed: {e}")

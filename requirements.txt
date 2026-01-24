@@ -8,9 +8,5 @@ langchain-google-genai
 langgraph
 pydantic
 python-dotenv
-pandas
-openpyxl
 psycopg2-binary
 langchain
-psycopg[binary,pool]
-langgraph-checkpoint-postgres
