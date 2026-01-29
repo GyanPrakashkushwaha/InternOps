@@ -1,9 +1,9 @@
 
 
-ANALYSIS_REPORT_QUERY = """
-    SELECT 
+# ANALYSIS_REPORT_QUERY = """
+#     SELECT 
 
-"""
+# """
 
 ANALYSIS_HISTORY_QUERY = """
 SELECT 
@@ -66,7 +66,7 @@ ANALYSIS_TABLE_INSERTION_QUERY = """
         """
 
 DB_CREATION_QUERY = """
-
+            -- ALTER DATABASE internops_db SET TIMEZONE TO 'Asia/Kolkata';
             CREATE TABLE IF NOT EXISTS analysis (
                 id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                 hash_key TEXT NOT NULL,
