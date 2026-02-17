@@ -55,7 +55,7 @@ async def analysis(
             final_result = get_final_result(existing_id["id"])
             return {
                 "status": "Completed", 
-                "final_result": final_result, 
+                "final_result": final_result,
                 "analysis_id": existing_id["id"],
                 "cached": True
             }
@@ -160,6 +160,11 @@ def fetch_analysis_history():
 def fetch_analysis_report(id):
     try:
         conn, cur = get_db_connection()
+        
+        if id == "latest":  # /latest
+            cur.execute("""SELECT id FROM analysis
+                            LIMIT 1;""")
+            id = cur.fetchone()
         
         cur.execute("SELECT company_name, employment_type FROM job_metadata WHERE analysis_id = %s", (id,))
         role = cur.fetchone()
