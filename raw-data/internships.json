@@ -1,0 +1,527 @@
+{
+  "Google": {
+    "program": "Summer Internship 2026",
+    "hire": "Not mentioned",
+    "eligibility": "Bachelor degree (BTech, MCA, BCA); Diploma holders/BA cannot apply",
+    "timeline": "May and August 2026",
+    "stipend_ctc": "1 to 1.5 lakh",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Not mentioned"],
+    "selection_criteria": "Not mentioned",
+    "conversion_to_ppo": "99% chances of PPO",
+    "key_notes": {
+      "tip-1": "Focus on fundamentals and thinking structure",
+      "tip-2": "Requires strong DSA knowledge",
+      "tip-3": "Permanent role (PPO) chances are very high after internship"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Build foundation in DSA (Arrays, Strings, Linked List, Stacks, Queues, Graphs)",
+      "strategy-2": "Solve 50-60 problems on Leetcode or GeeksforGeeks in January",
+      "strategy-3": "Build one simple full stack project"
+    },
+    "notes": "One of the dream companies for most students."
+  },
+  "Google-2": {
+    "program": "Google Step Internship",
+    "hire": "DSA based judging; involves interviews",
+    "eligibility": "Second year students; mostly for girls",
+    "timeline": "December",
+    "stipend_ctc": "77,000 to 1.25 lakh per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["DSA"],
+    "selection_criteria": "DSA skills",
+    "conversion_to_ppo": "PPI in third year if performance is good",
+    "key_notes": {
+      "tip-1": "Resume should be ATS friendly with top-notch projects",
+      "tip-2": "Judgment is purely based on DSA",
+      "tip-3": "One of the best programs for women in tech"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Top-notch DSA is required",
+      "strategy-2": "Build serious projects for resume boosting",
+      "strategy-3": "Refine and optimize resume profile"
+    },
+    "notes": "Step internship is specifically designed for early-year students."
+  },
+  "Microsoft": {
+    "program": "Microsoft Explore India",
+    "hire": "Not mentioned",
+    "eligibility": "First year and second year undergraduates in Computer Science (BTech, BSc, BCA); Not open for MCA",
+    "timeline": "Opens around November; check between May and July",
+    "stipend_ctc": "80,000 to 1 lakh per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "8 week program",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Not mentioned"],
+    "selection_criteria": "Not mentioned",
+    "conversion_to_ppo": "Strong long-term conversion rate",
+    "key_notes": {
+      "tip-1": "Designed as a pipeline program",
+      "tip-2": "Paid internship opportunity",
+      "tip-3": "Check between May and July for updates"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Focus on Computer Science fundamentals",
+      "strategy-2": "Prepare early to avoid missing deadlines",
+      "strategy-3": "Not mentioned"
+    },
+    "notes": "A great opportunity for 1st and 2nd year students."
+  },
+  "Microsoft-2": {
+    "program": "Software Engineering Intern",
+    "hire": "Not mentioned",
+    "eligibility": "Bachelor or Master degree in CS or related IT field; must have at least one semester remaining after internship",
+    "timeline": "Applications already open (as of Jan 2026)",
+    "stipend_ctc": "North of 1 lakh per month",
+    "location": "Karnataka, Bangalore",
+    "work_mode": "Offline",
+    "duration": "Not mentioned",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Algorithms", "DSA", "Leetcode Problems"],
+    "selection_criteria": "Strong knowledge of algorithms and DSA",
+    "conversion_to_ppo": "Not mentioned",
+    "key_notes": {
+      "tip-1": "Must be able to solve Leetcode problems",
+      "tip-2": "Must be in 1st, 2nd, or 3rd year (not final year)",
+      "tip-3": "Requires good projects"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Build strong DSA foundation",
+      "strategy-2": "Practice solving problems on Leetcode",
+      "strategy-3": "Prepare good projects"
+    },
+    "notes": "This is an offline internship requiring relocation to Bangalore."
+  },
+  "Amazon": {
+    "program": "Regular SDE Internship",
+    "hire": "Direct application on Amazon.jobs or rolling basis",
+    "eligibility": "Pre-final and final year students (graduating after 2026); BTech, MBA, BCA, ASIT",
+    "timeline": "March to May / September to December",
+    "stipend_ctc": "80,000 to 1.25 lakh per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "6 to 12 weeks",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Not mentioned"],
+    "selection_criteria": "Reviewing applications on rolling basis",
+    "conversion_to_ppo": "High-performing interns often get PPO",
+    "key_notes": {
+      "tip-1": "Relocation and housing expenses are covered",
+      "tip-2": "Apply early as applications are on rolling basis",
+      "tip-3": "Chance to work at a top product based company"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Apply directly on career portal",
+      "strategy-2": "Watch for rolling application updates",
+      "strategy-3": "Not mentioned"
+    },
+    "notes": "Amazon offers good relocation and housing support for interns."
+  },
+  "Amazon-2": {
+    "program": "Amazon Women Program (Amazon Wow)",
+    "hire": "Mentorship and hiring challenge",
+    "eligibility": "First to third year female students only",
+    "timeline": "November to December",
+    "stipend_ctc": "40,000 to 1 lakh stipend",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["DSA"],
+    "selection_criteria": "Higher selection chances for female candidates",
+    "conversion_to_ppo": "Provides intern and full-time job opportunities",
+    "key_notes": {
+      "tip-1": "Typically happens once a year",
+      "tip-2": "Mentorship program for women in tech",
+      "tip-3": "Leads to direct interview opportunities"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Focus on DSA skills",
+      "strategy-2": "Keep an eye on Amazon Wow portal",
+      "strategy-3": "Not mentioned"
+    },
+    "notes": "Diversity hiring program with high preference for females."
+  },
+  "Uber": {
+    "program": "Uber HackTag",
+    "hire": "Hackathon based competition; top 3 teams get rewards",
+    "eligibility": "Engineering students; third year or final year",
+    "timeline": "January to February/March",
+    "stipend_ctc": "1.2 lakh to 1.5 lakh per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["DSA", "Problem Solving"],
+    "selection_criteria": "Top teams get cash prizes and interview calls",
+    "conversion_to_ppo": "Opportunity for PPO/PPI",
+    "key_notes": {
+      "tip-1": "Top teams get cash prizes worth 5 lakh",
+      "tip-2": "Requires very high level DSA",
+      "tip-3": "High return on investment (ROI)"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Focus on good problem solving skills",
+      "strategy-2": "Master DSA at an advanced level",
+      "strategy-3": "Form a strong team for hackathon"
+    },
+    "notes": "Uber is known for asking high-level DSA questions."
+  },
+  "Flipkart": {
+    "program": "Flipkart Grid",
+    "hire": "Four round process: Quiz, coding assessment, case study based coding, National Finals",
+    "eligibility": "All engineering students; batches 2026 to 2029",
+    "timeline": "June to August",
+    "stipend_ctc": "1 lakh per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Not mentioned"],
+    "selection_criteria": "Skill-based assessment",
+    "conversion_to_ppo": "Full-time packages can exceed 30 lakh",
+    "key_notes": {
+      "tip-1": "India's largest engineering campus challenge",
+      "tip-2": "Can participate solo or in teams",
+      "tip-3": "Open to all engineering students"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Prepare for quiz and coding assessment rounds",
+      "strategy-2": "Participate in case study coding",
+      "strategy-3": "Apply immediately when registration opens"
+    },
+    "notes": "Flipkart Grid is a major gateway for non-diversity hiring."
+  },
+  "Flipkart-2": {
+    "program": "Flipkart Runway",
+    "hire": "Internship hiring challenge",
+    "eligibility": "Second and third year female students",
+    "timeline": "February to April",
+    "stipend_ctc": "1 lakh per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "8 to 10 weeks",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Not mentioned"],
+    "selection_criteria": "Not mentioned",
+    "conversion_to_ppo": "28 lakh full-time offer",
+    "key_notes": {
+      "tip-1": "Top 500 get interview skills workshops",
+      "tip-2": "Investing in women engineers early on",
+      "tip-3": "Duration May till July"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Prepare for hiring challenge",
+      "strategy-2": "Focus on networking and resume building",
+      "strategy-3": "Not mentioned"
+    },
+    "notes": "Specifically for undergraduate women students."
+  },
+  "Flipkart-3": {
+    "program": "Girls Want to Code (GWC) 7.0",
+    "hire": "Coding challenge followed by mentorship and PPI",
+    "eligibility": "Women in 3rd/4th year BTech or 1st/2nd year MTech",
+    "timeline": "Deadline January 15th",
+    "stipend_ctc": "1 lakh per month",
+    "location": "Bangalore (Headquarters visit)",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "unstop.com",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Coding Challenge"],
+    "selection_criteria": "Top 30 performers get all-expense paid trip",
+    "conversion_to_ppo": "Package about 32 lakhs per year",
+    "key_notes": {
+      "tip-1": "Top 30 performers visit Bangalore headquarters",
+      "tip-2": "Mentorship program provided",
+      "tip-3": "PPI opportunity included"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Apply through Unstop before January 15th",
+      "strategy-2": "Prepare for the initial coding challenge",
+      "strategy-3": "Not mentioned"
+    },
+    "notes": "Prestigious program with high PPO packages."
+  },
+  "Goldman Sachs": {
+    "program": "Summer Analyst Program",
+    "hire": "Competitive coding contest on platforms like Hacker Rank",
+    "eligibility": "Bachelor or Master degree students (Final and Pre-final year); Accepts all engineering branches and MCA/BCA",
+    "timeline": "January and July/August",
+    "stipend_ctc": "1 lakh per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["DSA"],
+    "selection_criteria": "Ability to solve Leetcode contest problems fast",
+    "conversion_to_ppo": "25 to 30 LPA package",
+    "key_notes": {
+      "tip-1": "Extremely competitive with low conversion rates",
+      "tip-2": "Hiring challenge involves competitive coding",
+      "tip-3": "Global internship program"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Master fast problem solving on Leetcode",
+      "strategy-2": "Participate in bi-weekly and weekly contests",
+      "strategy-3": "Apply on day one of opening"
+    },
+    "notes": "Fintech giant with a brutal but rewarding hiring process."
+  },
+  "American Express": {
+    "program": "Code Street / Cohort Street",
+    "hire": "Hackathon based",
+    "eligibility": "Technical degree students (CSE, IT, ECE); girls in 1st to 4th year",
+    "timeline": "January to March",
+    "stipend_ctc": "35,000 to 75,000 per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Technical Degree Skills"],
+    "selection_criteria": "Not mentioned",
+    "conversion_to_ppo": "Chance to secure PPO after internship",
+    "key_notes": {
+      "tip-1": "Global financial company",
+      "tip-2": "Offers 17-20 lakh full-time package",
+      "tip-3": "Check AX website regularly"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Form a team and participate in hackathon",
+      "strategy-2": "Monitor career page in Q1",
+      "strategy-3": "Not mentioned"
+    },
+    "notes": "Popular program for women in technical degrees."
+  },
+  "LinkedIn": {
+    "program": "Coaching Program",
+    "hire": "Mentorship program by LinkedIn engineers; includes a hackathon",
+    "eligibility": "Second year female students in BTech/BE",
+    "timeline": "January to February",
+    "stipend_ctc": "1 lakh per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "6 month mentorship",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Not mentioned"],
+    "selection_criteria": "Mentorship can convert to internship/PPI",
+    "conversion_to_ppo": "PPI/PPO opportunities",
+    "key_notes": {
+      "tip-1": "Mentors are actual engineers from LinkedIn",
+      "tip-2": "Includes iPhone and other benefits",
+      "tip-3": "Powerful pipeline for diversity hiring"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Apply between January and February",
+      "strategy-2": "Showcase strong skills during internship",
+      "strategy-3": "Not mentioned"
+    },
+    "notes": "One of the most valuable mentorship programs available."
+  },
+  "EY": {
+    "program": "EY Techathon",
+    "hire": "Annual tech competition/hackathon based on case studies",
+    "eligibility": "Second, third, or final year engineering students",
+    "timeline": "September to October",
+    "stipend_ctc": "40,000 stipend; winning prize up to 3 lakh",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "8 to 12 weeks",
+    "application_link": "Unstop",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["AI", "Generative AI"],
+    "selection_criteria": "Based on case studies and articulation",
+    "conversion_to_ppo": "Full-time CTC 10-13 LPA",
+    "key_notes": {
+      "tip-1": "Focuses heavily on AI and Generative AI",
+      "tip-2": "Participation involves building projects",
+      "tip-3": "One of the big four companies"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Focus on case study articulation",
+      "strategy-2": "Build projects using AI tools",
+      "strategy-3": "Apply on Unstop platform"
+    },
+    "notes": "EY focuses more on case studies than pure coding."
+  },
+  "JP Morgan": {
+    "program": "Code for Good",
+    "hire": "24-hour coding-based hackathon",
+    "eligibility": "Second or third year tech students; 7 CGPA or 70% minimum requirement",
+    "timeline": "February to March / September to October",
+    "stipend_ctc": "80,000 to 90,000 per month",
+    "location": "International (London/Glasgow possible)",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Programming Skills", "Team Work"],
+    "selection_criteria": "Performance in 24-hour hackathon",
+    "conversion_to_ppo": "Opportunity for International PPO",
+    "key_notes": {
+      "tip-1": "Winning teams can get international PPO",
+      "tip-2": "Requires strong teamwork",
+      "tip-3": "Well-known company with great brand name"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Form a solid team",
+      "strategy-2": "Prepare for intense 24-hour coding",
+      "strategy-3": "Maintain minimum 7 CGPA"
+    },
+    "notes": "Allows students to potentially go international for work."
+  },
+  "Adobe": {
+    "program": "Adobe India Internship",
+    "hire": "Direct hiring based on DSA and development skills",
+    "eligibility": "Engineering students graduating in 2026/2027",
+    "timeline": "August to October",
+    "stipend_ctc": "60,000 to 1 lakh per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "8 to 12 weeks",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["DSA", "Development Skills"],
+    "selection_criteria": "Strong DSA and dev expected",
+    "conversion_to_ppo": "PPO package can exceed 40 LPA",
+    "key_notes": {
+      "tip-1": "Adobe brand adds massive credibility",
+      "tip-2": "Prestigious internship with high pay",
+      "tip-3": "Requires pre-final or final year status"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Focus on strong DSA foundation",
+      "strategy-2": "Master full stack development",
+      "strategy-3": "Monitor career portal in late summer"
+    },
+    "notes": "Adobe is highly selective but offers great PPO packages."
+  },
+  "Walmart": {
+    "program": "Walmart CodeHers",
+    "hire": "Hiring challenge/Diversity hiring contest",
+    "eligibility": "Third year female students only (BTech/BE/ME/MTech)",
+    "timeline": "March",
+    "stipend_ctc": "80,000 to 90,000 per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["DSA"],
+    "selection_criteria": "Selection based primarily on DSA skills",
+    "conversion_to_ppo": "27 LPA full-time package",
+    "key_notes": {
+      "tip-1": "Diversity hiring contest",
+      "tip-2": "Focuses exclusively on DSA skills",
+      "tip-3": "Competitive challenge for girls"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Work intensively on DSA skills",
+      "strategy-2": "Practice for the online coding challenge",
+      "strategy-3": "Not mentioned"
+    },
+    "notes": "High paying diversity hiring opportunity."
+  },
+  "Trilogy": {
+    "program": "Codegon (Trilogy Innovations)",
+    "hire": "Competitive programming contest; difficult interview rounds",
+    "eligibility": "Bachelor degree students",
+    "timeline": "January to August",
+    "stipend_ctc": "1.5 lakh per month",
+    "location": "Dubai (Training)",
+    "work_mode": "Not mentioned",
+    "duration": "2 months",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Competitive Programming"],
+    "selection_criteria": "Extremely difficult interview rounds",
+    "conversion_to_ppo": "High PPO conversion rate",
+    "key_notes": {
+      "tip-1": "Includes training in Dubai",
+      "tip-2": "Income is tax-free",
+      "tip-3": "One of the highest paying internships"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Focus on high-level competitive programming",
+      "strategy-2": "Practice for very difficult interview rounds",
+      "strategy-3": "Not mentioned"
+    },
+    "notes": "Often known for providing the 'highest' stipend amounts."
+  },
+  "Juspay": {
+    "program": "Hiring Challenge",
+    "hire": "Programming rounds, deep programming, and hackathon style tests",
+    "eligibility": "Third year and final year students",
+    "timeline": "Every 3 months (March, June, Sept, Dec)",
+    "stipend_ctc": "40,000 to 50,000 per month",
+    "location": "Not mentioned",
+    "work_mode": "Not mentioned",
+    "duration": "Not mentioned",
+    "application_link": "hacker rank / hacker earth / unstop",
+    "application_status": "Not Applied",
+    "tech_stack_required": ["Development", "Deep Programming"],
+    "selection_criteria": "~7 interview rounds",
+    "conversion_to_ppo": "Package 20 to 27 LPA",
+    "key_notes": {
+      "tip-1": "Focuses more on development than DSA",
+      "tip-2": "Deep programming rounds are expected",
+      "tip-3": "Provides internship and PPO together"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Build strong development background",
+      "strategy-2": "Gain prior internship experience",
+      "strategy-3": "Check Unstop every 3 months"
+    },
+    "notes": "Process focuses on deep engineering skills."
+  },
+  "Oracle": {
+    "program": "Technology Internship",
+    "hire": "Direct application via career portal, profile creation, CV upload",
+    "eligibility": "Current students, freshers (0 to 2 years experience), English proficiency required",
+    "timeline": "Announced Jan 14, 2026",
+    "stipend_ctc": "Usually paid",
+    "location": "India",
+    "work_mode": "Not mentioned",
+    "duration": "8 to 12 weeks",
+    "application_link": "Not mentioned",
+    "application_status": "Not Applied",
+    "tech_stack_required": [
+      "Cloud Technology",
+      "Software Development",
+      "Data Analysis",
+      "Product Support"
+    ],
+    "selection_criteria": "Not mentioned",
+    "conversion_to_ppo": "Not mentioned",
+    "key_notes": {
+      "tip-1": "Real project involvement",
+      "tip-2": "Mentorship from industry experts",
+      "tip-3": "Improves career prospects"
+    },
+    "preparation_strategy": {
+      "strategy-1": "Create profile on Oracle career portal",
+      "strategy-2": "Upload ATS-friendly resume",
+      "strategy-3": "Prepare for tech roles in cloud/SDE"
+    },
+    "notes": "Announced 14th January 2026"
+  }
+}
