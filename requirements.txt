@@ -8,6 +8,6 @@ langchain-google-genai
 langgraph
 pydantic
 python-dotenv
-psycopg2-binaryr
+psycopg2-binary
 langchain
 gunicorn
