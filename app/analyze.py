@@ -9,7 +9,7 @@ from .models import (
     ATSAnalysis, 
     RecruiterAnalysis, 
     HiringManagerAnalysis, 
-    JobMetadata, 
+    JobMetadata,
     ResumeMetaData, 
     MetaDataExtraction
 )

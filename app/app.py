@@ -62,7 +62,8 @@ async def analysis(
         
         # Create new entry in DB (Status Pending)
         cur.execute(ANALYSIS_TABLE_INSERTION_QUERY, (hash_key, job_description, resume_content, mode))
-        analysis_id = cur.fetchone()["id"]
+        row = cur.fetchone()
+        analysis_id = row["id"]
         conn.commit()
         
         # EXECUTE ANALYSIS DIRECTLY (Blocking/Sync-in-Async)
@@ -94,13 +95,13 @@ async def analysis(
         if conn: conn.close()
         
         
-@app.get("/analysis_result/{analysis_id}")
-def get_analysis_result(analysis_id):
-    final_result = get_final_result(analysis_id)
-    return {
-            "status": "Completed",
-            "final_result": final_result
-        }
+# @app.get("/analysis_result/{analysis_id}")
+# def get_analysis_result(analysis_id):
+#     final_result = get_final_result(analysis_id)
+#     return {
+#             "status": "Completed",
+#             "final_result": final_result
+#         }
 
 @app.get("/analysis_id_list")
 def analysis_history():
