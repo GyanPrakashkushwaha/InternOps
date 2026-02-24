@@ -8,12 +8,14 @@ from .database_queries import (
     RESUME_METADATA_INSERTION_QUERY,
     ATS_RESULT_INSERTION_QUERY,
     RECRUITER_RESULT_INSERTION_QUERY,
-    HM_RESULT_INSERTION_QUERY
+    HM_RESULT_INSERTION_QUERY,
+    CREATE_USER_QUERY
 )
+from .auth import get_password_hash
+
 import json
 
 load_dotenv()
-
 
 def get_db_connection():
     conn = None
@@ -22,7 +24,6 @@ def get_db_connection():
         DB_URI = os.getenv("AIVEN_DB_URI")
         # Vercel Postgres requires SSL mode
         # ssl_mode = "require" if "localhost" not in DB_URI else "disable"
-        
         conn = psycopg2.connect(DB_URI, sslmode="require")
         cur = conn.cursor(cursor_factory=RealDictCursor)
     except Exception as e:
@@ -42,6 +43,18 @@ def init_db():
     finally:
         if cur: cur.close()
         if conn: conn.close()
+
+def create_new_user(conn, cur, email: str, plain_password: str):
+    try:
+        hashed_password = get_password_hash(plain_password)
+        cur.execute(CREATE_USER_QUERY, (email, hashed_password))
+        uid = cur.fetchone()
+        uid = uid["id"]
+        conn.commit()
+        return uid
+    except Exception as e:
+        conn.rollback()
+        raise e
 
 def get_final_result(analysis_id):
     try:

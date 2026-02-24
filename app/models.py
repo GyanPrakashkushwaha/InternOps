@@ -139,4 +139,17 @@ class HiringManagerAnalysis(BaseModel):
     stack_alignment: str = Field(..., description="How well their specific tech experience maps to the JD's stack.")
     decision: Literal["HIRE", "NO_HIRE", "MAYBE"]
     feedback: str = Field(..., description="Deep technical advice on improving bullet points.")
+
+class Token(BaseModel):
+    access_token : str
+    token_type : str
+
+class TokenData(BaseModel):
+    username : str or None = None
+
+class User(BaseModel):
+    email: str
+    password: str
     
+class UserInDB(User):
+    hashed_password: str

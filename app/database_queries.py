@@ -1,9 +1,11 @@
 
 
-# ANALYSIS_REPORT_QUERY = """
-#     SELECT 
-
-# """
+CREATE_USER_QUERY = """
+INSERT INTO users (email, hashed_password)
+VALUES
+(%s, %s)
+RETURNING id
+"""
 
 ANALYSIS_HISTORY_QUERY = """
 SELECT 
@@ -73,6 +75,13 @@ DB_CREATION_QUERY = """
                 job_description TEXT,
                 resume_text TEXT,
                 mode VARCHAR,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
+            
+            CREATE TABLE IF NOT EXISTS users(
+                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                email VARCHAR UNIQUE NOT NULL,
+                hashed_password VARCHAR NOT NULL,
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
             

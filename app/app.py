@@ -7,12 +7,16 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Internal Modules
 from .utils import read_pdf, generate_hash
-from .database import init_db, get_db_connection, get_final_result
+from .database import init_db, get_db_connection, get_final_result, create_new_user
 from .analyze import analyze_task
 from .database_queries import (
     DASHBOARD_HISTORY_QUERY,
     ANALYSIS_TABLE_INSERTION_QUERY,
     ANALYSIS_HISTORY_QUERY
+)
+
+from .models import (
+    Token, TokenData, User, UserInDB
 )
 
 app = FastAPI()
@@ -205,3 +209,26 @@ def fetch_analysis_report(id):
     finally:
         cur.close()
         conn.close()
+        
+
+@app.post("/signup")
+def user_registration(user_details: User):
+    # Accept a JSON body containing email and password. (Hint: Use a Pydantic model!)
+    # Get a database connection (using your get_db_connection).
+    # Call your create_new_user function.
+    # Return a success message and the new user_id.
+    
+    conn, cur = get_db_connection()
+    try:
+        # print(user_details)
+        user_id = create_new_user(conn, cur, user_details.email, user_details.password)
+        # print(user_details.password)
+        return {
+            "message": "User Created Sucessfully!",
+            "user-id": user_id
+        }
+    except Exception as e:
+        raise e
+    finally:
+        conn.close()
+        cur.close()
