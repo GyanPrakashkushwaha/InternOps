@@ -1,20 +1,9 @@
 
-CREATE_USERS_TABLE_QUERY = """
-CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    hashed_password TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-"""
 
-ALTER_ANALYSIS_TABLE_QUERY = """
-ALTER TABLE analysis 
-ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE SET NULL;
-"""
+# ANALYSIS_REPORT_QUERY = """
+#     SELECT 
 
-GET_USER_BY_EMAIL_QUERY = "SELECT * FROM users WHERE email = %s;"
-INSERT_USER_QUERY = "INSERT INTO users (email, hashed_password) VALUES (%s, %s) RETURNING id, email;"
+# """
 
 ANALYSIS_HISTORY_QUERY = """
 SELECT 
@@ -71,7 +60,7 @@ DASHBOARD_HISTORY_QUERY = """
 """
         
 ANALYSIS_TABLE_INSERTION_QUERY = """
-        INSERT INTO analysis (hash_key, job_description, resume_text, mode, user_id)
+        INSERT INTO analysis (hash_key, job_description, resume_text, mode)
         VALUES (%s, %s, %s, %s)
         RETURNING id
         """

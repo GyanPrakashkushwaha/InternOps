@@ -8,9 +8,7 @@ from .database_queries import (
     RESUME_METADATA_INSERTION_QUERY,
     ATS_RESULT_INSERTION_QUERY,
     RECRUITER_RESULT_INSERTION_QUERY,
-    HM_RESULT_INSERTION_QUERY,
-    CREATE_USERS_TABLE_QUERY,
-    ALTER_ANALYSIS_TABLE_QUERY
+    HM_RESULT_INSERTION_QUERY
 )
 import json
 
@@ -38,8 +36,6 @@ def init_db():
         conn, cur = get_db_connection()
         if not conn: raise RuntimeError("Database connection is None")
         cur.execute(DB_CREATION_QUERY)
-        cur.execute(CREATE_USERS_TABLE_QUERY) 
-        cur.execute(ALTER_ANALYSIS_TABLE_QUERY) 
         conn.commit()
     except Exception:
         raise
