@@ -55,7 +55,22 @@ def create_new_user(conn, cur, email: str, plain_password: str):
     except Exception as e:
         conn.rollback()
         raise e
-
+    
+def get_user_by_email(email: str):
+    """Fetches a user by their email for authentication purposes."""
+    conn, cur = get_db_connection()
+    try:
+        # Assuming your table is named 'users'. Adjust if CREATE_USER_QUERY uses a different name.
+        cur.execute("SELECT * FROM users WHERE email = %s;", (email,))
+        user = cur.fetchone()
+        return user
+    except Exception as e:
+        raise e
+    finally:
+        if cur: cur.close()
+        if conn: conn.close()
+        
+        
 def get_final_result(analysis_id):
     try:
         conn, cur = get_db_connection()

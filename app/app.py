@@ -15,6 +15,12 @@ from .database_queries import (
     ANALYSIS_HISTORY_QUERY
 )
 
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from datetime import timedelta
+from .auth import verify_password, create_access_token, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
+from .database import get_user_by_email
+
 from .models import (
     Token, TokenData, User, UserInDB
 )
@@ -232,3 +238,44 @@ def user_registration(user_details: User):
     finally:
         conn.close()
         cur.close()
+        
+@app.post("/login", response_model=Token)
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    # OAuth2PasswordRequestForm maps the email field to 'username' behind the scenes
+    user = get_user_by_email(form_data.username) 
+    
+    # Verify the user exists and the password matches
+    if not user or not verify_password(form_data.password, user["hashed_password"]):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user["email"]}, expires_delta=access_token_expires
+    )
+    
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+# @app.get("/web/dashboard/history")
+# def fetch_dashboard_history(current_user: dict = Depends(get_current_user)):
+#     # The route is now protected! Only requests with a valid Bearer token can access it.
+#     try:
+#         conn, cur = get_db_connection()
+#         # You can now filter data by current_user["id"] if needed
+#         cur.execute(DASHBOARD_HISTORY_QUERY)
+#         rows = cur.fetchall()
+#         return {
+#             "status": "success",
+#             "data": {
+#                 "history": rows
+#             }
+#         }
+#     except Exception as error:
+#         raise error
+#     finally:
+#         if cur: cur.close()
+#         if conn: conn.close()
