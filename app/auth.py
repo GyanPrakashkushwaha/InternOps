@@ -20,10 +20,12 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 def verify_password(plain_password, hashed_password):
     """Checks if the plain password matches the hashed password from the DB."""
-    return pwd_context.verify(plain_password, hashed_password)
+    # Truncate to 72 characters here as well to prevent the ValueError during login
+    return pwd_context.verify(plain_password[:72], hashed_password)
 
 def get_password_hash(password):
     """Takes a plain password and returns a secure hash to store in the DB."""
+    # Truncate during signup/password creation
     return pwd_context.hash(password[:72])
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):

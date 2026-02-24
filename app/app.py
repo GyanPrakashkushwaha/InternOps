@@ -149,11 +149,11 @@ def fetch_dashboard_history():
         conn.close()
 
 
-@app.get("/web/analysis/history")
-def fetch_analysis_history():
+@app.get("/web/dashboard/history")
+def fetch_dashboard_history(current_user: dict = Depends(get_current_user)):
     try:
         conn, cur = get_db_connection()
-        cur.execute(ANALYSIS_HISTORY_QUERY)
+        cur.execute(DASHBOARD_HISTORY_QUERY)
         rows = cur.fetchall()
         return {
             "status": "success",
@@ -164,8 +164,8 @@ def fetch_analysis_history():
     except Exception as error:
         raise error
     finally:
-        cur.close()
-        conn.close()
+        if cur: cur.close()
+        if conn: conn.close()
         
 @app.get("/web/analysis/report/{id}")
 def fetch_analysis_report(id):
@@ -258,24 +258,3 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     )
     
     return {"access_token": access_token, "token_type": "bearer"}
-
-
-# @app.get("/web/dashboard/history")
-# def fetch_dashboard_history(current_user: dict = Depends(get_current_user)):
-#     # The route is now protected! Only requests with a valid Bearer token can access it.
-#     try:
-#         conn, cur = get_db_connection()
-#         # You can now filter data by current_user["id"] if needed
-#         cur.execute(DASHBOARD_HISTORY_QUERY)
-#         rows = cur.fetchall()
-#         return {
-#             "status": "success",
-#             "data": {
-#                 "history": rows
-#             }
-#         }
-#     except Exception as error:
-#         raise error
-#     finally:
-#         if cur: cur.close()
-#         if conn: conn.close()
