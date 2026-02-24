@@ -1,3 +1,9 @@
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import Depends
+from .auth import get_password_hash, verify_password, create_access_token, get_current_user_id, get_optional_user_id
+from .models import UserCreate, Token
+from .database_queries import GET_USER_BY_EMAIL_QUERY, INSERT_USER_QUERY
+
 import json
 import asyncio
 from typing import Literal
@@ -37,7 +43,8 @@ def startup():
 async def analysis(
     mode: Literal["strict", "real-world", "brutal"],
     file: UploadFile = File(...),
-    job_description: str = Form(...)
+    job_description: str = Form(...),
+    user_id: int = Depends(get_optional_user_id)
 ):
     resume_content = await read_pdf(file)
     conn, cur = get_db_connection()
@@ -61,7 +68,7 @@ async def analysis(
             }
         
         # Create new entry in DB (Status Pending)
-        cur.execute(ANALYSIS_TABLE_INSERTION_QUERY, (hash_key, job_description, resume_content, mode))
+        cur.execute(ANALYSIS_TABLE_INSERTION_QUERY, (hash_key, job_description, resume_content, mode, user_id))
         row = cur.fetchone()
         analysis_id = row["id"]
         conn.commit()
@@ -121,10 +128,10 @@ def analysis_history():
         conn.close()
 
 @app.get("/web/dashboard/history")
-def fetch_dashboard_history():
+def fetch_dashboard_history(user_id: int = Depends(get_current_user_id)):
     try:
         conn, cur = get_db_connection()
-        cur.execute(DASHBOARD_HISTORY_QUERY)
+        cur.execute(DASHBOARD_HISTORY_QUERY, (user_id,))
         rows = cur.fetchall()
         return {
             "status": "success",
@@ -140,10 +147,10 @@ def fetch_dashboard_history():
 
 
 @app.get("/web/analysis/history")
-def fetch_analysis_history():
+def fetch_analysis_history(user_id: int = Depends(get_current_user_id)):
     try:
         conn, cur = get_db_connection()
-        cur.execute(ANALYSIS_HISTORY_QUERY)
+        cur.execute(ANALYSIS_HISTORY_QUERY, (user_id,))
         rows = cur.fetchall()
         return {
             "status": "success",
@@ -205,3 +212,44 @@ def fetch_analysis_report(id):
     finally:
         cur.close()
         conn.close()
+        
+@app.post("/auth/signup")
+def signup(user: UserCreate):
+    conn, cur = get_db_connection()
+    try:
+        # Check if user exists
+        cur.execute(GET_USER_BY_EMAIL_QUERY, (user.email,))
+        if cur.fetchone():
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        # Insert new user
+        hashed_pw = get_password_hash(user.password)
+        cur.execute(INSERT_USER_QUERY, (user.email, hashed_pw))
+        new_user = cur.fetchone()
+        conn.commit()
+        return {"status": "success", "user_id": new_user["id"], "email": new_user["email"]}
+    except Exception as e:
+        conn.rollback()
+        raise e
+    finally:
+        if cur: cur.close()
+        if conn: conn.close()
+
+@app.post("/auth/login", response_model=Token)
+def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    conn, cur = get_db_connection()
+    try:
+        cur.execute(GET_USER_BY_EMAIL_QUERY, (form_data.username,)) # OAuth2 uses 'username' for the email field
+        user = cur.fetchone()
+        
+        if not user or not verify_password(form_data.password, user["hashed_password"]):
+            raise HTTPException(status_code=401, detail="Incorrect email or password")
+        
+        access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 1440)))
+        access_token = create_access_token(
+            data={"sub": str(user["id"])}, expires_delta=access_token_expires
+        )
+        return {"access_token": access_token, "token_type": "bearer"}
+    finally:
+        if cur: cur.close()
+        if conn: conn.close()
