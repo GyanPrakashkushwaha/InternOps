@@ -11,5 +11,4 @@ python-dotenv
 psycopg2-binary
 langchain
 gunicorn
-passlib[bcrypt]
-python-jose[cryptography]
+bcrypt

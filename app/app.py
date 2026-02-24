@@ -43,42 +43,36 @@ def root():
 def startup():
     init_db()
 
+# ... (existing imports)
+
 @app.post("/analyze/{mode}")
 async def analysis(
     mode: Literal["strict", "real-world", "brutal"],
     file: UploadFile = File(...),
-    job_description: str = Form(...)
+    job_description: str = Form(...),
+    current_user: dict = Depends(get_current_user) # Route Protected!
 ):
     resume_content = await read_pdf(file)
     conn, cur = get_db_connection()
+    user_id = current_user["id"]
     
     try:
         resume_hash = generate_hash(resume_content)
         jd_hash = generate_hash(job_description)
-        hash_key = f"{resume_hash}_{jd_hash}_{mode}"
+        hash_key = f"{user_id}_{resume_hash}_{jd_hash}_{mode}"
         
-        # Check cache / existing analysis
         cur.execute("SELECT id FROM analysis WHERE hash_key = %s", (hash_key, ))
         existing_id = cur.fetchone()
         
         if existing_id:
             final_result = get_final_result(existing_id["id"])
-            return {
-                "status": "Completed", 
-                "final_result": final_result,
-                "analysis_id": existing_id["id"],
-                "cached": True
-            }
+            return {"status": "Completed", "final_result": final_result, "analysis_id": existing_id["id"], "cached": True}
         
-        # Create new entry in DB (Status Pending)
-        cur.execute(ANALYSIS_TABLE_INSERTION_QUERY, (hash_key, job_description, resume_content, mode))
+        cur.execute(ANALYSIS_TABLE_INSERTION_QUERY, (user_id, hash_key, job_description, resume_content, mode))
         row = cur.fetchone()
         analysis_id = row["id"]
         conn.commit()
         
-        # EXECUTE ANALYSIS DIRECTLY (Blocking/Sync-in-Async)
-        # This replaces the Celery task.
-        # Note: If this takes >60s (Vercel Pro) or >10s (Hobby), it may timeout.
         result_data = await analyze_task(
             resume_text=resume_content, 
             job_description=job_description, 
@@ -87,96 +81,68 @@ async def analysis(
             analysis_id=analysis_id
         )
         
-        # Re-fetch formatted result to match the structure expected by frontend
         final_result = get_final_result(analysis_id)
-        
-        return {
-            "status": "Completed",
-            "final_result": final_result,
-            "analysis_id": analysis_id
-        }
+        return {"status": "Completed", "final_result": final_result, "analysis_id": analysis_id}
         
     except Exception as e:
-        if conn:
-            conn.rollback()
+        if conn: conn.rollback()
         raise e
     finally:
         if cur: cur.close()
         if conn: conn.close()
-        
-        
-# @app.get("/analysis_result/{analysis_id}")
-# def get_analysis_result(analysis_id):
-#     final_result = get_final_result(analysis_id)
-#     return {
-#             "status": "Completed",
-#             "final_result": final_result
-#         }
 
 @app.get("/analysis_id_list")
-def analysis_history():
+def analysis_history(current_user: dict = Depends(get_current_user)):
     try:
         conn, cur = get_db_connection()
-        query = "SELECT id FROM analysis"
-        cur.execute(query)
-        analysis_id = cur.fetchall()
-        return {
-            "status": "done",
-            "id_list": analysis_id
-        }
-    except Exception as e:
-        raise e
+        cur.execute("SELECT id FROM analysis WHERE user_id = %s", (current_user["id"],))
+        analysis_ids = cur.fetchall()
+        return {"status": "done", "id_list": analysis_ids}
     finally:
         cur.close()
         conn.close()
-
-@app.get("/web/dashboard/history")
-def fetch_dashboard_history():
-    try:
-        conn, cur = get_db_connection()
-        cur.execute(DASHBOARD_HISTORY_QUERY)
-        rows = cur.fetchall()
-        return {
-            "status": "success",
-            "data": {
-                "history": rows
-            }
-        }
-    except Exception as error:
-        raise error
-    finally:
-        cur.close()
-        conn.close()
-
 
 @app.get("/web/dashboard/history")
 def fetch_dashboard_history(current_user: dict = Depends(get_current_user)):
     try:
         conn, cur = get_db_connection()
-        cur.execute(DASHBOARD_HISTORY_QUERY)
+        cur.execute(DASHBOARD_HISTORY_QUERY, (current_user["id"],))
         rows = cur.fetchall()
-        return {
-            "status": "success",
-            "data": {
-                "history": rows
-            }
-        }
-    except Exception as error:
-        raise error
+        return {"status": "success", "data": {"history": rows}}
     finally:
-        if cur: cur.close()
-        if conn: conn.close()
+        cur.close()
+        conn.close()
+
+@app.get("/web/analysis/history")
+def fetch_analysis_history(current_user: dict = Depends(get_current_user)):
+    try:
+        conn, cur = get_db_connection()
+        cur.execute(ANALYSIS_HISTORY_QUERY, (current_user["id"],))
+        rows = cur.fetchall()
+        return {"status": "success", "data": {"history": rows}}
+    finally:
+        cur.close()
+        conn.close()
         
 @app.get("/web/analysis/report/{id}")
-def fetch_analysis_report(id):
+def fetch_analysis_report(id: str, current_user: dict = Depends(get_current_user)):
     try:
         conn, cur = get_db_connection()
         
-        if id == "latest":  # /latest
-            cur.execute("""SELECT id FROM analysis
-                            LIMIT 1;""")
-            id = cur.fetchone()
+        if id == "latest":
+            cur.execute("SELECT id FROM analysis WHERE user_id = %s ORDER BY created_at DESC LIMIT 1;", (current_user["id"],))
+            row = cur.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="No analysis found for this user.")
+            id = row["id"]
+        else:
+            # SECURITY: Ensure the requested ID belongs to the current user
+            cur.execute("SELECT user_id FROM analysis WHERE id = %s", (id,))
+            row = cur.fetchone()
+            if not row or row["user_id"] != current_user["id"]:
+                raise HTTPException(status_code=403, detail="Not authorized to view this report.")
         
+        # Fetching remaining report data...
         cur.execute("SELECT company_name, employment_type FROM job_metadata WHERE analysis_id = %s", (id,))
         role = cur.fetchone()
         
@@ -203,14 +169,7 @@ def fetch_analysis_report(id):
                 "hm_result": hm_result      
             }
         }
-        
-        return {
-            "status": "success",
-            "report": report
-        }
-
-    except Exception as error:
-        raise error
+        return {"status": "success", "report": report}
 
     finally:
         cur.close()

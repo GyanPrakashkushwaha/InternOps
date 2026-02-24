@@ -21,10 +21,11 @@ def get_db_connection():
     conn = None
     cur = None
     try:
-        DB_URI = os.getenv("AIVEN_DB_URI")
+        DB_URI = os.getenv("LOCAL_DB_URI")
+        # DB_URI = os.getenv("AIVEN_DB_URI")
         # Vercel Postgres requires SSL mode
         # ssl_mode = "require" if "localhost" not in DB_URI else "disable"
-        conn = psycopg2.connect(DB_URI, sslmode="require")
+        conn = psycopg2.connect(DB_URI)
         cur = conn.cursor(cursor_factory=RealDictCursor)
     except Exception as e:
         raise RuntimeError(f"DB connection failed: {e}")

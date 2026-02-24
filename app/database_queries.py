@@ -21,6 +21,7 @@ LEFT JOIN recruiter r
 ON r.analysis_id = r.id
 LEFT JOIN hiring_manager ham
 ON ham.analysis_id = a.id
+WHERE a.user_id = %s
 ORDER BY a.created_at DESC
 """
 
@@ -56,34 +57,39 @@ DASHBOARD_HISTORY_QUERY = """
         ON r.analysis_id = a.id
         LEFT JOIN hiring_manager hm
         ON hm.analysis_id = a.id
-
+        WHERE a.user_id = %s
         ORDER BY date DESC
 
 """
         
 ANALYSIS_TABLE_INSERTION_QUERY = """
-        INSERT INTO analysis (hash_key, job_description, resume_text, mode)
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO analysis (user_id, hash_key, job_description, resume_text, mode)
+        VALUES (%s, %s, %s, %s, %s)
         RETURNING id
         """
 
 DB_CREATION_QUERY = """
             -- ALTER DATABASE internops_db SET TIMEZONE TO 'Asia/Kolkata';
-            CREATE TABLE IF NOT EXISTS analysis (
-                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                hash_key TEXT NOT NULL,
-                job_description TEXT,
-                resume_text TEXT,
-                mode VARCHAR,
-                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-            );
-            
             CREATE TABLE IF NOT EXISTS users(
                 id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                 email VARCHAR UNIQUE NOT NULL,
                 hashed_password VARCHAR NOT NULL,
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
+            
+            CREATE TABLE IF NOT EXISTS analysis (
+                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                user_id INT NOT NULL,
+                hash_key TEXT NOT NULL,
+                job_description TEXT,
+                resume_text TEXT,
+                mode VARCHAR,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                CONSTRAINT FK_Analysis_UserID
+                    FOREIGN KEY (user_id)
+                    REFERENCES users(id)
+            );
+            
             
             CREATE TABLE IF NOT EXISTS resume_parsed_data (
                 id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -124,7 +130,7 @@ DB_CREATION_QUERY = """
                 parsed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
                 CONSTRAINT FK_resume_analysisId 
-                    FOREIGN KEY (analysis_id) 
+                    FOREIGN KEY (analysis_id)
                     REFERENCES analysis(id)
                     ON DELETE CASCADE
             );
