@@ -19,14 +19,19 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 def verify_password(plain_password, hashed_password):
-    """Checks if the plain password matches the hashed password from the DB."""
-    # Truncate to 72 characters here as well to prevent the ValueError during login
-    return pwd_context.verify(plain_password[:72], hashed_password)
+    print(f"--- DEBUG LOGIN --- Password length received: {len(plain_password)}")
+    print(f"--- DEBUG LOGIN --- Password value: '{plain_password}'")
+    
+    # Truncate at the byte level to be absolutely bulletproof against Unicode/Emojis
+    truncated = plain_password.encode('utf-8')[:72].decode('utf-8', 'ignore')
+    return pwd_context.verify(truncated, hashed_password)
 
 def get_password_hash(password):
-    """Takes a plain password and returns a secure hash to store in the DB."""
-    # Truncate during signup/password creation
-    return pwd_context.hash(password[:72])
+    print(f"--- DEBUG SIGNUP --- Password length received: {len(password)}")
+    print(f"--- DEBUG SIGNUP --- Password value: '{password}'")
+    
+    truncated = password.encode('utf-8')[:72].decode('utf-8', 'ignore')
+    return pwd_context.hash(truncated)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()

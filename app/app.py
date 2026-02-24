@@ -227,7 +227,7 @@ def user_registration(user_details: User):
     conn, cur = get_db_connection()
     try:
         # print(user_details)
-        user_id = create_new_user(conn, cur, user_details.email, user_details.password)
+        user_id = create_new_user(conn, cur, user_details.email, str(user_details.password))
         # print(user_details.password)
         return {
             "message": "User Created Sucessfully!",
