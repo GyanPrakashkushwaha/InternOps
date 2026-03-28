@@ -1,7 +1,4 @@
 
-- [ ] Memory for Agents(Persistence Checkpointers)
-- [ ] Streaming
-- [ ] Add Chat feature
 - [ ] Add Chat feature for the resume. (There add checkpointers and persistent memory for the recruiter.)
 - [ ] Integrate the Resume builder workflow with the app and create api of it.
 - [ ] Add Rule based ATS class for dumb filtering.
@@ -9,11 +6,14 @@
 - [ ] AWS deployment
 - [ ] Do seperate ATS, Recruiter, and Hiring Manager to get faster results.
 - [ ] Add a way to generate new response even if the data is present in the database.
-- [ ] Add Polling -- Easy Step can be done later.
 - [ ] User's personalized dashboard
 - [ ] Role based Access
 
 ### DONE
+- [x] Add Polling -- Easy Step can be done later.
+- [x] Memory for Agents(Persistence Checkpointers)
+- [x] Streaming
+- [x] Add Chat feature
 - [x] Extension
 - [x] Structure the database(for responses).
 - [x] Persitence and caching.(For Chat History not for recruiter agent(LangGraph).)  ✅

@@ -35,17 +35,6 @@ def builder_node(state: BuilderStateInput):
     response = llm.invoke(prompt)
     return {"latex_resume_code": response.content}
 
-def evaluate_code(state: BuilderGenerationState):
-    prompt = ResumeBuilderPrompt.EVALUATOR_PROMPT.format(
-      latex_resume_code = state["latex_resume_code"]
-    )
-    response = llm.with_structured_output(LatexCodeAnalysis).invoke(prompt)
-    return {"latex_code_evaluations": [response.feedback], "decision": response.decision}
-
-# Conditional func
-def evaluation_condition(state: BuilderGenerationState) -> Literal["CORRECT", "NEEDS_IMPROVEMENT"]:
-    return state["decision"]  
-
 # GRAPH
 builder = StateGraph(BuilderGenerationState, input_schema= BuilderStateInput, output_schema = BuilderStateOutput)
 # node
@@ -54,7 +43,6 @@ builder.add_node("evaluate_code", evaluate_code)
 
 # edges
 builder.add_edge(START, "builder_node")
-builder.add_edge("builder_node", "evaluate_code")
-builder.add_conditional_edges("evaluate_code", evaluation_condition, {"CORRECT": END, "NEEDS_IMPROVEMENT": "builder_node"})
+builder.add_edge("builder_node", END)
 
 workflow = builder.compile()
