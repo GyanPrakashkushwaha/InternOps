@@ -42,7 +42,7 @@ The Chrome Extension evaluates resumes using three distinct simulation modes:
 
 InternOps is engineered for speed, precision, and measurable quality.
 
-* **95% Time Reduction:** Candidates typically spend **30-60 minutes** tailoring a resume for a single role. InternOps completes the deep analysis and tailoring process in under **2 minutes**.
+* **95% Time Reduction:** Candidates typically spend **30-60 minutes** tailoring a resume for a single role. InternOps completes the deep analysis and tailoring process in under **10 minutes**.
 * **85% Evaluation Score:** The agentic workflows have been rigorously tested using **LangGraph** evaluations, achieving an 85% success rate in accurately identifying resume gaps and generating relevant optimizations compared to human-expert baselines.
 * **90% Reduced TTFT (Time-To-First-Token):** Optimized LLM streaming and orchestration pipelines ensure near-instant feedback for the user.
 * **High-Precision Semantic Caching:** Implements intelligent caching that is highly sensitive to context. If even a single character changes in the Job Description or Resume, the system detects the shift and triggers a fresh analysis, ensuring you never receive stale or mismatched advice.
